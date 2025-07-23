@@ -15,6 +15,7 @@ import com.example.ziindrive.dto.*;
 import com.example.ziindrive.domain.FileEntity;
 import com.example.ziindrive.repository.FileRepository;
 import com.example.ziindrive.repository.FileRepository.FileSpecifications;
+import com.example.ziindrive.util.FileSizeFormatter;
 
 import jakarta.transaction.Transactional;
 
@@ -46,9 +47,11 @@ public class FileService {
             originalName = originalName.trim();
         }
 
-        String size = formatSize(Long.toString(fileInput.getSize()));
+        String size = FileSizeFormatter.format(fileInput.getSize());
+
         String extension = originalName.lastIndexOf(".") == -1 ? ""
                 : originalName.substring(originalName.lastIndexOf("."));
+
         String storedName = UUID.randomUUID().toString() + extension;
 
         File savedFile = new File(properties.getUploadPath(), storedName);
@@ -155,33 +158,5 @@ public class FileService {
 
         // DB에서 파일 메타데이터 삭제
         repository.delete(file);
-    }
-
-    // 사이즈 계산 및 포맷 함수
-    public String formatSize(String size) {
-
-        double sizeDouble = Double.parseDouble(size);
-
-        String siUnit = "";
-        String[] units = { "K", "M", "G" };
-
-        for (String e : units) {
-
-            if (sizeDouble / 1024 >= 1) {
-
-                sizeDouble /= 1024;
-                siUnit = e;
-
-            } else {
-                break;
-            }
-        }
-
-        if (sizeDouble == (long) sizeDouble) {
-            return String.format("%d ", sizeDouble) + siUnit + "B";
-
-        } else {
-            return String.format("%.1f ", sizeDouble) + siUnit + "B";
-        }
     }
 }

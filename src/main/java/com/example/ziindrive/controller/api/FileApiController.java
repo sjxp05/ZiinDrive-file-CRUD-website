@@ -50,6 +50,7 @@ public class FileApiController {
             service.uploadFile(fileInput);
         } catch (Exception e) {
             System.out.println("업로드 오류 발생: " + e.getMessage());
+            return ResponseEntity.badRequest().body(null);
         }
 
         return ResponseEntity.ok().body(null);
