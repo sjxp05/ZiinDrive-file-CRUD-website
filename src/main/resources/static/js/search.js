@@ -29,12 +29,13 @@ function searchFiles() {
 			return obj;
 		}, {});
 
-	if (filteredParams === "") {
+	if (Object.keys(filteredParams).length === 0) {
 		console.log("검색 조건이 비어 있음!");
 		return;
+	} else {
+		console.log(filteredParams); // test
+
+		const query = new URLSearchParams(filteredParams).toString();
+		location.href = "/files/search?" + query;
 	}
-
-	const query = new URLSearchParams(filteredParams).toString();
-
-	location.href = "/files/search" + query;
 }

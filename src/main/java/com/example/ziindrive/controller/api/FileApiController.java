@@ -8,10 +8,9 @@ import org.springframework.http.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.ziindrive.config.SearchOptionHolder;
-import com.example.ziindrive.dto.FileDownloadDto;
+import com.example.ziindrive.dto.*;
 import com.example.ziindrive.service.FileService;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,22 +21,30 @@ public class FileApiController {
     private final FileService service;
     private final SearchOptionHolder holder;
 
-    // 정렬 post
-    @PostMapping("/api/files/{sort}")
-    public ResponseEntity<Resource> setSort(@PathVariable("sort") String sort, HttpSession session) {
+    // 정렬 get
+    @GetMapping("/api/files")
+    public ResponseEntity<Resource> setSort(@RequestParam("sort") String sort) {
 
         // test
-        System.out.println("received POST request (Sort)");
+        System.out.println("received GET request (Sort)");
 
-        if (!sort.equals(session.getAttribute("sort"))) {
+        if (!sort.equals(holder.getSortToString())) {
 
-            session.setAttribute("sort", sort);
             holder.setStringToSort(sort);
-            service.findWithOptions();
 
+            // test
+            System.out.println("정렬 변함: " + holder.getSortToString());
+
+            return ResponseEntity.ok().build();
+
+        } else {
+
+            // test
+            System.out.println("정렬 유지: " + holder.getSortToString());
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
-        return ResponseEntity.ok().body(null);
     }
 
     // 업로드 post
@@ -78,16 +85,19 @@ public class FileApiController {
 
     }
 
-    // 이름수정 put
-    @PutMapping("/api/files/{id}/{newName}")
-    public ResponseEntity<Resource> renameFile(@PathVariable("id") Long id,
-            @PathVariable("newName") String newName) {
+    // 이름수정 patch
+    @PatchMapping("/api/files")
+    public ResponseEntity<?> renameFile(@RequestBody FileRenameDto dto) {
 
         // test
-        System.out.println("received PUT request");
+        System.out.println("received PATCH request");
 
-        service.renameFile(id, newName);
-        return ResponseEntity.ok().body(null);
+        if (service.renameFile(dto.getId(), dto.getNewName())) {
+            return ResponseEntity.ok().build(); // 이름이 바뀌었을때: 200 OK
+
+        } else {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 이름 바꿀 필요 없을때: 204 No content
+        }
     }
 
     // 삭제 delete

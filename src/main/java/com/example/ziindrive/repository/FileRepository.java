@@ -31,7 +31,10 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
                 if (extension == null || extension.isBlank()) {
                     return null;
                 }
-                return cb.like(root.get("extension"), "%" + extension);
+                if (extension.equals("none")) {
+                    return cb.equal(root.get("extension"), "");
+                }
+                return cb.like(root.get("extension"), "%." + extension);
             };
         }
 

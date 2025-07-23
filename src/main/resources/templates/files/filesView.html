@@ -67,9 +67,9 @@
 				<!--콤보박스-->
 				<select id="extension" name="extension" style="font-size: 15px">
 					<option value="">모든 형식</option>
-					<option value=".png">png</option>
-					<option value=".jpg">jpg</option>
-					<option value=".docx">docx</option>
+					<option value="png">png</option>
+					<option value="jpg">jpg</option>
+					<option value="docx">docx</option>
 					<option value="none">확장자 없음</option>
 				</select>
 
@@ -96,18 +96,13 @@
 
 			<!-- 업로드 버튼 표시 위치 -->
 			<span>
-				<form
-					id="uploadForm"
-					action="/api/files"
-					method="post"
-					enctype="multipart/form-data"
-				>
+				<form id="uploadForm" enctype="multipart/form-data">
 					<input
 						id="fileInput"
 						name="fileInput"
 						type="file"
 						style="display: none"
-						onchange="document.getElementById('uploadForm').submit()"
+						onchange="uploadFile()"
 					/>
 					<button
 						type="button"
@@ -208,6 +203,7 @@
 		<!-- script -->
 		<script src="/js/search.js"></script>
 		<script src="/js/sort.js"></script>
+		<script src="/js/upload.js"></script>
 		<script src="/js/download.js"></script>
 		<script src="/js/rename.js"></script>
 		<script src="/js/delete.js"></script>

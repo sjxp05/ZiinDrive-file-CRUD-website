@@ -133,18 +133,22 @@ public class FileService {
     }
 
     // update (*파일이름(사용자에게 보이는 이름)만 수정 가능)
-    public void renameFile(Long id, String newName) {
+    public boolean renameFile(Long id, String newName) {
 
         FileEntity file = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
-        // 올바른 확장자가 붙어있지 않을 경우에만 추가
-        if (newName.lastIndexOf(".") == -1
-                || !newName.substring(newName.lastIndexOf(".")).equals(file.getExtension())) {
+        // 올바른 확장자가 붙어있지 않을 경우 추가
+        if (!newName.endsWith(file.getExtension())) {
             newName += file.getExtension();
         }
 
+        if (newName.equals(file.getOriginalName())) {
+            return false;
+        }
+
         file.setOriginalName(newName); // Transactional 때문에 자동으로 저장, 새로고침됨
+        return true;
     }
 
     // delete
