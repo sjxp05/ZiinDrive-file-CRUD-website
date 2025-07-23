@@ -71,6 +71,13 @@ public class FileService {
         return repository.save(entity);
     }
 
+    // read
+    public void findAll() {
+
+        holder.setFindAll(true);
+        cachedFileList = repository.findAll(holder.getSort());
+    }
+
     // read, search
     public void findWithOptions() {
 
@@ -90,11 +97,6 @@ public class FileService {
             cachedFileList = repository.findAll(specs, holder.getSort());
         }
     }
-
-    // 맨처음 스프링 시작했을때 초기 상태 (null일 경우 findAll로 캐시를 로드해줘야됨)
-    // public boolean isCacheNull() {
-    // return (cachedFileList == null);
-    // }
 
     // 캐시가 비었는지 확인
     public boolean isCacheEmpty() {

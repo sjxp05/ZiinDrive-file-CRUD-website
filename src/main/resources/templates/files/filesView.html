@@ -81,10 +81,15 @@
 				<input id="to" type="date" />
 
 				<label style="font-size: 15px">&nbsp;&nbsp;</label>
-				<button style="font-size: 16px" onclick="search()">검색</button>
+				<button style="font-size: 16px" onclick="searchFiles()">
+					검색
+				</button>
 
 				<label style="font-size: 15px">&nbsp;&nbsp;</label>
-				<button style="font-size: 16px" onclick="viewAll()">
+				<button
+					style="font-size: 16px"
+					onclick="location.href='/files'"
+				>
 					초기화
 				</button>
 			</span>
@@ -93,7 +98,7 @@
 			<span>
 				<form
 					id="uploadForm"
-					action="/files/upload"
+					action="/api/files"
 					method="post"
 					enctype="multipart/form-data"
 				>
@@ -201,6 +206,11 @@
 		</div>
 
 		<!-- script -->
+		<script src="/js/search.js"></script>
+		<script src="/js/sort.js"></script>
+		<script src="/js/download.js"></script>
+		<script src="/js/rename.js"></script>
+		<script src="/js/delete.js"></script>
 
 		<!--bfcache 처리-->
 		<script>
