@@ -1,9 +1,9 @@
 package com.example.ziindrive.util;
 
-public class FileSizeFormatter {
+public class FileUtils {
 
     // 사이즈 계산 및 포맷 함수
-    public static String format(long size) {
+    public static String formatSize(long size) {
 
         double sizeDouble = (double) size;
 

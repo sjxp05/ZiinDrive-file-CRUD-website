@@ -15,7 +15,7 @@ import com.example.ziindrive.dto.*;
 import com.example.ziindrive.domain.FileEntity;
 import com.example.ziindrive.repository.FileRepository;
 import com.example.ziindrive.repository.FileRepository.FileSpecifications;
-import com.example.ziindrive.util.FileSizeFormatter;
+import com.example.ziindrive.util.FileUtils;
 
 import jakarta.transaction.Transactional;
 
@@ -47,7 +47,7 @@ public class FileService {
             originalName = originalName.trim();
         }
 
-        String size = FileSizeFormatter.format(fileInput.getSize());
+        String size = FileUtils.formatSize(fileInput.getSize());
 
         String extension = originalName.lastIndexOf(".") == -1 ? ""
                 : originalName.substring(originalName.lastIndexOf("."));
