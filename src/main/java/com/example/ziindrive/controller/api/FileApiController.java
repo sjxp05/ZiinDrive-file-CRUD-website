@@ -31,17 +31,9 @@ public class FileApiController {
         if (!sort.equals(holder.getSortToString())) {
 
             holder.setStringToSort(sort);
-
-            // test
-            System.out.println("정렬 변함: " + holder.getSortToString());
-
             return ResponseEntity.ok().build();
 
         } else {
-
-            // test
-            System.out.println("정렬 유지: " + holder.getSortToString());
-
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 

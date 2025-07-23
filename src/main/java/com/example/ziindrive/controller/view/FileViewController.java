@@ -47,8 +47,6 @@ public class FileViewController {
         System.out.println("received GET request (Search)");
 
         // 검색 조건 바꾸기
-        holder.setFindAll(false);
-
         holder.setKeyword(keyword);
         holder.setExtension(extension);
         holder.setFrom(from);
