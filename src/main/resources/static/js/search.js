@@ -1,3 +1,5 @@
+import { renderData } from "./render.js";
+
 const keyword = document.getElementById("keyword");
 const extension = document.getElementById("extension");
 const from = document.getElementById("from");
@@ -12,6 +14,26 @@ document.addEventListener("DOMContentLoaded", () => {
 	to.value = params.get("to") || "";
 
 	console.log("검색조건 화면 반영 완료");
+
+	// 파일 불러오기
+	fetch("/api/files")
+		.then((res) => {
+			if (!res.ok) {
+				throw new Error(res.status);
+			}
+			return res;
+		})
+		.then(async (res) => {
+			if (res.status === 200) {
+				const fileList = await res.json();
+
+				console.log("all files fetch 성공");
+				renderData(fileList);
+			}
+		})
+		.catch((err) => {
+			console.error("fetch 실패:", err);
+		});
 });
 
 function initialize() {
@@ -53,3 +75,6 @@ function searchFiles() {
 		location.href = "/files/search?" + query;
 	}
 }
+
+window.initialize = initialize;
+window.searchFiles = searchFiles;

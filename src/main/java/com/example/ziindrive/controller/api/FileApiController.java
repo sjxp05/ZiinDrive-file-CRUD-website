@@ -25,17 +25,27 @@ public class FileApiController {
     private final SearchOptionHolder holder;
 
     // 파일 불러오기 get
-    // @GetMapping("/api/files")
-    // public ResponseEntity<List<FileResponseDto>> getFileData() {
+    @GetMapping("/api/files")
+    public ResponseEntity<List<FileResponseDto>> getFileData() {
 
-    // // test
-    // System.out.println("received GET request (view all)");
+        // test
+        System.out.println("received GET request (view all)");
 
-    // service.findWithOptions();
-    // return ResponseEntity.ok().body(service.getCachedFiles());
-    // }
+        service.findWithOptions();
+        return ResponseEntity.ok().body(service.getCachedFiles());
+    }
 
-    // 정렬 get
+    // 현재 정렬 상태 get
+    @GetMapping("/api/files/sort")
+    public ResponseEntity<String> getSort() {
+
+        // test
+        System.out.println("received GET request (Current Sort)");
+
+        return ResponseEntity.ok().body(holder.getSortToString());
+    }
+
+    // 정렬된 결과 get
     @GetMapping("/api/files/sort/{sort}")
     public ResponseEntity<List<FileResponseDto>> setSort(@PathVariable("sort") String sort) {
 

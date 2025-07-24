@@ -4,8 +4,24 @@ const div = document.getElementById("fileTable");
 const buttons = document.querySelectorAll(".sortBt");
 
 addEventListener("DOMContentLoaded", () => {
-	const currentSort = div.dataset.sort;
-	document.getElementById(currentSort).classList.add("active");
+	// 정렬 조건 반영하기
+	fetch("/api/files/sort")
+		.then((res) => {
+			if (!res.ok) {
+				throw new Error(res.status);
+			}
+			return res;
+		})
+		.then(async (res) => {
+			const currentSort = await res.text();
+			console.log("정렬조건 받기 완료:", currentSort);
+
+			div.dataset.sort = currentSort;
+			document.getElementById(currentSort).classList.add("active");
+		})
+		.catch((err) => {
+			console.error("정렬조건 받기 실패:", err);
+		});
 });
 
 buttons.forEach((btn) => {

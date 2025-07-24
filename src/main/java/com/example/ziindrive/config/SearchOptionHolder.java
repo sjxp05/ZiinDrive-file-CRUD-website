@@ -18,6 +18,7 @@ import lombok.Setter;
 public class SearchOptionHolder {
 
     private boolean findAll = true;
+    private boolean active = true;
 
     private String keyword;
     private String extension;

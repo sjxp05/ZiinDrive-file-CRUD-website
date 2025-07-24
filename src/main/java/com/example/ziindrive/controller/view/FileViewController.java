@@ -3,10 +3,8 @@ package com.example.ziindrive.controller.view;
 import java.time.LocalDate;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 
 import com.example.ziindrive.config.SearchOptionHolder;
-import com.example.ziindrive.service.FileService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,21 +14,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class FileViewController {
 
-    private final FileService service;
     private final SearchOptionHolder holder;
 
     // 모든 파일 get
     @GetMapping("/files")
-    public String getAllFiles(Model model) {
+    public String getAllFiles() {
 
         // test
         System.out.println("received GET request (AllFiles)");
 
-        holder.setFindAll(true);
-        service.findAll(); // 모든 파일 검색
-
-        model.addAttribute("fileList", service.getCachedFiles());
-        model.addAttribute("currentSort", holder.getSortToString());
+        holder.setFindAll(true); // 모든 파일 검색하도록 설정
+        holder.setActive(true); // 휴지통에 없는 파일만 가능
 
         return "files/filesView";
     }
@@ -41,13 +35,13 @@ public class FileViewController {
             @RequestParam(name = "keyword", required = false) String keyword,
             @RequestParam(name = "extension", required = false) String extension,
             @RequestParam(name = "from", required = false) LocalDate from,
-            @RequestParam(name = "to", required = false) LocalDate to,
-            Model model) {
+            @RequestParam(name = "to", required = false) LocalDate to) {
 
         // test
         System.out.println("received GET request (Search)");
 
         holder.setFindAll(false);
+        holder.setActive(true);
 
         // 검색 조건 바꾸기
         holder.setKeyword(keyword);
@@ -55,16 +49,14 @@ public class FileViewController {
         holder.setFrom(from);
         holder.setTo(to);
 
-        service.findWithOptions(); // 조건 검색
-
-        model.addAttribute("fileList", service.getCachedFiles());
-        model.addAttribute("currentSort", holder.getSortToString());
-
         return "files/filesView";
     }
 
+    // 휴지통 뷰 보기
     @GetMapping("/files/bin")
     public String viewTrashBin() {
+
+        holder.setActive(false);
         return "files/trashBin";
     }
 }
