@@ -44,17 +44,6 @@ function finalizeRename(id, td, newName, currentName) {
 		return;
 	}
 
-	// 금지 문자 제한
-	const invalidChars = /[<>:"/\\|?*]/;
-
-	if (invalidChars.test(newName)) {
-		td.textContent = currentName;
-		alert(
-			'파일명에는 다음과 같은 문자를 사용할 수 없습니다.\n< > : " / \\ | ? *'
-		);
-		return;
-	}
-
 	fetch("/api/files", {
 		method: "PATCH",
 		headers: {

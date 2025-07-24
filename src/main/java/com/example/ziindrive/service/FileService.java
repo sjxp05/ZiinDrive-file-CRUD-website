@@ -41,7 +41,7 @@ public class FileService {
 
         String originalName = FileUtils.checkOriginalName(fileInput.getOriginalFilename());
         String size = FileUtils.formatSize(fileInput.getSize());
-        String extension = FileUtils.extractExtension(originalName);
+        String extension = originalName.substring(originalName.lastIndexOf("."));
         String storedName = UUID.randomUUID().toString() + extension;
 
         File savedFile = new File(properties.getUploadPath(), storedName);
@@ -127,12 +127,7 @@ public class FileService {
             newName += file.getExtension();
         }
 
-        // 이름 길이가 너무 길 경우 오류 발생
-        if (newName.length() > 255) {
-            throw new Exception("파일명이 너무 깁니다!");
-        }
-
-        FileUtils.checkIncludesReservedNames(newName); // 예약어 포함하면 안됨!
+        newName = FileUtils.checkOriginalName(newName); // 이름 길이 및 글자수 제한
 
         if (newName.equals(file.getOriginalName())) {
             return false;

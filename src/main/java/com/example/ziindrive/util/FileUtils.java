@@ -34,11 +34,17 @@ public class FileUtils {
 
         fileName = fileName.trim();
 
+        String extension = extractExtension(fileName);
+        fileName = fileName.substring(0, fileName.lastIndexOf(".")).trim(); // 확장자 제거한 파일이름만 검사
+
         if (fileName.length() == 0) {
             throw new Exception("올바르지 않은 파일명입니다!");
 
         } else if (fileName.length() > 255) {
             throw new Exception("파일명이 너무 깁니다!");
+
+        } else if (RESERVED_WINDOWS_NAMES.contains(fileName)) { // 윈도우 예약어인지 검사
+            throw new Exception("'" + fileName + "' 는 파일 이름으로 사용할 수 없습니다.");
 
         } else {
             for (char c : fileName.toCharArray()) {
@@ -47,17 +53,7 @@ public class FileUtils {
                 }
             }
 
-            return fileName;
-        }
-    }
-
-    // 윈도우 예약어인지 검사
-    public static void checkIncludesReservedNames(String newName) throws Exception {
-
-        newName = newName.substring(0, newName.lastIndexOf("."));
-
-        if (RESERVED_WINDOWS_NAMES.contains(newName)) {
-            throw new Exception("'" + newName + "' 는 파일 이름으로 사용할 수 없습니다.");
+            return fileName + extension;
         }
     }
 
