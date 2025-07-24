@@ -69,17 +69,21 @@ public class FileService {
     // read, search
     public void findWithOptions() {
 
-        // Specification으로 null이 아닌 모든 검색조건 추가
-        Specification<FileEntity> specs = List.of(
-                FileSpecifications.hasKeyword(holder.getKeyword()),
-                FileSpecifications.hasExtension(holder.getExtension()),
-                FileSpecifications.uploadedAfter(holder.getFrom()),
-                FileSpecifications.uploadedBefore(holder.getTo()))
-                .stream().reduce(Specification::and).orElse(null);
+        if (holder.isFindAll()) {
+            cachedFileList = repository.findAll(holder.getSort());
 
-        // 검색 및 캐시로 저장
-        cachedFileList = repository.findAll(specs, holder.getSort());
+        } else {
+            // Specification으로 null이 아닌 모든 검색조건 추가
+            Specification<FileEntity> specs = List.of(
+                    FileSpecifications.hasKeyword(holder.getKeyword()),
+                    FileSpecifications.hasExtension(holder.getExtension()),
+                    FileSpecifications.uploadedAfter(holder.getFrom()),
+                    FileSpecifications.uploadedBefore(holder.getTo()))
+                    .stream().reduce(Specification::and).orElse(null);
 
+            // 검색 및 캐시로 저장
+            cachedFileList = repository.findAll(specs, holder.getSort());
+        }
     }
 
     // 캐시 값 반환

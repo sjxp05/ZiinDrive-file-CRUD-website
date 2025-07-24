@@ -26,6 +26,7 @@ public class FileViewController {
         // test
         System.out.println("received GET request (AllFiles)");
 
+        holder.setFindAll(true);
         service.findAll(); // 모든 파일 검색
 
         model.addAttribute("fileList", service.getCachedFiles());
@@ -45,6 +46,8 @@ public class FileViewController {
 
         // test
         System.out.println("received GET request (Search)");
+
+        holder.setFindAll(false);
 
         // 검색 조건 바꾸기
         holder.setKeyword(keyword);

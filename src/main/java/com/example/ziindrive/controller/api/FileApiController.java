@@ -1,6 +1,7 @@
 package com.example.ziindrive.controller.api;
 
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.springframework.core.io.*;
 import org.springframework.http.*;
@@ -23,7 +24,7 @@ public class FileApiController {
 
     // 정렬 get
     @GetMapping("/api/files")
-    public ResponseEntity<Resource> setSort(@RequestParam("sort") String sort) {
+    public ResponseEntity<List<FileResponseDto>> setSort(@RequestParam("sort") String sort) {
 
         // test
         System.out.println("received GET request (Sort)");
@@ -31,7 +32,9 @@ public class FileApiController {
         if (!sort.equals(holder.getSortToString())) {
 
             holder.setStringToSort(sort);
-            return ResponseEntity.ok().build();
+            service.findWithOptions();
+
+            return ResponseEntity.ok().body(service.getCachedFiles());
 
         } else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

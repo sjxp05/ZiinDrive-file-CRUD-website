@@ -17,6 +17,8 @@ import lombok.Setter;
 @Setter
 public class SearchOptionHolder {
 
+    private boolean findAll = true;
+
     private String keyword;
     private String extension;
     private LocalDate from;
