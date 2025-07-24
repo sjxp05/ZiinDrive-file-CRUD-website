@@ -108,17 +108,23 @@ public class FileApiController {
 
     // 이름수정 patch
     @PatchMapping("/api/files")
-    public ResponseEntity<List<FileResponseDto>> renameFile(@RequestBody FileRenameDto dto) {
+    public ResponseEntity<?> renameFile(@RequestBody FileRenameDto dto) {
 
         // test
         System.out.println("received PATCH request");
 
-        if (service.renameFile(dto.getId(), dto.getNewName())) {
-            service.findWithOptions();
-            return ResponseEntity.ok().body(service.getCachedFiles()); // 이름이 바뀌었을때: 200 OK
+        try {
+            if (service.renameFile(dto.getId(), dto.getNewName())) {
 
-        } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 이름 바꿀 필요 없을때: 204 No content
+                service.findWithOptions();
+                return ResponseEntity.ok().body(service.getCachedFiles()); // 이름이 바뀌었을때: 200 OK + 정렬된 데이터
+
+            } else {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 이름 바꿀 필요 없을때: 204 No content
+            }
+
+        } catch (Exception e) { // 파일 이름이 너무 길때: 400 Bad Request + 에러 메시지
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

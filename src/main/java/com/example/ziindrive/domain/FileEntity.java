@@ -26,6 +26,8 @@ public class FileEntity {
     private LocalDateTime uploadedAt;
     private String formattedDate;
 
+    private boolean active = true;
+
     @Builder
     public FileEntity(String originalName, String storedName, String path, String extension, String size) {
 
@@ -57,5 +59,9 @@ public class FileEntity {
 
     public void setStoredName(String storedName) {
         this.storedName = storedName;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

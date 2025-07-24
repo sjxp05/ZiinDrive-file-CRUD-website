@@ -63,14 +63,14 @@ public class FileService {
     // read
     public void findAll() {
 
-        cachedFileList = repository.findAll(holder.getSort());
+        cachedFileList = repository.findAll(FileSpecifications.isActive(holder.isActive()), holder.getSort());
     }
 
     // read, search
     public void findWithOptions() {
 
         if (holder.isFindAll()) {
-            cachedFileList = repository.findAll(holder.getSort());
+            cachedFileList = repository.findAll(FileSpecifications.isActive(holder.isActive()), holder.getSort());
 
         } else {
             // Specification으로 null이 아닌 모든 검색조건 추가
@@ -78,7 +78,8 @@ public class FileService {
                     FileSpecifications.hasKeyword(holder.getKeyword()),
                     FileSpecifications.hasExtension(holder.getExtension()),
                     FileSpecifications.uploadedAfter(holder.getFrom()),
-                    FileSpecifications.uploadedBefore(holder.getTo()))
+                    FileSpecifications.uploadedBefore(holder.getTo()),
+                    FileSpecifications.isActive(holder.isActive()))
                     .stream().reduce(Specification::and).orElse(null);
 
             // 검색 및 캐시로 저장
@@ -116,7 +117,7 @@ public class FileService {
     }
 
     // update (*파일이름(사용자에게 보이는 이름)만 수정 가능)
-    public boolean renameFile(Long id, String newName) {
+    public boolean renameFile(Long id, String newName) throws Exception {
 
         FileEntity file = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
@@ -124,6 +125,11 @@ public class FileService {
         // 올바른 확장자가 붙어있지 않을 경우 추가
         if (!newName.endsWith(file.getExtension())) {
             newName += file.getExtension();
+        }
+
+        // 이름 길이가 너무 길 경우 오류 발생
+        if (newName.length() > 255) {
+            throw new Exception("파일명이 너무 깁니다!");
         }
 
         if (newName.equals(file.getOriginalName())) {

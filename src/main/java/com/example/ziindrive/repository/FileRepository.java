@@ -55,5 +55,11 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
                 return cb.lessThan(root.get("uploadedAt"), to.plusDays(1).atStartOfDay());
             };
         }
+
+        public static Specification<FileEntity> isActive(boolean active) {
+            return (root, query, cb) -> {
+                return cb.equal(root.get("active"), active);
+            };
+        }
     }
 }

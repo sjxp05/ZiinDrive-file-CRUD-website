@@ -4,6 +4,10 @@ import java.util.Set;
 
 public class FileUtils {
 
+    // 허용되지 않는 문자
+    private static final Set<Character> INVALID_CHARS = Set.of(
+            '<', '>', ':', '"', '/', '\\', '|', '?', '*');
+
     // 허용되는 모든 확장자
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of(
             ".txt", ".docx", ".hwp", ".xlsx", ".pptx", ".pdf", ".md", // 문서
@@ -26,7 +30,17 @@ public class FileUtils {
 
         if (fileName.length() == 0) {
             throw new Exception("올바르지 않은 파일명입니다!");
+
+        } else if (fileName.length() > 255) {
+            throw new Exception("파일명이 너무 깁니다!");
+
         } else {
+            for (char c : fileName.toCharArray()) {
+                if (INVALID_CHARS.contains(c)) {
+                    throw new Exception("파일명에는 다음과 같은 문자를 사용할 수 없습니다.\n< > : \" / \\ | ? *");
+                }
+            }
+
             return fileName;
         }
     }
@@ -51,7 +65,7 @@ public class FileUtils {
     }
 
     // 사이즈 계산 및 포맷 함수
-    public static String formatSize(long size) {
+    public static String formatSize(long size) throws Exception {
 
         double sizeDouble = (double) size;
 
@@ -68,6 +82,10 @@ public class FileUtils {
             } else {
                 break;
             }
+        }
+
+        if (siUnit.equals("G")) {
+            throw new Exception("1 GB 미만의 파일만 업로드 가능합니다!");
         }
 
         if (sizeDouble == (long) sizeDouble) {

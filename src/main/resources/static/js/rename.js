@@ -44,13 +44,6 @@ function finalizeRename(id, td, newName, currentName) {
 		return;
 	}
 
-	// 길이 제한
-	if (newName.length > 200) {
-		td.textContent = currentName;
-		alert("파일명이 너무 깁니다!");
-		return;
-	}
-
 	// 금지 문자 제한
 	const invalidChars = /[<>:"/\\|?*]/;
 
@@ -74,9 +67,8 @@ function finalizeRename(id, td, newName, currentName) {
 	})
 		.then((res) => {
 			if (!res.ok) {
-				throw new Error(res.status);
+				throw res;
 			}
-
 			return res;
 		})
 		.then(async (res) => {
@@ -90,8 +82,12 @@ function finalizeRename(id, td, newName, currentName) {
 				td.textContent = currentName;
 			}
 		})
-		.catch((err) => {
-			console.error("이름 변경 실패:", err);
+		.catch(async (err) => {
+			// 길이 제한
+			const msg = await err.text();
+			alert(msg);
+
+			console.error("이름 변경 실패:", msg);
 			td.textContent = currentName;
 		});
 }
