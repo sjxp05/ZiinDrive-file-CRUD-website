@@ -3,10 +3,10 @@ export function renderData(fileList) {
 	tBody.innerHTML = "";
 
 	if (fileList.length === 0) {
-		document.getElementById("isEmpty").style.display = "flex";
+		document.getElementById("isEmpty").style.display = "flex"; // '파일이 없습니다' 표시
 		return;
 	} else {
-		document.getElementById("isEmpty").style.display = "none";
+		document.getElementById("isEmpty").style.display = "none"; // 숨기기
 
 		const tableRows = fileList.map((file) => createRow(file)).join("");
 		tBody.innerHTML = tableRows;

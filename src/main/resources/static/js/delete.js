@@ -7,7 +7,6 @@ function deleteFile(btn) {
 	const really = confirm("정말 삭제하시겠습니까?");
 
 	if (!really) {
-		console.log("삭제 취소");
 		return;
 	}
 

@@ -13,8 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	from.value = params.get("from") || "";
 	to.value = params.get("to") || "";
 
-	console.log("검색조건 화면 반영 완료");
-
 	// 파일 불러오기
 	fetch("/api/files")
 		.then((res) => {
@@ -37,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initialize() {
+	// 이미 메인화면일 경우 검색어만 초기화 (db에 다시 접근해서 가져올 필요 없음)
 	if (location.href === "http://localhost:8080/files") {
 		keyword.value = "";
 		extension.value = "";
@@ -58,6 +57,7 @@ function searchFiles() {
 		to: to.value,
 	};
 
+	// 빈칸이 아닌 검색조건만 골라서 객체 형태로 저장
 	const filteredParams = Object.entries(rawParams)
 		.filter(([_, v]) => v != null && v !== "")
 		.reduce((obj, [k, v]) => {
@@ -66,11 +66,10 @@ function searchFiles() {
 		}, {});
 
 	if (Object.keys(filteredParams).length === 0) {
+		// 검색어가 없을 때
 		console.log("검색 조건이 비어 있음!");
 		return;
 	} else {
-		console.log(filteredParams); // test
-
 		const query = new URLSearchParams(filteredParams).toString();
 		location.href = "/files/search?" + query;
 	}

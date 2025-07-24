@@ -1,6 +1,6 @@
 function uploadFile() {
 	const input = document.getElementById("fileInput");
-	const fileInput = input.files[0]; // 첫번째 파일
+	const fileInput = input.files[0]; // 첫번째 파일 선택
 
 	if (!fileInput) {
 		console.log("파일이 선택되지 않음!");

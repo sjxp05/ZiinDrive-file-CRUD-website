@@ -50,7 +50,6 @@ function setSort(sortOption) {
 				const fileList = await res.json();
 
 				console.log("정렬 성공:", sortOption);
-				// location.reload(); // 페이지 새로고침하면서 데이터도 새로 반영됨! <-- 얘를 리로딩x 리렌더링으로 바꾸려고 생각중
 				renderData(fileList);
 			} else {
 				console.log("정렬 필요 없음", res.status);
