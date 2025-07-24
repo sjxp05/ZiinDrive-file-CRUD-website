@@ -88,12 +88,42 @@
 					>&nbsp;&nbsp;형식&nbsp;&nbsp;</label
 				>
 				<!--콤보박스-->
+				<!-- 옵션은 자바파일 따로 만들어서 돌림 개꿀ㅋㅋㅋㅋ -->
 				<select id="extension" name="extension" style="font-size: 15px">
 					<option value="">모든 형식</option>
+					<option value="txt">txt</option>
+					<option value="docx">docx</option>
+					<option value="hwp">hwp</option>
+					<option value="xlsx">xlsx</option>
+					<option value="pptx">pptx</option>
+					<option value="pdf">pdf</option>
+					<option value="md">md</option>
 					<option value="png">png</option>
 					<option value="jpg">jpg</option>
-					<option value="docx">docx</option>
-					<option value="none">확장자 없음</option>
+					<option value="jpeg">jpeg</option>
+					<option value="gif">gif</option>
+					<option value="bmp">bmp</option>
+					<option value="webp">webp</option>
+					<option value="mp3">mp3</option>
+					<option value="m4a">m4a</option>
+					<option value="wav">wav</option>
+					<option value="mp4">mp4</option>
+					<option value="avi">avi</option>
+					<option value="mkv">mkv</option>
+					<option value="mov">mov</option>
+					<option value="zip">zip</option>
+					<option value="tar">tar</option>
+					<option value="gz">gz</option>
+					<option value="c">c</option>
+					<option value="cpp">cpp</option>
+					<option value="py">py</option>
+					<option value="java">java</option>
+					<option value="js">js</option>
+					<option value="json">json</option>
+					<option value="html">html</option>
+					<option value="xml">xml</option>
+					<option value="csv">csv</option>
+					<option value="yml">yml</option>
 				</select>
 
 				<label style="font-size: 15px"
@@ -116,23 +146,21 @@
 
 			<!-- 업로드 버튼 표시 위치 -->
 			<span>
-				<form id="uploadForm" enctype="multipart/form-data">
-					<input
-						id="fileInput"
-						name="fileInput"
-						type="file"
-						style="display: none"
-						onchange="uploadFile()"
-					/>
-					<button
-						type="button"
-						class="uploadBt"
-						onclick="document.getElementById('fileInput').click()"
-					>
-						<b>+</b>
-					</button>
-					<label style="font-size: 15px">&nbsp;&nbsp;&nbsp;</label>
-				</form>
+				<input
+					id="fileInput"
+					name="fileInput"
+					type="file"
+					style="display: none"
+					onchange="uploadFile()"
+				/>
+				<button
+					type="button"
+					class="uploadBt"
+					onclick="document.getElementById('fileInput').click()"
+				>
+					<b>+</b>
+				</button>
+				<label style="font-size: 15px">&nbsp;&nbsp;&nbsp;</label>
 			</span>
 		</span>
 
