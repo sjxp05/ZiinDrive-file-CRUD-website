@@ -14,6 +14,8 @@ import com.example.ziindrive.service.FileService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,9 +24,20 @@ public class FileApiController {
     private final FileService service;
     private final SearchOptionHolder holder;
 
+    // 파일 불러오기 get
+    // @GetMapping("/api/files")
+    // public ResponseEntity<List<FileResponseDto>> getFileData() {
+
+    // // test
+    // System.out.println("received GET request (view all)");
+
+    // service.findWithOptions();
+    // return ResponseEntity.ok().body(service.getCachedFiles());
+    // }
+
     // 정렬 get
-    @GetMapping("/api/files")
-    public ResponseEntity<List<FileResponseDto>> setSort(@RequestParam("sort") String sort) {
+    @GetMapping("/api/files/sort/{sort}")
+    public ResponseEntity<List<FileResponseDto>> setSort(@PathVariable("sort") String sort) {
 
         // test
         System.out.println("received GET request (Sort)");

@@ -21,7 +21,7 @@ buttons.forEach((btn) => {
 });
 
 function setSort(sortOption) {
-	fetch("/api/files?sort=" + sortOption)
+	fetch("/api/files/sort/" + sortOption)
 		.then((res) => {
 			if (!res.ok) {
 				throw new Error(res.status);

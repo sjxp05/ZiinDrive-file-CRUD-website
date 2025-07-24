@@ -63,4 +63,8 @@ public class FileViewController {
         return "files/filesView";
     }
 
+    @GetMapping("/files/bin")
+    public String viewTrashBin() {
+        return "files/trashBin";
+    }
 }

@@ -3,10 +3,19 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Files - ZiinDrive</title>
+		<title>ZiinDrive</title>
 	</head>
 	<body>
 		<style>
+			.logo {
+				width: 110px;
+				color: black;
+				cursor: default;
+				user-select: none;
+			}
+			.logo:hover {
+				color: cadetblue;
+			}
 			.uploadBt {
 				font-size: 35px;
 				padding: 2px 15px;
@@ -54,7 +63,9 @@
 
 		<!-- 사이트 로고 -->
 		<div style="text-align: left; align-items: center">
-			<h2>&nbsp;&nbsp;&nbsp;<b>Ziin</b>Drive</h2>
+			<h2 class="logo" onclick="initialize()">
+				&nbsp;&nbsp;&nbsp;<b>Ziin</b>Drive
+			</h2>
 		</div>
 
 		<span
@@ -97,10 +108,7 @@
 				</button>
 
 				<label style="font-size: 15px">&nbsp;&nbsp;</label>
-				<button
-					style="font-size: 16px"
-					onclick="location.href='/files'"
-				>
+				<button style="font-size: 16px" onclick="initialize()">
 					초기화
 				</button>
 			</span>

@@ -14,6 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
 	console.log("검색조건 화면 반영 완료");
 });
 
+function initialize() {
+	if (location.href === "http://localhost:8080/files") {
+		keyword.value = "";
+		extension.value = "";
+		from.value = "";
+		to.value = "";
+
+		console.log("메인 화면 유지");
+		return;
+	} else {
+		location.href = "/files";
+	}
+}
+
 function searchFiles() {
 	const rawParams = {
 		keyword: keyword.value.trim(),
