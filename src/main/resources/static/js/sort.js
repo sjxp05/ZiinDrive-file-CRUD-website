@@ -1,3 +1,5 @@
+import { renderData } from "./render.js";
+
 const div = document.getElementById("fileTable");
 const buttons = document.querySelectorAll(".sortBt");
 
@@ -41,48 +43,4 @@ function setSort(sortOption) {
 		.catch((err) => {
 			console.error("정렬 실패:", err);
 		});
-}
-
-function renderData(fileList) {
-	const tBody = document.getElementById("tBody");
-	tBody.innerHTML = "";
-
-	if (fileList.length === 0) {
-		document.getElementById("isEmpty").style.display = "flex";
-		return;
-	} else {
-		document.getElementById("isEmpty").style.display = "none";
-
-		const tableRows = fileList.map((file) => createTableRow(file)).join("");
-		tBody.innerHTML = tableRows;
-	}
-}
-
-function createTableRow(file) {
-	return `<tr
-				th:attr="data-id=${file.id}"
-				style="height: 40px; align-items: center"
-			>
-				<td>${file.originalName}</td>
-				<td>${file.formattedDate}</td>
-				<td>${file.size}</td>
-				<td>
-					<button
-						onclick="downloadFile(this)"
-						class="downloadBt"
-					>
-						다운로드
-					</button>
-				</td>
-				<td>
-					<button onclick="renameFile(this)" class="renameBt">
-						이름 변경
-					</button>
-				</td>
-				<td>
-					<button onclick="deleteFile(this)" class="deleteBt">
-						삭제
-					</button>
-				</td>
-			</tr>`;
 }

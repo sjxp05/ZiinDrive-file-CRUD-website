@@ -85,13 +85,14 @@ public class FileApiController {
 
     // 이름수정 patch
     @PatchMapping("/api/files")
-    public ResponseEntity<?> renameFile(@RequestBody FileRenameDto dto) {
+    public ResponseEntity<List<FileResponseDto>> renameFile(@RequestBody FileRenameDto dto) {
 
         // test
         System.out.println("received PATCH request");
 
         if (service.renameFile(dto.getId(), dto.getNewName())) {
-            return ResponseEntity.ok().build(); // 이름이 바뀌었을때: 200 OK
+            service.findWithOptions();
+            return ResponseEntity.ok().body(service.getCachedFiles()); // 이름이 바뀌었을때: 200 OK
 
         } else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 이름 바꿀 필요 없을때: 204 No content
@@ -100,12 +101,19 @@ public class FileApiController {
 
     // 삭제 delete
     @DeleteMapping("/api/files/{id}")
-    public ResponseEntity<Resource> deleteFile(@PathVariable("id") Long id) {
+    public ResponseEntity<List<FileResponseDto>> deleteFile(@PathVariable("id") Long id) {
 
         // test
         System.out.println("received DELETE request");
 
-        service.deleteFile(id);
-        return ResponseEntity.ok().build();
+        try {
+            service.deleteFile(id);
+            service.findWithOptions(); // 삭제한거 빼고 다시 검색하기
+
+            return ResponseEntity.ok().body(service.getCachedFiles());
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

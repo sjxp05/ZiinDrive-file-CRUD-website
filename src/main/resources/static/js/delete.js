@@ -1,3 +1,5 @@
+import { renderData } from "./render.js";
+
 function deleteFile(btn) {
 	const id = btn.closest("tr").dataset.id;
 
@@ -16,12 +18,18 @@ function deleteFile(btn) {
 			if (!res.ok) {
 				throw new Error(res.status);
 			}
+
+			return res;
 		})
-		.then(() => {
+		.then(async (res) => {
+			const fileList = await res.json();
+
 			console.log("파일 삭제 완료");
-			location.reload();
+			renderData(fileList);
 		})
 		.catch((err) => {
 			console.error("파일 삭제 실패:", err);
 		});
 }
+
+window.deleteFile = deleteFile;

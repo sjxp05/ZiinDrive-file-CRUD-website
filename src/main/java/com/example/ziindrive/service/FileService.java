@@ -135,7 +135,7 @@ public class FileService {
     }
 
     // delete
-    public void deleteFile(Long id) {
+    public void deleteFile(Long id) throws Exception {
 
         FileEntity file = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));

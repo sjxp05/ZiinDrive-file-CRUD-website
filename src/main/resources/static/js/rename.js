@@ -1,3 +1,5 @@
+import { renderData } from "./render.js";
+
 function renameFile(btn) {
 	const td = btn.closest("tr").querySelector("td:nth-child(1)");
 	const id = btn.closest("tr").dataset.id;
@@ -57,14 +59,16 @@ function finalizeRename(id, td, newName, currentName) {
 				throw new Error(res.status);
 			}
 
-			return res.status;
+			return res;
 		})
-		.then((status) => {
-			if (status === 200) {
+		.then(async (res) => {
+			if (res.status === 200) {
+				const fileList = await res.json();
+
 				console.log("이름 변경 성공");
-				location.reload();
+				renderData(fileList);
 			} else {
-				console.log("이름이 같음", status);
+				console.log("이름이 같음", res.status);
 				td.textContent = currentName;
 			}
 		})
@@ -73,3 +77,5 @@ function finalizeRename(id, td, newName, currentName) {
 			td.textContent = currentName;
 		});
 }
+
+window.renameFile = renameFile;
