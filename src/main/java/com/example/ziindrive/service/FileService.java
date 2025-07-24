@@ -132,6 +132,8 @@ public class FileService {
             throw new Exception("파일명이 너무 깁니다!");
         }
 
+        FileUtils.checkIncludesReservedNames(newName); // 예약어 포함하면 안됨!
+
         if (newName.equals(file.getOriginalName())) {
             return false;
         }

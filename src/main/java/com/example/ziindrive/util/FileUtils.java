@@ -19,6 +19,12 @@ public class FileUtils {
             ".csv", ".yml" // 기타
     );
 
+    // 윈도우 예약어 (이름 바꿀때 넣지 못하게)
+    private static final Set<String> RESERVED_WINDOWS_NAMES = Set.of(
+            "CON", "PRN", "AUX", "NUL",
+            "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+            "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9");
+
     // 파일 이름 검사 함수
     public static String checkOriginalName(String fileName) throws Exception {
 
@@ -42,6 +48,16 @@ public class FileUtils {
             }
 
             return fileName;
+        }
+    }
+
+    // 윈도우 예약어인지 검사
+    public static void checkIncludesReservedNames(String newName) throws Exception {
+
+        newName = newName.substring(0, newName.lastIndexOf("."));
+
+        if (RESERVED_WINDOWS_NAMES.contains(newName)) {
+            throw new Exception("'" + newName + "' 는 파일 이름으로 사용할 수 없습니다.");
         }
     }
 
