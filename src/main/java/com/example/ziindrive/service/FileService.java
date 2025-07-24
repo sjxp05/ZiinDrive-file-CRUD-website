@@ -33,35 +33,21 @@ public class FileService {
     private volatile List<FileEntity> cachedFileList = null; // 쿼리로 찾은 파일 정보들을 캐싱하는 리스트
 
     // create
-    public FileEntity uploadFile(MultipartFile fileInput) throws IOException {
+    public FileEntity uploadFile(MultipartFile fileInput) throws Exception {
 
         if (fileInput == null) {
             return null;
         }
 
-        String originalName = fileInput.getOriginalFilename();
-
-        if (originalName == null) {
-            return null;
-        } else {
-            originalName = originalName.trim();
-        }
-
+        String originalName = FileUtils.checkOriginalName(fileInput.getOriginalFilename());
         String size = FileUtils.formatSize(fileInput.getSize());
-
-        String extension = originalName.lastIndexOf(".") == -1 ? ""
-                : originalName.substring(originalName.lastIndexOf("."));
-
+        String extension = FileUtils.extractExtension(originalName);
         String storedName = UUID.randomUUID().toString() + extension;
 
         File savedFile = new File(properties.getUploadPath(), storedName);
         String path = savedFile.getAbsolutePath();
 
-        try {
-            fileInput.transferTo(savedFile);
-        } catch (Exception e) {
-            System.out.println("저장 실패: " + e.getMessage());
-        }
+        fileInput.transferTo(savedFile);
 
         FileEntity entity = FileEntity.builder()
                 .originalName(originalName)

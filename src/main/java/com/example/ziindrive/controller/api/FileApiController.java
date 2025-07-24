@@ -41,19 +41,21 @@ public class FileApiController {
 
     // 업로드 post
     @PostMapping("/api/files")
-    public ResponseEntity<Resource> uploadFile(@RequestParam("fileInput") MultipartFile fileInput) {
+    public ResponseEntity<String> uploadFile(@RequestParam("fileInput") MultipartFile fileInput) {
 
         // test
         System.out.println("received POST request (Upload)");
 
         try {
-            service.uploadFile(fileInput);
+            if (service.uploadFile(fileInput) == null) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
         } catch (Exception e) {
             System.out.println("업로드 오류 발생: " + e.getMessage());
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().build();
     }
 
     // 다운로드 get
@@ -73,7 +75,7 @@ public class FileApiController {
 
         } catch (Exception e) {
             System.out.println("다운로드 오류 발생: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
     }
@@ -101,6 +103,6 @@ public class FileApiController {
         System.out.println("received DELETE request");
 
         service.deleteFile(id);
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().build();
     }
 }

@@ -17,14 +17,21 @@ function uploadFile() {
 	})
 		.then((res) => {
 			if (!res.ok) {
-				throw new Error(res.status);
+				throw res;
+			}
+
+			return res.status;
+		})
+		.then((status) => {
+			if (status === 200) {
+				location.href = "/files";
+			} else {
+				console.log("파일이 선택되지 않음");
 			}
 		})
-		.then(() => {
-			console.log("업로드 성공");
-			location.href = "/files";
-		})
-		.catch((err) => {
-			console.error("업로드 실패:", err);
+		.catch(async (err) => {
+			const msg = await err.text();
+			alert(msg);
+			console.error("업로드 실패:", msg);
 		});
 }
