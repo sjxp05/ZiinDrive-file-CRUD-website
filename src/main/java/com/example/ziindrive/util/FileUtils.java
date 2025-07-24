@@ -10,7 +10,7 @@ public class FileUtils {
             ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", // 이미지
             ".mp3", ".m4a", ".wav", // 오디오
             ".mp4", ".avi", ".mkv", ".mov", // 동영상
-            ".zip", ".tar", ".gz", // 압축 파일
+            ".zip", ".tar", ".gz", ".7z", // 압축 파일
             ".c", ".cpp", ".py", ".java", ".js", ".json", ".html", ".xml", // 소스코드
             ".csv", ".yml" // 기타
     );

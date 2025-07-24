@@ -48,6 +48,13 @@
 				align-items: center;
 				justify-content: center;
 			}
+			.select {
+				font-size: 15px;
+				width: 100px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
 			.downloadBt {
 				background-color: cadetblue;
 				color: white;
@@ -89,41 +96,56 @@
 				>
 				<!--콤보박스-->
 				<!-- 옵션은 자바파일 따로 만들어서 돌림 개꿀ㅋㅋㅋㅋ -->
-				<select id="extension" name="extension" style="font-size: 15px">
+				<select id="extension" class="select">
 					<option value="">모든 형식</option>
-					<option value="txt">txt</option>
-					<option value="docx">docx</option>
-					<option value="hwp">hwp</option>
-					<option value="xlsx">xlsx</option>
-					<option value="pptx">pptx</option>
-					<option value="pdf">pdf</option>
-					<option value="md">md</option>
-					<option value="png">png</option>
-					<option value="jpg">jpg</option>
-					<option value="jpeg">jpeg</option>
-					<option value="gif">gif</option>
-					<option value="bmp">bmp</option>
-					<option value="webp">webp</option>
-					<option value="mp3">mp3</option>
-					<option value="m4a">m4a</option>
-					<option value="wav">wav</option>
-					<option value="mp4">mp4</option>
-					<option value="avi">avi</option>
-					<option value="mkv">mkv</option>
-					<option value="mov">mov</option>
-					<option value="zip">zip</option>
-					<option value="tar">tar</option>
-					<option value="gz">gz</option>
-					<option value="c">c</option>
-					<option value="cpp">cpp</option>
-					<option value="py">py</option>
-					<option value="java">java</option>
-					<option value="js">js</option>
-					<option value="json">json</option>
-					<option value="html">html</option>
-					<option value="xml">xml</option>
-					<option value="csv">csv</option>
-					<option value="yml">yml</option>
+					<optgroup label="문서">
+						<option value="docx">docx</option>
+						<option value="pdf">pdf</option>
+						<option value="hwp">hwp</option>
+						<option value="xlsx">xlsx</option>
+						<option value="pptx">pptx</option>
+						<option value="txt">txt</option>
+						<option value="md">md</option>
+					</optgroup>
+					<optgroup label="이미지">
+						<option value="png">png</option>
+						<option value="jpg">jpg</option>
+						<option value="jpeg">jpeg</option>
+						<option value="gif">gif</option>
+						<option value="bmp">bmp</option>
+						<option value="webp">webp</option>
+					</optgroup>
+					<optgroup label="오디오">
+						<option value="mp3">mp3</option>
+						<option value="m4a">m4a</option>
+						<option value="wav">wav</option>
+					</optgroup>
+					<optgroup label="동영상">
+						<option value="mp4">mp4</option>
+						<option value="avi">avi</option>
+						<option value="mkv">mkv</option>
+						<option value="mov">mov</option>
+					</optgroup>
+					<optgroup label="압축 파일">
+						<option value="zip">zip</option>
+						<option value="tar">tar</option>
+						<option value="gz">gz</option>
+						<option value="7z">7z</option>
+					</optgroup>
+					<optgroup label="코드">
+						<option value="c">c</option>
+						<option value="cpp">cpp</option>
+						<option value="py">py</option>
+						<option value="java">java</option>
+						<option value="js">js</option>
+						<option value="json">json</option>
+						<option value="html">html</option>
+						<option value="xml">xml</option>
+					</optgroup>
+					<optgroup label="기타">
+						<option value="csv">csv</option>
+						<option value="yml">yml</option>
+					</optgroup>
 				</select>
 
 				<label style="font-size: 15px"
