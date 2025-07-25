@@ -21,7 +21,7 @@ public class FileViewController {
     public String getAllFiles() {
 
         // test
-        System.out.println("received GET request (AllFiles)");
+        System.out.println("received GET request (Main View)");
 
         holder.setFindAll(true); // 모든 파일 검색하도록 설정
         holder.setActive(true); // 휴지통에 없는 파일만 가능
@@ -56,7 +56,9 @@ public class FileViewController {
     @GetMapping("/files/bin")
     public String viewTrashBin() {
 
+        holder.setFindAll(true);
         holder.setActive(false);
+
         return "files/trashBin";
     }
 }

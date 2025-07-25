@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 });
 
-function initialize() {
+function toMainView() {
 	// 이미 메인화면일 경우 검색어만 초기화 (db에 다시 접근해서 가져올 필요 없음)
 	if (location.href === "http://localhost:8080/files") {
 		keyword.value = "";
@@ -47,6 +47,16 @@ function initialize() {
 	} else {
 		location.href = "/files";
 	}
+}
+
+function initialize() {
+	// 검색 조건만 초기화
+	keyword.value = "";
+	extension.value = "";
+	from.value = "";
+	to.value = "";
+
+	console.log("검색 조건 초기화됨");
 }
 
 function searchFiles() {
@@ -67,13 +77,18 @@ function searchFiles() {
 
 	if (Object.keys(filteredParams).length === 0) {
 		// 검색어가 없을 때
-		console.log("검색 조건이 비어 있음!");
-		return;
+		console.log("검색 조건이 비어 있음, 메인화면으로 돌아감");
+		toMainView();
+		/*
+		 * 이미 메인화면이면 변화 x
+		 * 아니라면(의도적으로 비운 상태이면) /files로 이동하기
+		 */
 	} else {
 		const query = new URLSearchParams(filteredParams).toString();
 		location.href = "/files/search?" + query;
 	}
 }
 
+window.toMainView = toMainView;
 window.initialize = initialize;
 window.searchFiles = searchFiles;

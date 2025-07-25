@@ -62,11 +62,21 @@ function finalizeRename(id, td, newName, currentName) {
 		})
 		.then(async (res) => {
 			if (res.status === 200) {
-				const fileList = await res.json();
+				const contentType = res.headers.get("Content-Type");
 
-				console.log("이름 변경 성공");
-				renderData(fileList);
-			} else {
+				// 이름순으로 정렬되어 있어서 새롭게 정렬이 필요한 경우
+				if (contentType && contentType.includes("application/json")) {
+					const fileList = await res.json();
+					console.log("이름 목록 전체 리렌더링");
+					renderData(fileList);
+				} else {
+					// 최신순/오래된순 정렬되어 있어 해당 파일 이름만 바꿔주면 되는 경우
+					const fileName = await res.text();
+					console.log("해당 파일만 변경");
+					td.textContent = fileName;
+				}
+			} else if (res.status === 204) {
+				// 이름이 실질적으로 바뀌지 않은 경우
 				console.log("이름이 같음", res.status);
 				td.textContent = currentName;
 			}

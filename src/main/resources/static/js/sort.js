@@ -1,6 +1,5 @@
 import { renderData } from "./render.js";
 
-const div = document.getElementById("fileTable");
 const buttons = document.querySelectorAll(".sortBt");
 
 addEventListener("DOMContentLoaded", () => {
@@ -15,8 +14,6 @@ addEventListener("DOMContentLoaded", () => {
 		.then(async (res) => {
 			const currentSort = await res.text();
 			console.log("정렬조건 받기 완료:", currentSort);
-
-			div.dataset.sort = currentSort;
 			document.getElementById(currentSort).classList.add("active");
 		})
 		.catch((err) => {

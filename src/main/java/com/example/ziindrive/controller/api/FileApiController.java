@@ -29,7 +29,7 @@ public class FileApiController {
     public ResponseEntity<List<FileResponseDto>> getFileData() {
 
         // test
-        System.out.println("received GET request (view all)");
+        System.out.println("received GET request (Send Files)");
 
         service.findWithOptions();
         return ResponseEntity.ok().body(service.getCachedFiles());
@@ -50,7 +50,7 @@ public class FileApiController {
     public ResponseEntity<List<FileResponseDto>> setSort(@PathVariable("sort") String sort) {
 
         // test
-        System.out.println("received GET request (Sort)");
+        System.out.println("received GET request (Set Sort)");
 
         if (!sort.equals(holder.getSortToString())) {
 
@@ -111,19 +111,34 @@ public class FileApiController {
     public ResponseEntity<?> renameFile(@RequestBody FileRenameDto dto) {
 
         // test
-        System.out.println("received PATCH request");
+        System.out.println("received PATCH request (Rename)");
 
         try {
-            if (service.renameFile(dto.getId(), dto.getNewName())) {
+            String validatedName = service.renameFile(dto.getId(), dto.getNewName());
+            /*
+             * 이름이 달라졌을때: 바뀐 이름 반환
+             * 이름이 기존과 같을때: null 반환
+             * 길이나 예약어 조건에 맞지 않을 경우: Exception 발생
+             */
 
-                service.findWithOptions();
-                return ResponseEntity.ok().body(service.getCachedFiles()); // 이름이 바뀌었을때: 200 OK + 정렬된 데이터
+            if (validatedName != null) {
+                // 이름순 정렬이 새롭게 필요할때: 200 OK + 정렬된 데이터 (json)
+                if (holder.getSortToString().equals("name")) {
 
+                    service.findWithOptions();
+                    return ResponseEntity.ok()
+                            .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                            .body(service.getCachedFiles());
+                }
+                // 이름만 바꾸면 되고 정렬 새로 필요 없을때: 200 OK + 새로 정한 이름만 (text)
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_TYPE, "text/plain")
+                        .body(validatedName);
             } else {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 이름 바꿀 필요 없을때: 204 No content
             }
 
-        } catch (Exception e) { // 파일 이름이 너무 길때: 400 Bad Request + 에러 메시지
+        } catch (Exception e) { // 파일 이름이 조건에 맞지 않을때: 400 Bad Request + 에러 메시지
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -133,7 +148,7 @@ public class FileApiController {
     public ResponseEntity<List<FileResponseDto>> deleteFile(@PathVariable("id") Long id) {
 
         // test
-        System.out.println("received DELETE request");
+        System.out.println("received DELETE request (Delete)");
 
         try {
             service.deleteFile(id);

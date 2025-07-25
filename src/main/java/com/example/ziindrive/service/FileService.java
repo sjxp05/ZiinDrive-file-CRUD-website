@@ -39,7 +39,7 @@ public class FileService {
             return null;
         }
 
-        String originalName = FileUtils.checkOriginalName(fileInput.getOriginalFilename());
+        String originalName = FileUtils.validateOriginalName(fileInput.getOriginalFilename());
         String size = FileUtils.formatSize(fileInput.getSize());
         String extension = originalName.substring(originalName.lastIndexOf("."));
         String storedName = UUID.randomUUID().toString() + extension;
@@ -117,24 +117,24 @@ public class FileService {
     }
 
     // update (*파일이름(사용자에게 보이는 이름)만 수정 가능)
-    public boolean renameFile(Long id, String newName) throws Exception {
+    public String renameFile(Long id, String newName) throws Exception {
 
         FileEntity file = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
-        // 올바른 확장자가 붙어있지 않을 경우 추가
+        // 올바른 확장자가 붙어있지 않을 경우 추가한 뒤 validate 함수로 보내기
         if (!newName.endsWith(file.getExtension())) {
             newName += file.getExtension();
         }
 
-        newName = FileUtils.checkOriginalName(newName); // 이름 길이 및 글자수 제한
+        newName = FileUtils.validateOriginalName(newName); // 이름 길이 및 글자수 제한
 
         if (newName.equals(file.getOriginalName())) {
-            return false;
+            return null;
         }
 
         file.setOriginalName(newName); // Transactional 때문에 자동으로 저장, 새로고침됨
-        return true;
+        return newName; // validateOriginalName에서 다듬은 새 이름 보내주기
     }
 
     // delete

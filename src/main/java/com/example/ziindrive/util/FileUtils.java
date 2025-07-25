@@ -26,7 +26,7 @@ public class FileUtils {
             "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9");
 
     // 파일 이름 검사 함수
-    public static String checkOriginalName(String fileName) throws Exception {
+    public static String validateOriginalName(String fileName) throws Exception {
 
         if (fileName == null) {
             throw new Exception("올바르지 않은 파일명입니다!");
@@ -96,14 +96,17 @@ public class FileUtils {
             }
         }
 
+        // 용량 제한 (yml설정에는 넉넉하게 100기가로 잡아놓고 실제 가능한 파일은 1기가 미만)
         if (siUnit.equals("G")) {
             throw new Exception("1 GB 미만의 파일만 업로드 가능합니다!");
         }
 
         if (sizeDouble == (long) sizeDouble) {
+            // 정수일땐 .0 없이 출력
             return String.format("%d ", (long) sizeDouble) + siUnit + "B";
 
         } else {
+            // 최대 소수 1자리까지 출력
             return String.format("%.1f ", sizeDouble) + siUnit + "B";
         }
     }
