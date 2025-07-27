@@ -62,18 +62,19 @@
 -   검색:
 
     -   뷰 로딩: `GET /files/search?(파라미터)`
-    -   데이터 로딩: `GET /api/files` (모든파일과 같은 곳에서 처리)
+    -   데이터 로딩: `GET /api/files` (모든파일과 같은 메소드로 처리)
 
 -   정렬:
 
     -   현재 저장된 정렬 기준: `GET /api/files/sort`
-    -   새로 정렬한 파일 목록 로딩: `GET /api/files/sort/{sort}`
+    -   새로 정렬한 파일 목록 로딩: `GET /api/files?sort=(정렬 기준)`\
+        (`GET /api/files` 에서 정렬만 바꿔주고 메소드 자체는 그대로 사용)
 
 -   업로드: `POST /api/files`
 
 -   다운로드: `GET /api/files/{id}`
 
--   이름 수정: `PATCH /api/files`
+-   이름 수정: `PATCH /api/files/{id}`
 
 -   삭제: `DELETE /api/files/{id}`
 

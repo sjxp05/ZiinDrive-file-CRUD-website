@@ -30,7 +30,8 @@ public class FileService {
     private final FileUploadProperties properties;
     private final SearchOptionHolder holder;
 
-    private volatile List<FileEntity> cachedFileList = null; // 쿼리로 찾은 파일 정보들을 캐싱하는 리스트
+    // private volatile List<FileEntity> cachedFileList = null; // 쿼리로 찾은 파일 정보들을
+    // 캐싱하는 리스트
 
     // create
     public FileEntity uploadFile(MultipartFile fileInput) throws Exception {
@@ -61,16 +62,23 @@ public class FileService {
     }
 
     // read
-    public void findAll() {
+    // public List<FileResponseDto> findAll() {
 
-        cachedFileList = repository.findAll(FileSpecifications.isActive(holder.isActive()), holder.getSort());
-    }
+    // List<FileEntity> entities =
+    // repository.findAll(FileSpecifications.isActive(holder.isActive()),
+    // holder.getSort());
+
+    // return entities == null ? Collections.emptyList()
+    // : entities.stream().map(FileResponseDto::fromEntity).toList();
+    // }
 
     // read, search
-    public void findWithOptions() {
+    public List<FileResponseDto> findWithOptions() {
+
+        List<FileEntity> entities = null;
 
         if (holder.isFindAll()) {
-            cachedFileList = repository.findAll(FileSpecifications.isActive(holder.isActive()), holder.getSort());
+            entities = repository.findAll(FileSpecifications.isActive(holder.isActive()), holder.getSort());
 
         } else {
             // Specification으로 null이 아닌 모든 검색조건 추가
@@ -82,16 +90,19 @@ public class FileService {
                     FileSpecifications.isActive(holder.isActive()))
                     .stream().reduce(Specification::and).orElse(null);
 
-            // 검색 및 캐시로 저장
-            cachedFileList = repository.findAll(specs, holder.getSort());
+            entities = repository.findAll(specs, holder.getSort());
         }
+
+        // 받은 검색결과를 DTO 리스트로 만들어 반환하기
+        return entities == null ? Collections.emptyList()
+                : entities.stream().map(FileResponseDto::fromEntity).toList();
     }
 
     // 캐시 값 반환
-    public List<FileResponseDto> getCachedFiles() {
-        return cachedFileList == null ? Collections.emptyList()
-                : cachedFileList.stream().map(FileResponseDto::fromEntity).toList();
-    }
+    // public List<FileResponseDto> getCachedFiles() {
+    // return cachedFileList == null ? Collections.emptyList()
+    // : cachedFileList.stream().map(FileResponseDto::fromEntity).toList();
+    // }
 
     // 다운로드에 필요한 정보 전달
     public FileDownloadDto getFileResource(Long id) throws IOException {
@@ -137,8 +148,42 @@ public class FileService {
         return newName; // validateOriginalName에서 다듬은 새 이름 보내주기
     }
 
+    // 미완성
     // delete
     public void deleteFile(Long id) throws Exception {
+
+        FileEntity file = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("file does not exist"));
+
+        // 디스크 위치 이동
+        File storedPath = new File(file.getPath());
+        if (storedPath.exists()) {
+            System.out.println("삭제 성공 여부: " + storedPath.delete()); // test
+        }
+
+        // DB에 "active == false"로 기록
+        file.setActive(false); // Transactional 때문에 자동으로 저장, 새로고침됨
+    }
+
+    // 미완성
+    // 파일 복원
+    public void recoverFile(Long id) throws Exception {
+
+        FileEntity file = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("file does not exist"));
+
+        // 디스크 위치 이동
+        File storedPath = new File(file.getPath());
+        if (storedPath.exists()) {
+            System.out.println("삭제 성공 여부: " + storedPath.delete()); // test
+        }
+
+        // DB에 "active == true"로 기록
+        file.setActive(true); // Transactional 때문에 자동으로 저장, 새로고침됨
+    }
+
+    // 영구삭제
+    public void shredFile(Long id) throws Exception {
 
         FileEntity file = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
@@ -146,7 +191,7 @@ public class FileService {
         // 디스크에서 먼저 삭제
         File storedPath = new File(file.getPath());
         if (storedPath.exists()) {
-            System.out.println(storedPath.delete()); // test
+            System.out.println("삭제 성공 여부: " + storedPath.delete()); // test
         }
 
         // DB에서 파일 메타데이터 삭제

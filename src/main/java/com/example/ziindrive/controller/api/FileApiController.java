@@ -1,7 +1,7 @@
 package com.example.ziindrive.controller.api;
 
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.*;
 
 import org.springframework.core.io.*;
 import org.springframework.http.*;
@@ -26,13 +26,25 @@ public class FileApiController {
 
     // 파일 불러오기 get
     @GetMapping("/api/files")
-    public ResponseEntity<List<FileResponseDto>> getFileData() {
+    public ResponseEntity<List<FileResponseDto>> getFileData(
+            @RequestParam(name = "sort", required = false) String sort) {
 
         // test
         System.out.println("received GET request (Send Files)");
 
-        service.findWithOptions();
-        return ResponseEntity.ok().body(service.getCachedFiles());
+        if (sort == null) { // 정렬 변경 없이 새 페이지만 로드되었을 때
+            return ResponseEntity.ok().body(service.findWithOptions());
+
+        } else { // 정렬 버튼을 눌렀을 때
+            if (sort.equals(holder.getSortToString())) { // 이전 정렬 상태와 같음: 204 No Content
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+            } else { // 정렬상태가 달라짐: 200 OK + 정렬 바꿔서 다시 구한 파일 목록
+
+                holder.setStringToSort(sort);
+                return ResponseEntity.ok().body(service.findWithOptions());
+            }
+        }
     }
 
     // 현재 정렬 상태 get
@@ -46,24 +58,25 @@ public class FileApiController {
     }
 
     // 정렬된 결과 get
-    @GetMapping("/api/files/sort/{sort}")
-    public ResponseEntity<List<FileResponseDto>> setSort(@PathVariable("sort") String sort) {
+    // @GetMapping("/api/files/sort/{sort}")
+    // public ResponseEntity<List<FileResponseDto>> setSort(@PathVariable("sort")
+    // String sort) {
 
-        // test
-        System.out.println("received GET request (Set Sort)");
+    // // test
+    // System.out.println("received GET request (Set Sort)");
 
-        if (!sort.equals(holder.getSortToString())) {
+    // if (!sort.equals(holder.getSortToString())) {
 
-            holder.setStringToSort(sort);
-            service.findWithOptions();
+    // holder.setStringToSort(sort);
+    // service.findWithOptions();
 
-            return ResponseEntity.ok().body(service.getCachedFiles());
+    // return ResponseEntity.ok().body(service.getCachedFiles());
 
-        } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
+    // } else {
+    // return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    // }
 
-    }
+    // }
 
     // 업로드 post
     @PostMapping("/api/files")
@@ -107,35 +120,34 @@ public class FileApiController {
     }
 
     // 이름수정 patch
-    @PatchMapping("/api/files")
-    public ResponseEntity<?> renameFile(@RequestBody FileRenameDto dto) {
+    @PatchMapping("/api/files/{id}")
+    public ResponseEntity<?> renameFile(@PathVariable("id") Long id, @RequestBody Map<String, String> renameInfo) {
 
         // test
         System.out.println("received PATCH request (Rename)");
 
         try {
-            String validatedName = service.renameFile(dto.getId(), dto.getNewName());
+            String validatedName = service.renameFile(id, renameInfo.get("newName"));
             /*
              * 이름이 달라졌을때: 바뀐 이름 반환
              * 이름이 기존과 같을때: null 반환
              * 길이나 예약어 조건에 맞지 않을 경우: Exception 발생
              */
 
-            if (validatedName != null) {
+            if (validatedName == null) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 이름 바꿀 필요 없을때: 204 No content
+
+            } else {
                 // 이름순 정렬이 새롭게 필요할때: 200 OK + 정렬된 데이터 (json)
                 if (holder.getSortToString().equals("name")) {
-
-                    service.findWithOptions();
                     return ResponseEntity.ok()
                             .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                            .body(service.getCachedFiles());
+                            .body(service.findWithOptions());
                 }
                 // 이름만 바꾸면 되고 정렬 새로 필요 없을때: 200 OK + 새로 정한 이름만 (text)
                 return ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_TYPE, "text/plain")
                         .body(validatedName);
-            } else {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 이름 바꿀 필요 없을때: 204 No content
             }
 
         } catch (Exception e) { // 파일 이름이 조건에 맞지 않을때: 400 Bad Request + 에러 메시지
@@ -152,12 +164,27 @@ public class FileApiController {
 
         try {
             service.deleteFile(id);
-            service.findWithOptions(); // 삭제한거 빼고 다시 검색하기
-
-            return ResponseEntity.ok().body(service.getCachedFiles());
+            // 삭제한거 빼고 다시 검색한 결과 보내기
+            return ResponseEntity.ok().body(service.findWithOptions());
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    // 휴지통 복원 patch
+    @PatchMapping("/api/bin/{id}")
+    public ResponseEntity<?> recoverFile(@PathVariable("id") Long id) {
+
+        // 미완성
+        return ResponseEntity.ok().body(null);
+    }
+
+    // 휴지통 영구삭제 delete
+    @DeleteMapping("/api/bin/{id}")
+    public ResponseEntity<List<FileResponseDto>> shredFile(@PathVariable("id") Long id) {
+
+        // 미완성
+        return ResponseEntity.ok().body(null);
     }
 }

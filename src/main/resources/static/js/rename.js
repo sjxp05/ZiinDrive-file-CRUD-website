@@ -44,13 +44,12 @@ function finalizeRename(id, td, newName, currentName) {
 		return;
 	}
 
-	fetch("/api/files", {
+	fetch("/api/files/" + id, {
 		method: "PATCH",
 		headers: {
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify({
-			id: id,
 			newName: newName,
 		}),
 	})
