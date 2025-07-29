@@ -162,7 +162,7 @@ public class FileService {
 
         // DB에 기록된 파일 정보 수정 (경로 및 휴지통 여부)
         file.setPath(target.toString());
-        file.setDeletedAt();
+        file.setDeleted(); // 삭제한 날짜를 정해줌으로써 삭제상태 확정
         file.setActive(false); // Transactional 때문에 자동으로 저장, 새로고침됨
     }
 
@@ -180,6 +180,7 @@ public class FileService {
 
         // DB에 기록된 파일 정보 수정 (경로 및 휴지통 여부)
         file.setPath(target.toString());
+        file.setRestored(); // 복원 확정 표시
         file.setActive(true); // Transactional 때문에 자동으로 저장, 새로고침됨
     }
 

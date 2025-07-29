@@ -66,11 +66,20 @@ public class FileEntity {
         this.path = path;
     }
 
-    public void setDeletedAt() {
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    // 삭제, 복원 함수
+    public void setDeleted() {
+        if (this.deletedAt != null) {
+            return;
+        }
+
         this.deletedAt = LocalDateTime.now();
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setRestored() {
+        this.deletedAt = null;
     }
 }
