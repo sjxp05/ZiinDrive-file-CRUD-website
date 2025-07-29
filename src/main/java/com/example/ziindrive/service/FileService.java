@@ -148,7 +148,6 @@ public class FileService {
         return newName; // validateOriginalName에서 다듬은 새 이름 보내주기
     }
 
-    // 미완성
     // delete
     public void deleteFile(Long id) throws Exception {
 
@@ -156,29 +155,31 @@ public class FileService {
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
         // 디스크 위치 이동
-        File storedPath = new File(file.getPath());
-        if (storedPath.exists()) {
-            System.out.println("삭제 성공 여부: " + storedPath.delete()); // test
-        }
+        Path source = Paths.get(file.getPath());
+        Path target = Paths.get(properties.getBinPath(), file.getStoredName());
 
-        // DB에 "active == false"로 기록
+        Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
+
+        // DB에 기록된 파일 정보 수정 (경로 및 휴지통 여부)
+        file.setPath(target.toString());
+        file.setDeletedAt();
         file.setActive(false); // Transactional 때문에 자동으로 저장, 새로고침됨
     }
 
-    // 미완성
     // 파일 복원
-    public void recoverFile(Long id) throws Exception {
+    public void restoreFile(Long id) throws Exception {
 
         FileEntity file = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
         // 디스크 위치 이동
-        File storedPath = new File(file.getPath());
-        if (storedPath.exists()) {
-            System.out.println("삭제 성공 여부: " + storedPath.delete()); // test
-        }
+        Path source = Paths.get(file.getPath());
+        Path target = Paths.get(properties.getUploadPath(), file.getStoredName());
 
-        // DB에 "active == true"로 기록
+        Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
+
+        // DB에 기록된 파일 정보 수정 (경로 및 휴지통 여부)
+        file.setPath(target.toString());
         file.setActive(true); // Transactional 때문에 자동으로 저장, 새로고침됨
     }
 

@@ -26,6 +26,11 @@ public class FileViewController {
         holder.setFindAll(true); // 모든 파일 검색하도록 설정
         holder.setActive(true); // 휴지통에 없는 파일만 가능
 
+        // 휴지통 -> 메인으로 갈 경우 최신순 정렬
+        if (holder.getSortToString().equals("deleted")) {
+            holder.setStringToSort("latest");
+        }
+
         return "files/filesView";
     }
 
@@ -49,6 +54,11 @@ public class FileViewController {
         holder.setFrom(from);
         holder.setTo(to);
 
+        // 휴지통 -> 메인으로 갈 경우 최신순 정렬
+        if (holder.getSortToString().equals("deleted")) {
+            holder.setStringToSort("latest");
+        }
+
         return "files/filesView";
     }
 
@@ -58,6 +68,9 @@ public class FileViewController {
 
         holder.setFindAll(true);
         holder.setActive(false);
+
+        // 삭제된 순서대로 보기
+        holder.setStringToSort("deleted");
 
         return "files/trashBin";
     }

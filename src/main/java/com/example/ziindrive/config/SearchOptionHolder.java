@@ -32,6 +32,7 @@ public class SearchOptionHolder {
         sort = switch (sortString) {
             case "name" -> Sort.by(Sort.Order.asc("originalName"));
             case "oldest" -> Sort.by(Sort.Order.asc("id"));
+            case "deleted" -> Sort.by(Sort.Order.desc("deletedAt"));
             default -> Sort.by(Sort.Order.desc("id"));
         };
     }
@@ -44,8 +45,11 @@ public class SearchOptionHolder {
         } else if (sort.equals(Sort.by(Sort.Order.asc("originalName")))) {
             return "name";
 
-        } else {
+        } else if (sort.equals(Sort.by(Sort.Order.asc("id")))) {
             return "oldest";
+
+        } else {
+            return "deleted";
         }
     }
 }

@@ -25,6 +25,7 @@ public class FileEntity {
     private String size;
     private LocalDateTime uploadedAt;
     private String formattedDate;
+    private LocalDateTime deletedAt = null;
 
     private boolean active = true;
 
@@ -59,6 +60,14 @@ public class FileEntity {
 
     public void setStoredName(String storedName) {
         this.storedName = storedName;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public void setDeletedAt() {
+        this.deletedAt = LocalDateTime.now();
     }
 
     public void setActive(boolean active) {

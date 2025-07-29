@@ -174,17 +174,33 @@ public class FileApiController {
 
     // 휴지통 복원 patch
     @PatchMapping("/api/bin/{id}")
-    public ResponseEntity<?> recoverFile(@PathVariable("id") Long id) {
+    public ResponseEntity<List<FileResponseDto>> restoreFile(@PathVariable("id") Long id) {
 
-        // 미완성
-        return ResponseEntity.ok().body(null);
+        // test
+        System.out.println("received PATCH request (Restore)");
+
+        try {
+            service.restoreFile(id);
+            return ResponseEntity.ok().body(service.findWithOptions());
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     // 휴지통 영구삭제 delete
     @DeleteMapping("/api/bin/{id}")
     public ResponseEntity<List<FileResponseDto>> shredFile(@PathVariable("id") Long id) {
 
-        // 미완성
-        return ResponseEntity.ok().body(null);
+        // test
+        System.out.println("received DELETE request (Shred)");
+
+        try {
+            service.shredFile(id);
+            return ResponseEntity.ok().body(service.findWithOptions());
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

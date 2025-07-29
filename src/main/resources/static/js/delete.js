@@ -3,13 +3,6 @@ import { renderData } from "./render.js";
 function deleteFile(btn) {
 	const id = btn.closest("tr").dataset.id;
 
-	// 정말 삭제할지 경고
-	const really = confirm("정말 삭제하시겠습니까?");
-
-	if (!really) {
-		return;
-	}
-
 	fetch("/api/files/" + id, {
 		method: "DELETE",
 	})
@@ -24,6 +17,7 @@ function deleteFile(btn) {
 			const fileList = await res.json();
 
 			console.log("파일 삭제 완료");
+			alert("휴지통으로 이동하였습니다.");
 			renderData(fileList);
 		})
 		.catch((err) => {
