@@ -30,9 +30,6 @@ public class FileService {
     private final FileUploadProperties properties;
     private final SearchOptionHolder holder;
 
-    // private volatile List<FileEntity> cachedFileList = null; // 쿼리로 찾은 파일 정보들을
-    // 캐싱하는 리스트
-
     // create
     public FileEntity uploadFile(MultipartFile fileInput) throws Exception {
 
@@ -61,17 +58,6 @@ public class FileService {
         return repository.save(entity);
     }
 
-    // read
-    // public List<FileResponseDto> findAll() {
-
-    // List<FileEntity> entities =
-    // repository.findAll(FileSpecifications.isActive(holder.isActive()),
-    // holder.getSort());
-
-    // return entities == null ? Collections.emptyList()
-    // : entities.stream().map(FileResponseDto::fromEntity).toList();
-    // }
-
     // read, search
     public List<FileResponseDto> findWithOptions() {
 
@@ -97,12 +83,6 @@ public class FileService {
         return entities == null ? Collections.emptyList()
                 : entities.stream().map(FileResponseDto::fromEntity).toList();
     }
-
-    // 캐시 값 반환
-    // public List<FileResponseDto> getCachedFiles() {
-    // return cachedFileList == null ? Collections.emptyList()
-    // : cachedFileList.stream().map(FileResponseDto::fromEntity).toList();
-    // }
 
     // 다운로드에 필요한 정보 전달
     public FileDownloadDto getFileResource(Long id) throws IOException {
@@ -154,6 +134,11 @@ public class FileService {
         FileEntity file = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
+        // 이미 삭제된 파일의 경우 막아놓기
+        if (file.getDeletedAt() != null) {
+            throw new Exception();
+        }
+
         // 디스크 위치 이동
         Path source = Paths.get(file.getPath());
         Path target = Paths.get(properties.getBinPath(), file.getStoredName());
@@ -162,8 +147,7 @@ public class FileService {
 
         // DB에 기록된 파일 정보 수정 (경로 및 휴지통 여부)
         file.setPath(target.toString());
-        file.setDeleted(); // 삭제한 날짜를 정해줌으로써 삭제상태 확정
-        file.setActive(false); // Transactional 때문에 자동으로 저장, 새로고침됨
+        file.setDeleted(); // Transactional 때문에 자동으로 저장, 새로고침됨
     }
 
     // 파일 복원
@@ -171,6 +155,11 @@ public class FileService {
 
         FileEntity file = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
+
+        // 삭제되지 않았으면 복구 안되게 막아놓기
+        if (file.getDeletedAt() == null) {
+            throw new Exception();
+        }
 
         // 디스크 위치 이동
         Path source = Paths.get(file.getPath());
@@ -180,8 +169,7 @@ public class FileService {
 
         // DB에 기록된 파일 정보 수정 (경로 및 휴지통 여부)
         file.setPath(target.toString());
-        file.setRestored(); // 복원 확정 표시
-        file.setActive(true); // Transactional 때문에 자동으로 저장, 새로고침됨
+        file.setRestored(); // Transactional 때문에 자동으로 저장, 새로고침됨
     }
 
     // 영구삭제
@@ -189,6 +177,11 @@ public class FileService {
 
         FileEntity file = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
+
+        // 삭제된 파일인지 먼저 확인
+        if (file.getDeletedAt() == null) {
+            throw new Exception();
+        }
 
         // 디스크에서 먼저 삭제
         File storedPath = new File(file.getPath());

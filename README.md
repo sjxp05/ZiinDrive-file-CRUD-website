@@ -78,6 +78,16 @@
 
 -   삭제: `DELETE /api/files/{id}`
 
+---
+
+#### 휴지통
+
+-   메인화면 뷰: `GET /files/bin` // 수정할 생각중
+
+-   복원: `PATCH /api/bin/{id}`
+
+-   영구 삭제: `DELETE /api/bin/{id}`
+
 ## 추가할 기능
 
 -   아직 `localhost:8080`에서만 불러올 수 있는 사이트라서 언젠가 실제 url로 배포해보고 싶은 생각이 있습니당

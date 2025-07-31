@@ -27,8 +27,6 @@ public class FileEntity {
     private String formattedDate;
     private LocalDateTime deletedAt = null;
 
-    private boolean active = true;
-
     @Builder
     public FileEntity(String originalName, String storedName, String path, String extension, String size) {
 
@@ -64,10 +62,6 @@ public class FileEntity {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     // 삭제, 복원 함수

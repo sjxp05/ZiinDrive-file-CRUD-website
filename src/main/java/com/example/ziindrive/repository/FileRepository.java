@@ -18,15 +18,17 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
     public class FileSpecifications {
 
         public static Specification<FileEntity> hasKeyword(String keyword) {
+
             return (root, query, cb) -> {
                 if (keyword == null || keyword.isBlank()) {
                     return null;
                 }
-                return cb.like(root.get("originalName"), "%" + keyword + "%");
+                return cb.like(cb.lower(root.get("originalName")), "%" + keyword + "%");
             };
         }
 
         public static Specification<FileEntity> hasExtension(String extension) {
+
             return (root, query, cb) -> {
                 if (extension == null || extension.isBlank()) {
                     return null;
@@ -39,6 +41,7 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
         }
 
         public static Specification<FileEntity> uploadedAfter(LocalDate from) {
+
             return (root, query, cb) -> {
                 if (from == null) {
                     return null;
@@ -48,6 +51,7 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
         }
 
         public static Specification<FileEntity> uploadedBefore(LocalDate to) {
+
             return (root, query, cb) -> {
                 if (to == null) {
                     return null;
@@ -57,8 +61,14 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
         }
 
         public static Specification<FileEntity> isActive(boolean active) {
+
             return (root, query, cb) -> {
-                return cb.equal(root.get("active"), active);
+                if (active) {
+                    return cb.isNull(root.get("deletedAt"));
+
+                } else {
+                    return cb.isNotNull(root.get("deletedAt"));
+                }
             };
         }
     }
