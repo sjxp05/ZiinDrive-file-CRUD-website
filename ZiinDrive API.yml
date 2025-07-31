@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
     title: ZiinDrive
     version: 1.0.0
-    description: ""
+    description: "ZiinDrive API 명세"
 
 servers:
     - url: "http://localhost:8080"
@@ -48,7 +48,7 @@ paths:
                     description: 검색 성공
     /bin:
         get:
-            summary: trashbin view=
+            summary: trashbin view
             responses:
                 "200":
                     description: 휴지통 뷰 불러오기 성공
@@ -75,6 +75,19 @@ paths:
             responses:
                 "200":
                     description: 업로드 성공
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                    originalName:
+                                        type: string
+                                    size:
+                                        type: string
+                                    formattedDate:
+                                        type: string
         get:
             summary: get filelist
             responses:
@@ -87,7 +100,6 @@ paths:
               required: true
               schema:
                   type: string
-              example: "2"
         get:
             summary: download
             responses:
@@ -113,6 +125,19 @@ paths:
             responses:
                 "200":
                     description: 파일 이름 변경됨
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                    originalName:
+                                        type: string
+                                    size:
+                                        type: string
+                                    formattedDate:
+                                        type: string
                 "204":
                     description: 기존 이름과 같음, 변경 x
         delete:
@@ -120,6 +145,19 @@ paths:
             responses:
                 "200":
                     description: 파일 삭제 성공 (휴지통 이동)
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                    originalName:
+                                        type: string
+                                    size:
+                                        type: string
+                                    formattedDate:
+                                        type: string
 
     /api/bin/{id}:
         parameters:
@@ -128,14 +166,39 @@ paths:
               required: true
               schema:
                   type: string
-              example: "2"
         patch:
             summary: restore file
             responses:
                 "200":
                     description: 파일 복원 성공
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                    originalName:
+                                        type: string
+                                    size:
+                                        type: string
+                                    formattedDate:
+                                        type: string
         delete:
             summary: shred file
             responses:
                 "200":
                     description: 파일 영구삭제 성공
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                    originalName:
+                                        type: string
+                                    size:
+                                        type: string
+                                    formattedDate:
+                                        type: string
