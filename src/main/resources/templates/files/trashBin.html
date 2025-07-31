@@ -7,6 +7,12 @@
 	</head>
 	<body>
 		<style>
+			.spanCustom {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				height: 70px;
+			}
 			.logo {
 				width: 110px;
 				color: black;
@@ -16,22 +22,40 @@
 			.logo:hover {
 				color: darkcyan;
 			}
-			.sortButtonsDiv {
-				display: flex;
-				height: 30px;
-				align-items: center;
+			.menuBt {
+				font-size: 40px;
+				padding: 2px 15px;
+				text-align: center;
+				background-color: transparent;
+				border: none;
+				color: rgb(134, 133, 133);
+				font-family: "Courier new";
 			}
-			.sortBt {
-				font-size: 15px;
-				background-color: white;
-				color: black;
-				cursor: pointer;
-				transition: all 0.2s ease;
-				border-width: 1px;
+			.overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100vw;
+				height: 100vh;
+				background-color: rgba(102, 102, 102, 0.222);
+				z-index: 99;
+				visibility: hidden;
 			}
-			.sortBt.active {
-				background-color: black;
-				color: white;
+			.overlay.active {
+				visibility: visible;
+			}
+			.sidemenu {
+				position: fixed;
+				top: 0;
+				right: 0;
+				width: 300px;
+				height: 100vh;
+				background-color: aliceblue;
+				z-index: 100;
+				visibility: hidden;
+			}
+			.sidemenu.active {
+				visibility: visible;
 			}
 			.isEmpty {
 				display: none;
@@ -50,11 +74,29 @@
 			}
 		</style>
 
-		<!-- 사이트 로고 -->
-		<div style="text-align: left; align-items: center">
-			<h2 class="logo" onclick="location.href='/files'">
+		<!-- 사이트 로고 + 메뉴버튼 -->
+		<span class="spanCustom">
+			<h2 class="logo" onclick="toMainView()">
 				&nbsp;&nbsp;&nbsp;<b>Ziin</b>Drive
 			</h2>
+
+			<div>
+				<button class="menuBt" onclick="showMenu()"><b>≡</b></button>
+				<label style="font-size: 15px">&nbsp;&nbsp;&nbsp;</label>
+			</div>
+		</span>
+
+		<div class="overlay" onclick="closeMenu()"></div>
+
+		<div class="sidemenu">
+			<button class="menuBt" onclick="closeMenu()"><b>×</b></button>
+			<h3>&nbsp;&nbsp;&nbsp;MENU</h3>
+
+			<ul>
+				<li onclick="location.href='/files'">모든 파일</li>
+				<li>즐겨찾기</li>
+				<li onclick="location.href='/bin'">휴지통</li>
+			</ul>
 		</div>
 
 		<!-- 모든 파일 리스트 -->
@@ -87,9 +129,11 @@
 			<h3>휴지통이 비어 있습니다.</h3>
 		</div>
 
+		<!-- 스크립트 -->
 		<script src="/js/binRender.js" type="module"></script>
 		<script src="/js/restore.js" type="module"></script>
 		<script src="/js/shred.js" type="module"></script>
+		<script src="/js/showMenu.js"></script>
 
 		<!--bfcache 처리-->
 		<script>

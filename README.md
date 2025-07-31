@@ -82,7 +82,7 @@
 
 #### 휴지통
 
--   메인화면 뷰: `GET /files/bin` // 수정할 생각중
+-   메인화면 뷰: `GET /bin`
 
 -   복원: `PATCH /api/bin/{id}`
 

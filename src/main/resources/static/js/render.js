@@ -1,3 +1,25 @@
+document.addEventListener("DOMContentLoaded", () => {
+	// 파일 불러오기
+	fetch("/api/files")
+		.then((res) => {
+			if (!res.ok) {
+				throw new Error(res.status);
+			}
+			return res;
+		})
+		.then(async (res) => {
+			if (res.status === 200) {
+				const fileList = await res.json();
+
+				console.log("all files fetch 성공");
+				renderData(fileList);
+			}
+		})
+		.catch((err) => {
+			console.error("fetch 실패:", err);
+		});
+});
+
 export function renderData(fileList) {
 	const tBody = document.getElementById("tBody");
 	tBody.innerHTML = "";

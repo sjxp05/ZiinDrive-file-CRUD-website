@@ -1,0 +1,141 @@
+openapi: 3.0.0
+
+info:
+    title: ZiinDrive
+    version: 1.0.0
+    description: ""
+
+servers:
+    - url: "http://localhost:8080"
+
+paths:
+    /files:
+        get:
+            summary: Main view
+            responses:
+                "200":
+                    description: 메인 뷰 불러오기 성공
+    /files/search:
+        get:
+            summary: search page
+            parameters:
+                - name: keyword
+                  in: query
+                  required: false
+                  schema:
+                      type: string
+                  example: "key"
+                - name: extension
+                  in: query
+                  required: false
+                  schema:
+                      type: string
+                  example: "png"
+                - name: from
+                  in: query
+                  required: false
+                  schema:
+                      type: string
+                  example: "2025-07-24"
+                - name: to
+                  in: query
+                  required: false
+                  schema:
+                      type: string
+                  example: "2025-07-29"
+            responses:
+                "200":
+                    description: 검색 성공
+    /bin:
+        get:
+            summary: trashbin view=
+            responses:
+                "200":
+                    description: 휴지통 뷰 불러오기 성공
+
+    /api/files/sort:
+        get:
+            summary: get current sort criteria
+            responses:
+                "200":
+                    description: 현재 정렬 기준 받아오기 성공
+    /api/files:
+        post:
+            summary: upload
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                file:
+                                    type: string
+                                    format: binary
+            responses:
+                "200":
+                    description: 업로드 성공
+        get:
+            summary: get filelist
+            responses:
+                "200":
+                    description: 파일 목록 불러오기 성공
+    /api/files/{id}:
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                  type: string
+              example: "2"
+        get:
+            summary: download
+            responses:
+                "200":
+                    description: 다운로드 성공
+        patch:
+            summary: rename file
+            parameters:
+                - name: Content-Type
+                  in: header
+                  required: true
+                  example: application/json
+                  schema:
+                      type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                newName:
+                                    type: string
+            responses:
+                "200":
+                    description: 파일 이름 변경됨
+                "204":
+                    description: 기존 이름과 같음, 변경 x
+        delete:
+            summary: delete file
+            responses:
+                "200":
+                    description: 파일 삭제 성공 (휴지통 이동)
+
+    /api/bin/{id}:
+        parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                  type: string
+              example: "2"
+        patch:
+            summary: restore file
+            responses:
+                "200":
+                    description: 파일 복원 성공
+        delete:
+            summary: shred file
+            responses:
+                "200":
+                    description: 파일 영구삭제 성공

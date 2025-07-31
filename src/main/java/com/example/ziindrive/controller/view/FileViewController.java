@@ -63,7 +63,7 @@ public class FileViewController {
     }
 
     // 휴지통 뷰 보기
-    @GetMapping("/files/bin")
+    @GetMapping("/bin")
     public String viewTrashBin() {
 
         holder.setFindAll(true);

@@ -12,26 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	extension.value = params.get("extension") || "";
 	from.value = params.get("from") || "";
 	to.value = params.get("to") || "";
-
-	// 파일 불러오기
-	fetch("/api/files")
-		.then((res) => {
-			if (!res.ok) {
-				throw new Error(res.status);
-			}
-			return res;
-		})
-		.then(async (res) => {
-			if (res.status === 200) {
-				const fileList = await res.json();
-
-				console.log("all files fetch 성공");
-				renderData(fileList);
-			}
-		})
-		.catch((err) => {
-			console.error("fetch 실패:", err);
-		});
 });
 
 function toMainView() {

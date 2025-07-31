@@ -7,6 +7,12 @@
 	</head>
 	<body>
 		<style>
+			.spanCustom {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				height: 70px;
+			}
 			.logo {
 				width: 110px;
 				color: black;
@@ -15,6 +21,41 @@
 			}
 			.logo:hover {
 				color: darkcyan;
+			}
+			.menuBt {
+				font-size: 40px;
+				padding: 2px 15px;
+				text-align: center;
+				background-color: transparent;
+				border: none;
+				color: rgb(134, 133, 133);
+				font-family: "Courier new";
+			}
+			.overlay {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100vw;
+				height: 100vh;
+				background-color: rgba(102, 102, 102, 0.222);
+				z-index: 99;
+				visibility: hidden;
+			}
+			.overlay.active {
+				visibility: visible;
+			}
+			.sidemenu {
+				position: fixed;
+				top: 0;
+				right: 0;
+				width: 300px;
+				height: 100vh;
+				background-color: aliceblue;
+				z-index: 100;
+				visibility: hidden;
+			}
+			.sidemenu.active {
+				visibility: visible;
 			}
 			.uploadBt {
 				font-size: 35px;
@@ -69,21 +110,32 @@
 			}
 		</style>
 
-		<!-- 사이트 로고 -->
-		<div style="text-align: left; align-items: center">
+		<!-- 사이트 로고 + 메뉴버튼 -->
+		<span class="spanCustom">
 			<h2 class="logo" onclick="toMainView()">
 				&nbsp;&nbsp;&nbsp;<b>Ziin</b>Drive
 			</h2>
+
+			<div>
+				<button class="menuBt" onclick="showMenu()"><b>≡</b></button>
+				<label style="font-size: 15px">&nbsp;&nbsp;&nbsp;</label>
+			</div>
+		</span>
+
+		<div class="overlay" onclick="closeMenu()"></div>
+
+		<div class="sidemenu">
+			<button class="menuBt" onclick="closeMenu()"><b>×</b></button>
+			<h3>&nbsp;&nbsp;&nbsp;MENU</h3>
+
+			<ul>
+				<li onclick="location.href='/files'">모든 파일</li>
+				<li>즐겨찾기</li>
+				<li onclick="location.href='/bin'">휴지통</li>
+			</ul>
 		</div>
 
-		<span
-			style="
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				height: 70px;
-			"
-		>
+		<span class="spanCustom">
 			<!-- 이름, 날짜별 검색 등 버튼 -->
 			<span>
 				<label style="font-size: 15px"
@@ -238,6 +290,7 @@
 		<script src="/js/rename.js" type="module"></script>
 		<script src="/js/delete.js" type="module"></script>
 		<script src="/js/render.js" type="module"></script>
+		<script src="/js/showMenu.js"></script>
 
 		<!--bfcache 처리-->
 		<script>
