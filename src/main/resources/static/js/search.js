@@ -1,5 +1,3 @@
-import { renderData } from "./render.js";
-
 const keyword = document.getElementById("keyword");
 const extension = document.getElementById("extension");
 const from = document.getElementById("from");
@@ -16,7 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function toMainView() {
 	// 이미 메인화면일 경우 검색어만 초기화 (db에 다시 접근해서 가져올 필요 없음)
-	if (location.href === "http://localhost:8080/files") {
+	if (
+		location.href === "http://localhost:8080/files" ||
+		location.href === "http://localhost:8080/favorites"
+	) {
 		keyword.value = "";
 		extension.value = "";
 		from.value = "";
@@ -25,7 +26,11 @@ function toMainView() {
 		console.log("메인 화면 유지");
 		return;
 	} else {
-		location.href = "/files";
+		if (location.href.startsWith("http://localhost:8080/favorites")) {
+			location.href = "/favorites";
+		} else {
+			location.href = "/files";
+		}
 	}
 }
 
@@ -65,10 +70,11 @@ function searchFiles() {
 		 */
 	} else {
 		const query = new URLSearchParams(filteredParams).toString();
-		location.href = "/files/search?" + query;
+
+		if (location.href.startsWith("http://localhost:8080/favorites")) {
+			location.href = "/favorites/search?" + query;
+		} else {
+			location.href = "/files/search?" + query;
+		}
 	}
 }
-
-window.toMainView = toMainView;
-window.initialize = initialize;
-window.searchFiles = searchFiles;

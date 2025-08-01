@@ -130,6 +130,31 @@ public class FileService {
         return newName; // validateOriginalName에서 다듬은 새 이름 보내주기
     }
 
+    // 즐겨찾기 여부 수정
+    public boolean favoriteFile(Long id, boolean change) throws Exception {
+
+        FileEntity file = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("file does not exist"));
+
+        if (change == true) {
+            if (file.isFavorited() == false) {
+                file.setFavorited(true);
+                return true;
+
+            } else {
+                return false;
+            }
+        } else {
+            if (file.isFavorited() == true) {
+                file.setFavorited(false);
+                return true;
+
+            } else {
+                return false;
+            }
+        }
+    }
+
     // delete
     public void deleteFile(Long id) throws Exception {
 
@@ -193,5 +218,11 @@ public class FileService {
 
         // DB에서 파일 메타데이터 삭제
         repository.delete(file);
+    }
+
+    // 휴지통 비우기
+    public void shredAll() throws Exception {
+
+        repository.delete(FileSpecifications.isActive(false));
     }
 }

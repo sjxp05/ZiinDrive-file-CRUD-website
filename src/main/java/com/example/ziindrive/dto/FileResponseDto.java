@@ -17,6 +17,7 @@ public class FileResponseDto {
     String originalName;
     String size;
     String formattedDate;
+    boolean favorited;
 
     public static FileResponseDto fromEntity(FileEntity file) {
 
@@ -25,6 +26,7 @@ public class FileResponseDto {
                 .originalName(file.getOriginalName())
                 .size(file.getSize())
                 .formattedDate(file.getFormattedDate())
+                .favorited(file.isFavorited())
                 .build();
     }
 

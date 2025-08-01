@@ -16,7 +16,7 @@
 			.logo {
 				font-size: 30px;
 				color: black;
-				cursor: default;
+				cursor: pointer;
 				user-select: none;
 			}
 			.logo:hover {
@@ -69,7 +69,7 @@
 				background-color: aliceblue;
 				color: black;
 				border-top: 1px solid #ccc;
-				cursor: default;
+				cursor: pointer;
 				transition: background-color 0.2s ease;
 			}
 			.menuList li.active {
@@ -149,7 +149,9 @@
 				justify-content: right;
 			"
 		>
-			<button class="shredAllBt">휴지통 비우기</button>
+			<button class="shredAllBt" onclick="shredAll()">
+				휴지통 비우기
+			</button>
 			<label style="font-size: 15px">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</label>

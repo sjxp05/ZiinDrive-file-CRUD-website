@@ -31,4 +31,36 @@ function shredFile(btn) {
 		});
 }
 
+function shredAll() {
+	const trs = document.getElementById("tBody").querySelectorAll("tr");
+	const trCount = trs.length;
+
+	const really = confirm(
+		"휴지통에 있는 " + trCount + " 개의 파일을 모두 삭제하시겠습니까?"
+	);
+
+	if (!really) {
+		return;
+	}
+
+	fetch("/api/bin", {
+		method: "DELETE",
+	})
+		.then((res) => {
+			if (!res.ok) {
+				throw new Error(res.status);
+			}
+			return res;
+		})
+		.then(async (res) => {
+			const emptyList = await res.json();
+			renderData(emptyList);
+			console.log("휴지통 비우기 성공");
+		})
+		.catch((err) => {
+			console.error("휴지통 비우기 실패:", err);
+		});
+}
+
 window.shredFile = shredFile;
+window.shredAll = shredAll;

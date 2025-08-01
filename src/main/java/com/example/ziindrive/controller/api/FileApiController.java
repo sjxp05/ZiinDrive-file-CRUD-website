@@ -136,10 +136,25 @@ public class FileApiController {
 
     // 즐겨찾기 patch
     @PatchMapping("/api/files/favorite/{id}")
-    public ResponseEntity<String> favoriteFile(@PathVariable("id") Long id) {
+    public ResponseEntity<String> favoriteFile(@PathVariable("id") Long id,
+            @RequestBody Map<String, String> favoriteInfo) {
 
-        // 미완성
-        return ResponseEntity.ok().build();
+        // test
+        System.out.println("received PATCH request (Favorite)");
+
+        boolean change = Boolean.parseBoolean(favoriteInfo.get("change"));
+
+        try {
+            if (service.favoriteFile(id, change)) {
+                return ResponseEntity.ok().body("즐겨찾기 반영 성공");
+
+            } else {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("존재하지 않는 파일");
+        }
     }
 
     // 삭제 delete
@@ -153,6 +168,26 @@ public class FileApiController {
             service.deleteFile(id);
             // 삭제한거 빼고 다시 검색한 결과 보내기
             return ResponseEntity.ok().body(service.findWithOptions());
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // 즐겨찾기 목록 업데이트 patch
+    @PatchMapping("/api/favorites/{id}")
+    public ResponseEntity<List<FileResponseDto>> reloadFavorites(@PathVariable("id") Long id) {
+
+        // test
+        System.out.println("received PATCH request (Reload Favorites)");
+
+        try {
+            if (service.favoriteFile(id, false)) {
+                return ResponseEntity.ok().body(service.findWithOptions());
+
+            } else {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -185,6 +220,22 @@ public class FileApiController {
         try {
             service.shredFile(id);
             return ResponseEntity.ok().body(service.findWithOptions());
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // 휴지통 비우기 delete
+    @DeleteMapping("/api/bin")
+    public ResponseEntity<?> shredAll() {
+
+        // test
+        System.out.println("received DELETE request (Empty Trashbin)");
+
+        try {
+            service.shredAll();
+            return ResponseEntity.ok().body(Collections.emptyList());
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

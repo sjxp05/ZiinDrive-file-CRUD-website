@@ -43,7 +43,9 @@ function createRow(file) {
 				<td>${file.originalName}</td>
 				<td>${file.formattedDate}</td>
 				<td>${file.size}</td>
-				<td></td>
+				<td style="color: red; cursor: pointer" onclick="favoriteFile(this)">
+					${file.favorited ? "&nbsp;♥&nbsp;" : "&nbsp;♡&nbsp;"}
+				</td>
 				<td>
 					<button
 						onclick="downloadFile(this)"
