@@ -26,6 +26,7 @@ public class FileEntity {
     private LocalDateTime uploadedAt;
     private String formattedDate;
     private LocalDateTime deletedAt = null;
+    private boolean favorited = false;
 
     @Builder
     public FileEntity(String originalName, String storedName, String path, String extension, String size) {
@@ -56,12 +57,12 @@ public class FileEntity {
         this.originalName = originalName;
     }
 
-    public void setStoredName(String storedName) {
-        this.storedName = storedName;
-    }
-
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
     }
 
     // 삭제, 복원 함수

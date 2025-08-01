@@ -64,7 +64,8 @@ public class FileService {
         List<FileEntity> entities = null;
 
         if (holder.isFindAll()) {
-            entities = repository.findAll(FileSpecifications.isActive(holder.isActive()), holder.getSort());
+            entities = repository.findAll(FileSpecifications.isActive(holder.isActive())
+                    .and(FileSpecifications.isFavorited(holder.isFavorites())), holder.getSort());
 
         } else {
             // Specification으로 null이 아닌 모든 검색조건 추가
@@ -73,7 +74,8 @@ public class FileService {
                     FileSpecifications.hasExtension(holder.getExtension()),
                     FileSpecifications.uploadedAfter(holder.getFrom()),
                     FileSpecifications.uploadedBefore(holder.getTo()),
-                    FileSpecifications.isActive(holder.isActive()))
+                    FileSpecifications.isActive(holder.isActive()),
+                    FileSpecifications.isFavorited(holder.isFavorites()))
                     .stream().reduce(Specification::and).orElse(null);
 
             entities = repository.findAll(specs, holder.getSort());

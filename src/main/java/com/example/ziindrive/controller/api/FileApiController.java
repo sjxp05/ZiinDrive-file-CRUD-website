@@ -57,27 +57,6 @@ public class FileApiController {
         return ResponseEntity.ok().body(holder.getSortToString());
     }
 
-    // 정렬된 결과 get
-    // @GetMapping("/api/files/sort/{sort}")
-    // public ResponseEntity<List<FileResponseDto>> setSort(@PathVariable("sort")
-    // String sort) {
-
-    // // test
-    // System.out.println("received GET request (Set Sort)");
-
-    // if (!sort.equals(holder.getSortToString())) {
-
-    // holder.setStringToSort(sort);
-    // service.findWithOptions();
-
-    // return ResponseEntity.ok().body(service.getCachedFiles());
-
-    // } else {
-    // return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    // }
-
-    // }
-
     // 업로드 post
     @PostMapping("/api/files")
     public ResponseEntity<String> uploadFile(@RequestParam("fileInput") MultipartFile fileInput) {
@@ -153,6 +132,14 @@ public class FileApiController {
         } catch (Exception e) { // 파일 이름이 조건에 맞지 않을때: 400 Bad Request + 에러 메시지
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    // 즐겨찾기 patch
+    @PatchMapping("/api/files/favorite/{id}")
+    public ResponseEntity<String> favoriteFile(@PathVariable("id") Long id) {
+
+        // 미완성
+        return ResponseEntity.ok().build();
     }
 
     // 삭제 delete

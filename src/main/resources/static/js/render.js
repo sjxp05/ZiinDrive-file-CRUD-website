@@ -43,6 +43,7 @@ function createRow(file) {
 				<td>${file.originalName}</td>
 				<td>${file.formattedDate}</td>
 				<td>${file.size}</td>
+				<td></td>
 				<td>
 					<button
 						onclick="downloadFile(this)"

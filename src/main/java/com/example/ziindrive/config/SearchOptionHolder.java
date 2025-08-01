@@ -19,6 +19,7 @@ public class SearchOptionHolder {
 
     private boolean findAll = true;
     private boolean active = true;
+    private boolean favorites = false;
 
     private String keyword;
     private String extension;

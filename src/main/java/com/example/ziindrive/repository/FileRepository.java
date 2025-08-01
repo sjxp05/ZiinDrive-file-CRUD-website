@@ -71,5 +71,17 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
                 }
             };
         }
+
+        public static Specification<FileEntity> isFavorited(boolean favorited) {
+
+            return (root, query, cb) -> {
+                if (favorited) {
+                    return cb.isTrue(root.get("favorited"));
+
+                } else {
+                    return null;
+                }
+            };
+        }
     }
 }
