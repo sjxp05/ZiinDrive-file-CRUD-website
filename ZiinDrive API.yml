@@ -46,12 +46,55 @@ paths:
             responses:
                 "200":
                     description: 검색 성공
+    /favorites:
+        get:
+            summary: favorite page view
+            responses:
+                "200":
+                    description: 즐겨찾기 뷰 불러오기 성공
+    /favorites/search:
+        get:
+            summary: search in favorited list
+            parameters:
+                - name: keyword
+                  in: query
+                  required: false
+                  schema:
+                      type: string
+                  example: "key"
+                - name: extension
+                  in: query
+                  required: false
+                  schema:
+                      type: string
+                  example: "png"
+                - name: from
+                  in: query
+                  required: false
+                  schema:
+                      type: string
+                  example: "2025-07-24"
+                - name: to
+                  in: query
+                  required: false
+                  schema:
+                      type: string
+                  example: "2025-07-29"
+            responses:
+                "200":
+                    description: 즐겨찾기 검색 성공
     /bin:
         get:
             summary: trashbin view
             responses:
                 "200":
                     description: 휴지통 뷰 불러오기 성공
+    /error:
+        get:
+            summary: error page
+            responses:
+                "200":
+                    description: 에러 페이지 불러오기 성공
 
     /api/files/sort:
         get:
@@ -75,6 +118,17 @@ paths:
             responses:
                 "200":
                     description: 업로드 성공
+        get:
+            summary: get filelist
+            parameters:
+                - name: sort
+                  in: query
+                  required: false
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: 파일 목록 불러오기 성공
                     content:
                         application/json:
                             schema:
@@ -88,11 +142,22 @@ paths:
                                         type: string
                                     formattedDate:
                                         type: string
-        get:
-            summary: get filelist
+                                    favorited:
+                                        type: string
+    /api/files/favorite/{id}:
+        patch:
+            summary: add to/delete from favorited list
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
             responses:
                 "200":
-                    description: 파일 목록 불러오기 성공
+                    description: 즐겨찾기 추가/해제 성공
+                "204":
+                    description: 변경 사항 없음
     /api/files/{id}:
         parameters:
             - name: id
@@ -105,6 +170,11 @@ paths:
             responses:
                 "200":
                     description: 다운로드 성공
+                    content:
+                        application/octet-stream:
+                        schema:
+                            type: string
+                            format: binary
         patch:
             summary: rename file
             parameters:
@@ -138,6 +208,8 @@ paths:
                                         type: string
                                     formattedDate:
                                         type: string
+                                    favorited:
+                                        type: string
                 "204":
                     description: 기존 이름과 같음, 변경 x
         delete:
@@ -158,7 +230,50 @@ paths:
                                         type: string
                                     formattedDate:
                                         type: string
+                                    favorited:
+                                        type: string
 
+    /api/favorites/{id}:
+        patch:
+            summary: reload favorited list
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: 즐겨찾기 목록 불러오기 성공
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                    originalName:
+                                        type: string
+                                    size:
+                                        type: string
+                                    formattedDate:
+                                        type: string
+                                    favorited:
+                                        type: string
+                "204":
+                    description: 변경 내용 없음
+
+    /api/bin:
+        delete:
+            summary: empty trashbin
+            responses:
+                "200":
+                    description: 휴지통 비우기 성공
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                            # 빈 리스트 보냄
     /api/bin/{id}:
         parameters:
             - name: id
@@ -184,6 +299,8 @@ paths:
                                         type: string
                                     formattedDate:
                                         type: string
+                                    favorited:
+                                        type: string
         delete:
             summary: shred file
             responses:
@@ -201,4 +318,6 @@ paths:
                                     size:
                                         type: string
                                     formattedDate:
+                                        type: string
+                                    favorited:
                                         type: string

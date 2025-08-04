@@ -1,5 +1,7 @@
 package com.example.ziindrive.dto;
 
+import java.time.format.DateTimeFormatter;
+
 import com.example.ziindrive.domain.FileEntity;
 
 import lombok.AllArgsConstructor;
@@ -25,7 +27,7 @@ public class FileResponseDto {
                 .id(file.getId())
                 .originalName(file.getOriginalName())
                 .size(file.getSize())
-                .formattedDate(file.getFormattedDate())
+                .formattedDate(file.getUploadedAt().format(DateTimeFormatter.ofPattern("yyyy. M. d H:mm")))
                 .favorited(file.isFavorited())
                 .build();
     }

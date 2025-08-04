@@ -1,7 +1,6 @@
 package com.example.ziindrive.domain;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -24,9 +23,10 @@ public class FileEntity {
     private String extension;
     private String size;
     private LocalDateTime uploadedAt;
-    private String formattedDate;
     private LocalDateTime deletedAt = null;
     private boolean favorited = false;
+
+    // private String formattedDate;
 
     @Builder
     public FileEntity(String originalName, String storedName, String path, String extension, String size) {
@@ -37,16 +37,16 @@ public class FileEntity {
         this.extension = extension;
         this.size = size;
         this.uploadedAt = LocalDateTime.now();
-        this.formattedDate = formatDate(uploadedAt);
+        // this.formattedDate = formatDate(uploadedAt);
 
     }
 
-    // 날짜 포맷 함수
-    public static String formatDate(LocalDateTime uploadedAt) {
+    // 날짜 포맷 함수 -> 날짜포맷을 DTO만드는 과정에서 할듯
+    // public static String formatDate(LocalDateTime uploadedAt) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. M. d H:mm");
-        return uploadedAt.format(formatter);
-    }
+    // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy. M. d H:mm");
+    // return uploadedAt.format(formatter);
+    // }
 
     /*
      * getter(모든 멤버에 있음, 롬복으로 자동 생성)
