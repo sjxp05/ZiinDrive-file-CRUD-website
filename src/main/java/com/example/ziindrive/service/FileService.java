@@ -30,6 +30,8 @@ public class FileService {
     private final FileUploadProperties properties;
     private final SearchOptionHolder holder;
 
+    private volatile List<FileResponseDto> cachedFiles = null;
+
     // create
     public FileEntity uploadFile(MultipartFile fileInput) throws Exception {
 
@@ -81,9 +83,17 @@ public class FileService {
             entities = repository.findAll(specs, holder.getSort());
         }
 
-        // 받은 검색결과를 DTO 리스트로 만들어 반환하기
-        return entities == null ? Collections.emptyList()
+        // 받은 검색결과를 DTO 리스트로 만들어 캐싱+반환하기
+        cachedFiles = entities == null ? Collections.emptyList()
                 : entities.stream().map(FileResponseDto::fromEntity).toList();
+        return cachedFiles;
+    }
+
+    // 정렬만 바뀌었을 때
+    public List<FileResponseDto> changeSortOnly() {
+
+        cachedFiles = cachedFiles.stream().sorted(holder.getSortToComparator()).toList();
+        return cachedFiles;
     }
 
     // 다운로드에 필요한 정보 전달

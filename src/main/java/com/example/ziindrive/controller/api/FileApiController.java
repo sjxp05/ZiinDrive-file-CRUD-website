@@ -39,10 +39,10 @@ public class FileApiController {
             if (sort.equals(holder.getSortToString())) { // 이전 정렬 상태와 같음: 204 No Content
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
-            } else { // 정렬상태가 달라짐: 200 OK + 정렬 바꿔서 다시 구한 파일 목록
+            } else { // 정렬상태가 달라짐: 200 OK + 정렬만 바꿔서 다시 구한 파일 캐시
 
                 holder.setStringToSort(sort);
-                return ResponseEntity.ok().body(service.findWithOptions());
+                return ResponseEntity.ok().body(service.changeSortOnly());
             }
         }
     }
