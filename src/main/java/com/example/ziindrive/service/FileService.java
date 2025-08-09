@@ -45,15 +45,13 @@ public class FileService {
         String storedName = UUID.randomUUID().toString() + extension;
 
         File savedFile = new File(properties.getUploadPath(), storedName);
-        String path = savedFile.getAbsolutePath();
-
         fileInput.transferTo(savedFile);
 
         FileEntity entity = FileEntity.builder()
                 .originalName(originalName)
                 .storedName(storedName)
                 .extension(extension)
-                .path(path)
+                .path(properties.getUploadPath())
                 .size(size)
                 .build();
 
@@ -102,8 +100,11 @@ public class FileService {
         FileEntity file = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
-        Path storedPath = Paths.get(file.getPath());
+        if (file.getDeletedAt() != null) {
+            throw new RuntimeException("file is not active");
+        }
 
+        Path storedPath = Paths.get(file.getPath(), file.getStoredName());
         if (!Files.exists(storedPath)) {
             throw new FileNotFoundException("file does not exist");
         }
@@ -177,13 +178,13 @@ public class FileService {
         }
 
         // 디스크 위치 이동
-        Path source = Paths.get(file.getPath());
+        Path source = Paths.get(file.getPath(), file.getStoredName());
         Path target = Paths.get(properties.getBinPath(), file.getStoredName());
 
         Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
 
         // DB에 기록된 파일 정보 수정 (경로 및 휴지통 여부)
-        file.setPath(target.toString());
+        file.setPath(properties.getBinPath());
         file.setDeleted(); // Transactional 때문에 자동으로 저장, 새로고침됨
     }
 
@@ -199,13 +200,13 @@ public class FileService {
         }
 
         // 디스크 위치 이동
-        Path source = Paths.get(file.getPath());
+        Path source = Paths.get(file.getPath(), file.getStoredName());
         Path target = Paths.get(properties.getUploadPath(), file.getStoredName());
 
         Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
 
         // DB에 기록된 파일 정보 수정 (경로 및 휴지통 여부)
-        file.setPath(target.toString());
+        file.setPath(properties.getUploadPath());
         file.setRestored(); // Transactional 때문에 자동으로 저장, 새로고침됨
     }
 
@@ -217,11 +218,11 @@ public class FileService {
 
         // 삭제된 파일인지 먼저 확인
         if (file.getDeletedAt() == null) {
-            throw new Exception();
+            throw new Exception("file cannot be shredded");
         }
 
         // 디스크에서 먼저 삭제
-        File storedPath = new File(file.getPath());
+        File storedPath = new File(file.getPath(), file.getStoredName());
         if (storedPath.exists()) {
             System.out.println("삭제 성공 여부: " + storedPath.delete()); // test
         }

@@ -20,10 +20,16 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
         public static Specification<FileEntity> hasKeyword(String keyword) {
 
             return (root, query, cb) -> {
+
                 if (keyword == null || keyword.isBlank()) {
                     return null;
                 }
-                return cb.like(cb.lower(root.get("originalName")), "%" + keyword + "%");
+
+                return cb.like(cb.lower(cb.function("REGEXP_REPLACE", String.class,
+                        root.get("originalName"),
+                        cb.literal("[ _\\'\\\"\\-\\+]"),
+                        cb.literal(""))),
+                        "%" + keyword.replaceAll("[ _\\'\\\"\\-\\+]", "").toLowerCase() + "%");
             };
         }
 
@@ -33,9 +39,7 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
                 if (extension == null || extension.isBlank()) {
                     return null;
                 }
-                if (extension.equals("none")) {
-                    return cb.equal(root.get("extension"), "");
-                }
+
                 return cb.like(root.get("extension"), "%." + extension);
             };
         }

@@ -27,5 +27,5 @@ spring:
 
 file:
     location:
-        upload-path: C:\Users\LG\Visual Studio Code\java projects\ziindrive\src\main\resources\static\uploads
-        bin-path: C:\Users\LG\Visual Studio Code\java projects\ziindrive\src\main\resources\static\trashbin
+        upload-path: C:\Users\LG\Visual Studio Code\java projects\ziindrive\src\main\resources\static\uploads\
+        bin-path: C:\Users\LG\Visual Studio Code\java projects\ziindrive\src\main\resources\static\trashbin\

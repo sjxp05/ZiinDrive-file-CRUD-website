@@ -32,7 +32,7 @@ public class FileApiController {
         // test
         System.out.println("received GET request (Send Files)");
 
-        if (sort == null) { // 정렬 변경 없이 새 페이지만 로드되었을 때
+        if (sort == null) { // 정렬 변경 없이 새 페이지만 로드되었을 때: 200 OK + 파일 목록
             return ResponseEntity.ok().body(service.findWithOptions());
 
         } else { // 정렬 버튼을 눌렀을 때
