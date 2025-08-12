@@ -20,9 +20,6 @@ public class FileViewController {
     @GetMapping("/files")
     public String getAllFiles() {
 
-        // test
-        System.out.println("received GET request (Main View)");
-
         holder.setFindAll(true); // 모든 파일 검색하도록 설정
         holder.setActive(true); // 휴지통에 없는 파일만 가능
         holder.setFavorites(false); // 즐겨찾기 여부 상관없음
@@ -42,9 +39,6 @@ public class FileViewController {
             @RequestParam(name = "extension", required = false) String extension,
             @RequestParam(name = "from", required = false) LocalDate from,
             @RequestParam(name = "to", required = false) LocalDate to) {
-
-        // test
-        System.out.println("received GET request (Search)");
 
         holder.setFindAll(false);
         holder.setActive(true);
@@ -87,9 +81,6 @@ public class FileViewController {
             @RequestParam(name = "extension", required = false) String extension,
             @RequestParam(name = "from", required = false) LocalDate from,
             @RequestParam(name = "to", required = false) LocalDate to) {
-
-        // test
-        System.out.println("received GET request (Search)");
 
         holder.setFindAll(false);
         holder.setActive(true);

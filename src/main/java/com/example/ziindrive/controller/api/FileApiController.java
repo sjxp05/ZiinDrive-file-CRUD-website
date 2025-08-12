@@ -29,9 +29,6 @@ public class FileApiController {
     public ResponseEntity<List<FileResponseDto>> getFileData(
             @RequestParam(name = "sort", required = false) String sort) {
 
-        // test
-        System.out.println("received GET request (Send Files)");
-
         if (sort == null) { // 정렬 변경 없이 새 페이지만 로드되었을 때: 200 OK + 파일 목록
             return ResponseEntity.ok().body(service.findWithOptions());
 
@@ -51,19 +48,12 @@ public class FileApiController {
     @GetMapping("/api/files/sort")
     public ResponseEntity<String> getSort() {
 
-        // test
-        System.out.println("received GET request (Current Sort)");
-
         return ResponseEntity.ok().body(holder.getSortToString());
     }
 
     // 업로드 post
     @PostMapping("/api/files")
     public ResponseEntity<String> uploadFile(@RequestParam("fileInput") MultipartFile fileInput) {
-
-        // test
-        System.out.println("received POST request (Upload)");
-
         try {
             if (service.uploadFile(fileInput) == null) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -79,10 +69,6 @@ public class FileApiController {
     // 다운로드 get
     @GetMapping("/api/files/{id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable("id") Long id) {
-
-        // test
-        System.out.println("received GET request (Download)");
-
         try {
             FileDownloadDto dto = service.getFileResource(id);
             Resource resource = new UrlResource(Paths.get(dto.getStoredPath()).toUri());
@@ -101,10 +87,6 @@ public class FileApiController {
     // 이름수정 patch
     @PatchMapping("/api/files/{id}")
     public ResponseEntity<?> renameFile(@PathVariable("id") Long id, @RequestBody Map<String, String> renameInfo) {
-
-        // test
-        System.out.println("received PATCH request (Rename)");
-
         try {
             String validatedName = service.renameFile(id, renameInfo.get("newName"));
             /*
@@ -139,9 +121,6 @@ public class FileApiController {
     public ResponseEntity<String> favoriteFile(@PathVariable("id") Long id,
             @RequestBody Map<String, String> favoriteInfo) {
 
-        // test
-        System.out.println("received PATCH request (Favorite)");
-
         boolean change = Boolean.parseBoolean(favoriteInfo.get("change"));
 
         try {
@@ -160,10 +139,6 @@ public class FileApiController {
     // 삭제 delete
     @DeleteMapping("/api/files/{id}")
     public ResponseEntity<List<FileResponseDto>> deleteFile(@PathVariable("id") Long id) {
-
-        // test
-        System.out.println("received DELETE request (Delete)");
-
         try {
             service.deleteFile(id);
             // 삭제한거 빼고 다시 검색한 결과 보내기
@@ -177,10 +152,6 @@ public class FileApiController {
     // 즐겨찾기 목록 업데이트 patch
     @PatchMapping("/api/favorites/{id}")
     public ResponseEntity<List<FileResponseDto>> reloadFavorites(@PathVariable("id") Long id) {
-
-        // test
-        System.out.println("received PATCH request (Reload Favorites)");
-
         try {
             if (service.favoriteFile(id, false)) {
                 return ResponseEntity.ok().body(service.findWithOptions());
@@ -197,10 +168,6 @@ public class FileApiController {
     // 휴지통 복원 patch
     @PatchMapping("/api/bin/{id}")
     public ResponseEntity<List<FileResponseDto>> restoreFile(@PathVariable("id") Long id) {
-
-        // test
-        System.out.println("received PATCH request (Restore)");
-
         try {
             service.restoreFile(id);
             return ResponseEntity.ok().body(service.findWithOptions());
@@ -213,10 +180,6 @@ public class FileApiController {
     // 휴지통 영구삭제 delete
     @DeleteMapping("/api/bin/{id}")
     public ResponseEntity<List<FileResponseDto>> shredFile(@PathVariable("id") Long id) {
-
-        // test
-        System.out.println("received DELETE request (Shred)");
-
         try {
             service.shredFile(id);
             return ResponseEntity.ok().body(service.findWithOptions());
@@ -229,10 +192,6 @@ public class FileApiController {
     // 휴지통 비우기 delete
     @DeleteMapping("/api/bin")
     public ResponseEntity<?> shredAll() {
-
-        // test
-        System.out.println("received DELETE request (Empty Trashbin)");
-
         try {
             service.shredAll();
             return ResponseEntity.ok().body(Collections.emptyList());
