@@ -109,7 +109,7 @@ public class FileService {
             throw new FileNotFoundException("file does not exist");
         }
 
-        // 한글 이름일경우 인코딩 필요
+        // 한글 이름 및 특수문자 등의 경우 인코딩 필요
         String encodedName = URLEncoder.encode(file.getOriginalName(), StandardCharsets.UTF_8);
 
         FileDownloadDto dto = FileDownloadDto.builder()
@@ -224,7 +224,7 @@ public class FileService {
         // 디스크에서 먼저 삭제
         File storedPath = new File(file.getPath(), file.getStoredName());
         if (storedPath.exists()) {
-            System.out.println("삭제 성공 여부: " + storedPath.delete()); // test
+            storedPath.delete();
         }
 
         // DB에서 파일 메타데이터 삭제
