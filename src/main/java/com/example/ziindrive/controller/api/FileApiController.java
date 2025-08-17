@@ -106,6 +106,8 @@ public class FileApiController {
                             .body(service.findWithOptions());
                 }
                 // 이름만 바꾸면 되고 정렬 새로 필요 없을때: 200 OK + 새로 정한 이름만 (text)
+                service.findWithOptions(); // 캐시만 새로고침하기
+
                 return ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_TYPE, "text/plain")
                         .body(validatedName);
@@ -125,6 +127,7 @@ public class FileApiController {
 
         try {
             if (service.favoriteFile(id, change)) {
+                service.findWithOptions(); // 캐시 새로고침
                 return ResponseEntity.ok().body("즐겨찾기 반영 성공");
 
             } else {

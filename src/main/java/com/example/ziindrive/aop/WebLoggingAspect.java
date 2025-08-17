@@ -5,11 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +26,21 @@ public class WebLoggingAspect {
 
     private static long start;
 
-    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *) || within(@org.springframework.web.bind.annotation.Controller *)")
-    private void controllerLayer() {
+    // 뷰 로딩시 포인트컷
+    @Pointcut("within(@org.springframework.stereotype.Controller *)")
+    private void viewControllerLayer() {
+    }
+
+    // api 호출시 포인트컷
+    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
+    private void apiControllerLayer() {
     }
 
     // 메소드 실행 전: 요청 메타데이터 기록하기
-    @Before("controllerLayer()")
+    @Before("apiControllerLayer() || viewControllerLayer()")
     public void logRequest(JoinPoint jp) {
+
+        System.out.println("AOP HIT");
 
         // 요청 객체 및 메소드 정보
         HttpServletRequest request = currentRequest();
@@ -71,8 +75,58 @@ public class WebLoggingAspect {
         start = System.nanoTime();
     }
 
-    // 메소드 실행 성공 시: 응답 메타데이터 기록하기
-    @AfterReturning(pointcut = "controllerLayer()", returning = "result")
+    // view 로드 성공 시: 응답 메타데이터 기록하기
+    @AfterReturning(pointcut = "viewControllerLayer()", returning = "result")
+    public void logViewResponse(JoinPoint jp, Object result) {
+
+        // 실행 시간 측정
+        long tookMs = System.nanoTime() - start / 1_000_000;
+        log.info("실행 시간: {} ms", tookMs);
+
+        HttpServletResponse response = currentResponse();
+        int status = response != null ? response.getStatus() : -1;
+
+        MethodSignature sig = (MethodSignature) jp.getSignature();
+        String classMethod = sig.getDeclaringType().getSimpleName();
+
+        String viewDesc;
+        if (result == null) {
+            viewDesc = "null/void";
+
+        } else if (result instanceof String) {
+            viewDesc = "view=" + (String) result;
+
+        } else {
+            viewDesc = String.valueOf(result);
+        }
+
+        log.info("VIEW: handler={} status={} {}",
+                classMethod,
+                status,
+                viewDesc);
+    }
+
+    // view 로드 실패 시
+    @AfterThrowing(pointcut = "viewControllerLayer()", throwing = "ex")
+    public void logViewException(JoinPoint jp, Throwable ex) {
+
+        HttpServletResponse response = currentResponse();
+        int status = response != null ? response.getStatus() : -1;
+
+        MethodSignature sig = (MethodSignature) jp.getSignature();
+        String classMethod = sig.getDeclaringType().getSimpleName();
+
+        log.warn("ERROR: handler={} status={} threw={}: {}",
+                classMethod,
+                status,
+                ex.getClass().getSimpleName(),
+                ex.getMessage());
+    }
+
+    /*********************************************************************/
+
+    // api 응답 성공 시: 응답 메타데이터 기록하기
+    @AfterReturning(pointcut = "apiControllerLayer()", returning = "result")
     public void logResponse(JoinPoint jp, Object result) {
 
         // 실행 시간 측정
@@ -87,12 +141,14 @@ public class WebLoggingAspect {
 
         int status = response != null ? response.getStatus() : -1;
 
-        log.info("RESPONSE: handler={} status={} args={}", classMethod, status, safeToString(result));
-
+        log.info("RESPONSE: handler={} status={} args={}",
+                classMethod,
+                status,
+                safeToString(result));
     }
 
-    // 실행 오류 발생시
-    @AfterThrowing(pointcut = "controllerLayer()", throwing = "ex")
+    // api 응답 오류 발생시
+    @AfterThrowing(pointcut = "apiControllerLayer()", throwing = "ex")
     public void logException(JoinPoint jp, Throwable ex) {
 
         // 응답 객체 및 정보 받기

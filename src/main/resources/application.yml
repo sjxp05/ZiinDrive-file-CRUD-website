@@ -25,6 +25,11 @@ spring:
             max-file-size: 100GB
             max-request-size: 100GB
 
+logging:
+    level:
+        root: INFO
+        com.example.ziindrive: DEBUG
+
 file:
     location:
         upload-path: C:\Users\LG\Visual Studio Code\java projects\ziindrive\src\main\resources\static\uploads\
