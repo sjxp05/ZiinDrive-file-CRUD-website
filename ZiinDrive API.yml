@@ -101,7 +101,7 @@ paths:
             summary: get current sort criteria
             responses:
                 "200":
-                    description: 현재 정렬 기준 받아오기 성공
+                    description: 현재 정렬 기준 받기 성공
     /api/files:
         post:
             summary: upload
