@@ -40,7 +40,7 @@ function createRow(file) {
 				data-id=${file.id}
 				style="height: 40px; align-items: center"
 			>
-				<td>${file.originalName}</td>
+				<td>${file.truncatedName}</td>
 				<td>${file.formattedDate}</td>
 				<td>${file.size}</td>
 				<td>

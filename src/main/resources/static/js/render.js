@@ -38,9 +38,10 @@ export function renderData(fileList) {
 function createRow(file) {
 	return `<tr
 				data-id=${file.id}
+				data-fullname="${file.originalName}"
 				style="height: 40px; align-items: center"
 			>
-				<td>${file.originalName}</td>
+				<td>${file.truncatedName}</td>
 				<td>${file.formattedDate}</td>
 				<td>${file.size}</td>
 				<td style="color: red; cursor: pointer" onclick="favoriteFile(this)">

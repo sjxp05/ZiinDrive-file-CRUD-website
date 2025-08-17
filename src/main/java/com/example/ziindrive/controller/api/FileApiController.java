@@ -14,8 +14,6 @@ import com.example.ziindrive.service.FileService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequiredArgsConstructor
@@ -99,18 +97,10 @@ public class FileApiController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 이름 바꿀 필요 없을때: 204 No content
 
             } else {
-                // 이름순 정렬이 새롭게 필요할때: 200 OK + 정렬된 데이터 (json)
-                if (holder.getSortToString().equals("name")) {
-                    return ResponseEntity.ok()
-                            .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                            .body(service.findWithOptions());
-                }
-                // 이름만 바꾸면 되고 정렬 새로 필요 없을때: 200 OK + 새로 정한 이름만 (text)
-                service.findWithOptions(); // 캐시만 새로고침하기
-
+                // 200 OK + 정렬된 데이터 (json) (view에 fullName 반영하기 위함)
                 return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_TYPE, "text/plain")
-                        .body(validatedName);
+                        .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                        .body(service.findWithOptions());
             }
 
         } catch (Exception e) { // 파일 이름이 조건에 맞지 않을때: 400 Bad Request + 에러 메시지
