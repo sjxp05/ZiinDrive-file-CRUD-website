@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ZiinDrive</title>
+	</head>
+	<body style="margin: 0">
+		<style>
+			.container {
+				display: flex;
+				flex-direction: column;
+				width: 100vw;
+				height: 100vh;
+				align-items: center;
+				justify-content: center;
+			}
+			.button {
+				font-size: 20px;
+				padding: 10px 20px;
+				background-color: darkcyan;
+				color: white;
+				border-radius: 7px;
+				border-style: hidden;
+			}
+			.button:hover {
+				filter: brightness(90%);
+				transition: 0.3s;
+			}
+		</style>
+
+		<div class="container">
+			<h1 style="padding-bottom: 100px; flex-direction: row">
+				Welcome to <b>Ziin</b>Drive!
+			</h1>
+			<button class="button" onclick="location.href='/files'">
+				시작하기
+			</button>
+		</div>
+	</body>
+</html>

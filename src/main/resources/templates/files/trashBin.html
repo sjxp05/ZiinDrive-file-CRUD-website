@@ -37,7 +37,7 @@
 				left: 0;
 				width: 100vw;
 				height: 100vh;
-				background-color: rgba(0, 0, 0, 0.1);
+				background-color: rgba(0, 0, 0, 0.15);
 				z-index: 99;
 				visibility: hidden;
 			}
@@ -54,9 +54,12 @@
 				z-index: 100;
 				visibility: hidden;
 				box-shadow: 3px 0 6px rgba(0, 0, 0, 0.25);
+				transform: translateX(100%);
+				transition: transform 0.2s ease;
 			}
 			.sidemenu.active {
 				visibility: visible;
+				transform: translateX(0);
 			}
 			.menuList {
 				list-style: none; /* ● 없애기 */
@@ -77,7 +80,7 @@
 				color: aliceblue;
 			}
 			.menuList li:hover {
-				background-color: rgb(202, 212, 219);
+				background-color: rgb(124, 147, 163);
 				color: black;
 			}
 			.shredAllBt {
