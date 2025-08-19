@@ -1,0 +1,51 @@
+/* favorite, filesView only */
+
+/* 검색창 및 업로드 버튼 */
+.uploadBt {
+	font-size: 35px;
+	padding: 2px 15px;
+	text-align: center;
+	background-color: darkcyan;
+	border: none;
+	color: white;
+}
+.select {
+	font-size: 15px;
+	width: 100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* 정렬버튼 */
+.sortButtonsDiv {
+	display: flex;
+	height: 30px;
+	align-items: center;
+}
+.sortBt {
+	font-size: 15px;
+	background-color: white;
+	color: black;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	border-width: 1px;
+}
+.sortBt.active {
+	background-color: black;
+	color: white;
+}
+
+/* 테이블 요소(tr)별 버튼 */
+.downloadBt {
+	background-color: cadetblue;
+	color: white;
+}
+.renameBt {
+	background-color: lightgray;
+	color: black;
+}
+.deleteBt {
+	background-color: firebrick;
+	color: white;
+}

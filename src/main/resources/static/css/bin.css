@@ -1,0 +1,24 @@
+/* trashBin only */
+
+/* 휴지통 비우기 기능 들어갈 곳 */
+.shredAllBtDiv {
+	display: flex;
+	width: 100%;
+	height: 35px;
+	justify-content: right;
+}
+.shredAllBt {
+	font-size: 18px;
+	background-color: lightgray;
+	border-color: darkgray;
+}
+
+/* 테이블 요소(tr)별 버튼 */
+.restoreBt {
+	background-color: lightgray;
+	color: black;
+}
+.shredBt {
+	background-color: firebrick;
+	color: white;
+}
