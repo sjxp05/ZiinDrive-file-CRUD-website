@@ -31,7 +31,7 @@
 
 		<div class="sidemenu">
 			<button class="menuBt" onclick="closeMenu()"><b>×</b></button>
-			<h3>&nbsp;&nbsp;&nbsp;MENU</h3>
+			<h3 style="cursor: default">&nbsp;&nbsp;&nbsp;MENU</h3>
 
 			<ul class="menuList">
 				<li id="allFilesMenu" onclick="location.href='/files'">
@@ -123,12 +123,18 @@
 				<input id="to" type="date" />
 
 				<label style="font-size: 15px">&nbsp;&nbsp;</label>
-				<button style="font-size: 16px" onclick="searchFiles()">
+				<button
+					style="font-size: 16px; cursor: pointer"
+					onclick="searchFiles()"
+				>
 					검색
 				</button>
 
 				<label style="font-size: 15px">&nbsp;&nbsp;</label>
-				<button style="font-size: 16px" onclick="initialize()">
+				<button
+					style="font-size: 16px; cursor: pointer"
+					onclick="initialize()"
+				>
 					초기화
 				</button>
 			</span>

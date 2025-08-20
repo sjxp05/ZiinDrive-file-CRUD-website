@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.ziindrive.config.SearchOptionHolder;
 import com.example.ziindrive.dto.*;
 import com.example.ziindrive.service.FileService;
+import com.example.ziindrive.util.FileUtils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,8 @@ public class FileApiController {
             } else { // 정렬상태가 달라짐: 200 OK + 정렬만 바꿔서 다시 구한 파일 캐시
 
                 holder.setStringToSort(sort);
-                return ResponseEntity.ok().body(service.changeSortOnly());
+                // return ResponseEntity.ok().body(service.changeSortOnly());
+                return ResponseEntity.ok().body(service.findWithOptions());
             }
         }
     }
@@ -97,10 +99,12 @@ public class FileApiController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 이름 바꿀 필요 없을때: 204 No content
 
             } else {
-                // 200 OK + 정렬된 데이터 (json) (view에 fullName 반영하기 위함)
+                // 200 OK + truncatedName + fullName (json body) (view에 fullName 반영하기 위함)
                 return ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                        .body(service.findWithOptions());
+                        .body(Map.of(
+                                "fullName", validatedName,
+                                "truncatedName", FileUtils.getTruncatedName(validatedName)));
             }
 
         } catch (Exception e) { // 파일 이름이 조건에 맞지 않을때: 400 Bad Request + 에러 메시지
@@ -117,7 +121,7 @@ public class FileApiController {
 
         try {
             if (service.favoriteFile(id, change)) {
-                service.findWithOptions(); // 캐시 새로고침
+                // service.findWithOptions(); // 캐시 새로고침
                 return ResponseEntity.ok().body("즐겨찾기 반영 성공");
 
             } else {

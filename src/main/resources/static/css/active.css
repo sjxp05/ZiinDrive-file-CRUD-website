@@ -8,6 +8,7 @@
 	background-color: darkcyan;
 	border: none;
 	color: white;
+	cursor: pointer;
 }
 .select {
 	font-size: 15px;
@@ -15,6 +16,7 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	cursor: pointer;
 }
 
 /* 정렬버튼 */
@@ -40,12 +42,15 @@
 .downloadBt {
 	background-color: cadetblue;
 	color: white;
+	cursor: pointer;
 }
 .renameBt {
 	background-color: lightgray;
 	color: black;
+	cursor: pointer;
 }
 .deleteBt {
 	background-color: firebrick;
 	color: white;
+	cursor: pointer;
 }

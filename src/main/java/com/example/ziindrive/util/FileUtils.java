@@ -57,7 +57,23 @@ public class FileUtils {
         }
     }
 
+    // 이름 축약 함수
+    public static String getTruncatedName(String fullName) {
+
+        String extension = null;
+        try {
+            extension = extractExtension(fullName);
+        } catch (Exception e) {
+        }
+
+        String nameWithoutExt = fullName.substring(0, fullName.lastIndexOf(extension));
+
+        return (nameWithoutExt.length() > 30 ? nameWithoutExt.substring(0, 30) + " ... "
+                : nameWithoutExt) + extension;
+    }
+
     // 확장자 추출 및 제한 함수
+    /* 헬퍼함수의 헬퍼함수 ㄷㄷ */
     public static String extractExtension(String fileName) throws Exception {
 
         String extension;

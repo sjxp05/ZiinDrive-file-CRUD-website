@@ -30,7 +30,13 @@ public class FileService {
     private final FileUploadProperties properties;
     private final SearchOptionHolder holder;
 
-    private volatile List<FileResponseDto> cachedFiles = null;
+    // private volatile List<FileResponseDto> cachedFiles = null;
+
+    /*
+     * 원래 계획은 캐싱기능을 넣어서 정렬상태만 바뀌었을 경우 이 캐시 내에서 재정렬만 해줄까 했는데
+     * 이름수정, 즐겨찾기 변경 등을 하고 나서 정렬상태만 바꾸면 상태 반영이 안된다는 문제가 있음!
+     * 파일 하나 수정작업 가지고 매번 DB접근해서 다시 캐싱하는 건 비효율적이라 주소/새로고침/정렬 변경 때만 DB접근하기로 함
+     */
 
     // create
     public FileEntity uploadFile(MultipartFile fileInput) throws Exception {
@@ -82,17 +88,20 @@ public class FileService {
         }
 
         // 받은 검색결과를 DTO 리스트로 만들어 캐싱+반환하기
-        cachedFiles = entities == null ? Collections.emptyList()
+        return entities == null ? Collections.emptyList()
                 : entities.stream().map(FileResponseDto::fromEntity).toList();
-        return cachedFiles;
+        // cachedFiles = entities == null ? Collections.emptyList()
+        // : entities.stream().map(FileResponseDto::fromEntity).toList();
+        // return cachedFiles;
     }
 
     // 정렬만 바뀌었을 때
-    public List<FileResponseDto> changeSortOnly() {
+    // public List<FileResponseDto> changeSortOnly() {
 
-        cachedFiles = cachedFiles.stream().sorted(holder.getSortToComparator()).toList();
-        return cachedFiles;
-    }
+    // cachedFiles =
+    // cachedFiles.stream().sorted(holder.getSortToComparator()).toList();
+    // return cachedFiles;
+    // }
 
     // 다운로드에 필요한 정보 전달
     public FileDownloadDto getFileResource(Long id) throws IOException {

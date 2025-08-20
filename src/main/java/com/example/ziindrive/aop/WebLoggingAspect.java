@@ -80,7 +80,7 @@ public class WebLoggingAspect {
     public void logViewResponse(JoinPoint jp, Object result) {
 
         // 실행 시간 측정
-        long tookMs = System.nanoTime() - start / 1_000_000;
+        long tookMs = (System.nanoTime() - start) / 1_000_000;
         log.info("실행 시간: {} ms", tookMs);
 
         HttpServletResponse response = currentResponse();
@@ -130,7 +130,7 @@ public class WebLoggingAspect {
     public void logResponse(JoinPoint jp, Object result) {
 
         // 실행 시간 측정
-        long tookMs = System.nanoTime() - start / 1_000_000;
+        long tookMs = (System.nanoTime() - start) / 1_000_000;
         log.info("실행 시간: {} ms", tookMs);
 
         // 응답 객체 및 정보 받기

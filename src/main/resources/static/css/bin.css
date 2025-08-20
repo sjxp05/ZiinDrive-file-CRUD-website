@@ -11,14 +11,17 @@
 	font-size: 18px;
 	background-color: lightgray;
 	border-color: darkgray;
+	cursor: pointer;
 }
 
 /* 테이블 요소(tr)별 버튼 */
 .restoreBt {
 	background-color: lightgray;
 	color: black;
+	cursor: pointer;
 }
 .shredBt {
 	background-color: firebrick;
 	color: white;
+	cursor: pointer;
 }
