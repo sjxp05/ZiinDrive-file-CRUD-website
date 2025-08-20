@@ -70,8 +70,10 @@ public class FileService {
         List<FileEntity> entities = null;
 
         if (holder.isFindAll()) {
-            entities = repository.findAll(FileSpecifications.isActive(holder.isActive())
-                    .and(FileSpecifications.isFavorited(holder.isFavorites())), holder.getSort());
+            entities = repository.findAll(
+                    FileSpecifications.isActive(holder.isActive())
+                            .and(FileSpecifications.isFavoritesMenu(holder.isFavoritesMenu())),
+                    holder.getSort());
 
         } else {
             // Specification으로 null이 아닌 모든 검색조건 추가
@@ -81,13 +83,13 @@ public class FileService {
                     FileSpecifications.uploadedAfter(holder.getFrom()),
                     FileSpecifications.uploadedBefore(holder.getTo()),
                     FileSpecifications.isActive(holder.isActive()),
-                    FileSpecifications.isFavorited(holder.isFavorites()))
+                    FileSpecifications.isFavoritesMenu(holder.isFavoritesMenu()))
                     .stream().reduce(Specification::and).orElse(null);
 
             entities = repository.findAll(specs, holder.getSort());
         }
 
-        // 받은 검색결과를 DTO 리스트로 만들어 캐싱+반환하기
+        // 받은 검색결과를 DTO 리스트로 만들어 반환하기
         return entities == null ? Collections.emptyList()
                 : entities.stream().map(FileResponseDto::fromEntity).toList();
         // cachedFiles = entities == null ? Collections.emptyList()

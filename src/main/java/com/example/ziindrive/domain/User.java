@@ -15,12 +15,13 @@ public class User {
     private String userId;
 
     private String password;
-    private String userName;
+    private String nickname;
 
     @Builder
-    public User(String userId, String password, String userName) {
+    public User(String userId, String password, String nickname) {
+
         this.userId = userId;
         this.password = password;
-        this.userName = userName;
+        this.nickname = nickname;
     }
 }

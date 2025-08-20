@@ -1,12 +1,12 @@
 package com.example.ziindrive.config;
 
 import java.time.LocalDate;
-import java.util.Comparator;
+
+// import java.util.Comparator;
+// import com.example.ziindrive.dto.FileResponseDto;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-
-import com.example.ziindrive.dto.FileResponseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class SearchOptionHolder {
 
     private boolean findAll = true;
     private boolean active = true;
-    private boolean favorites = false;
+    private boolean favoritesMenu = false;
 
     private String keyword;
     private String extension;
@@ -57,16 +57,16 @@ public class SearchOptionHolder {
         }
     }
 
-    public Comparator<FileResponseDto> getSortToComparator() {
+    // public Comparator<FileResponseDto> getSortToComparator() {
 
-        if (sort.equals(Sort.by(Sort.Order.asc("originalName")))) {
-            return Comparator.comparing(FileResponseDto::getOriginalName);
+    // if (sort.equals(Sort.by(Sort.Order.asc("originalName")))) {
+    // return Comparator.comparing(FileResponseDto::getOriginalName);
 
-        } else if (sort.equals(Sort.by(Sort.Order.asc("id")))) {
-            return Comparator.comparing(FileResponseDto::getId);
+    // } else if (sort.equals(Sort.by(Sort.Order.asc("id")))) {
+    // return Comparator.comparing(FileResponseDto::getId);
 
-        } else {
-            return Comparator.comparing(FileResponseDto::getId).reversed();
-        }
-    }
+    // } else {
+    // return Comparator.comparing(FileResponseDto::getId).reversed();
+    // }
+    // }
 }
