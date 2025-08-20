@@ -1,11 +1,14 @@
 import { renderData } from "./render.js";
 
+// 하트 버튼 눌렀을때
 function favoriteFile(btn) {
 	const id = btn.closest("tr").dataset.id;
 
 	if (location.href.startsWith("http://localhost:8080/favorites")) {
+		//즐겨찾기 모음이면 즉시 반영될 수 있도록 다음 함수로 이동
 		reloadFavoriteList(id, false);
 	} else {
+		// 바뀌었다는 정보 전달 + 해당 파일의 표시만 바꿔 반영해주기
 		const change = btn.innerText === "\u00A0♡\u00A0" ? true : false;
 
 		fetch("/api/files/favorite/" + id, {
@@ -39,6 +42,7 @@ function favoriteFile(btn) {
 	}
 }
 
+// 즐겨찾기 모음 화면에서는 삭제 시 실시간 반영되도록 하기
 function reloadFavoriteList(id) {
 	fetch("/api/favorites/" + id, {
 		method: "PATCH",

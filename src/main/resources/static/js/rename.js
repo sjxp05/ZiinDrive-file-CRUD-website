@@ -1,5 +1,3 @@
-import { renderData } from "./render.js";
-
 function renameFile(btn) {
 	const tr = btn.closest("tr");
 	const td = tr.querySelector("td:nth-child(1)");
@@ -65,9 +63,11 @@ function finalizeRename(id, td, newName, currentName) {
 			if (res.status === 200) {
 				const contentType = res.headers.get("Content-Type");
 				if (contentType && contentType.includes("application/json")) {
-					const fileList = await res.json();
-					console.log("이름 목록 전체 리렌더링");
-					renderData(fileList);
+					const renameInfo = await res.json();
+					console.log("새 이름 + 풀네임 반영");
+
+					td.closest("tr").dataset.fullname = renameInfo.fullName;
+					td.textContent = renameInfo.truncatedName;
 				}
 			} else if (res.status === 204) {
 				// 이름이 실질적으로 바뀌지 않은 경우
@@ -76,7 +76,7 @@ function finalizeRename(id, td, newName, currentName) {
 			}
 		})
 		.catch(async (err) => {
-			// 길이 제한 or 특수문자 제한
+			// 길이 제한 or 특수문자 제한 등 경고 메시지
 			const msg = await err.text();
 			alert(msg);
 
@@ -84,5 +84,3 @@ function finalizeRename(id, td, newName, currentName) {
 			td.textContent = currentName;
 		});
 }
-
-window.renameFile = renameFile;
