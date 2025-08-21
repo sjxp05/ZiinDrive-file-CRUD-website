@@ -4,7 +4,10 @@ import { renderData } from "./render.js";
 function favoriteFile(btn) {
 	const id = btn.closest("tr").dataset.id;
 
-	if (location.href.startsWith("http://localhost:8080/favorites")) {
+	if (
+		location.href.endsWith("/favorites") ||
+		location.href.endsWith("/favorites/search")
+	) {
 		//즐겨찾기 모음이면 즉시 반영될 수 있도록 다음 함수로 이동
 		reloadFavoriteList(id, false);
 	} else {

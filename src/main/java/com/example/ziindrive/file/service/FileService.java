@@ -16,6 +16,8 @@ import com.example.ziindrive.file.dto.*;
 import com.example.ziindrive.file.entity.FileEntity;
 import com.example.ziindrive.file.repository.FileRepository;
 import com.example.ziindrive.file.repository.FileRepository.FileSpecifications;
+import com.example.ziindrive.user.entity.UserEntity;
+import com.example.ziindrive.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -26,7 +28,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class FileService {
 
-    private final FileRepository repository;
+    private final FileRepository fileRepository;
+    private final UserRepository userRepository;
     private final FileUploadProperties properties;
     private final SearchOptionHolder holder;
 
@@ -39,11 +42,14 @@ public class FileService {
      */
 
     // create
-    public FileEntity uploadFile(MultipartFile fileInput) throws Exception {
+    public FileEntity uploadFile(MultipartFile fileInput, String userId) throws Exception {
 
-        if (fileInput == null) {
+        if (fileInput == null || userId == null) {
             return null;
         }
+
+        UserEntity owner = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("user does not exist"));
 
         String originalName = FileUtils.validateOriginalName(fileInput.getOriginalFilename());
         String size = FileUtils.formatSize(fileInput.getSize());
@@ -54,6 +60,7 @@ public class FileService {
         fileInput.transferTo(savedFile);
 
         FileEntity entity = FileEntity.builder()
+                .owner(owner)
                 .originalName(originalName)
                 .storedName(storedName)
                 .extension(extension)
@@ -61,23 +68,25 @@ public class FileService {
                 .size(size)
                 .build();
 
-        return repository.save(entity);
+        return fileRepository.save(entity);
     }
 
     // read, search
-    public List<FileResponseDto> findWithOptions() {
+    public List<FileResponseDto> findWithOptions(String userId) {
 
         List<FileEntity> entities = null;
 
         if (holder.isFindAll()) {
-            entities = repository.findAll(
-                    FileSpecifications.isActive(holder.isActive())
+            entities = fileRepository.findAll(
+                    FileSpecifications.isOwnerId(userId)
+                            .and(FileSpecifications.isActive(holder.isActive()))
                             .and(FileSpecifications.isFavoritesMenu(holder.isFavoritesMenu())),
                     holder.getSort());
 
         } else {
             // Specification으로 null이 아닌 모든 검색조건 추가
             Specification<FileEntity> specs = List.of(
+                    FileSpecifications.isOwnerId(userId),
                     FileSpecifications.hasKeyword(holder.getKeyword()),
                     FileSpecifications.hasExtension(holder.getExtension()),
                     FileSpecifications.uploadedAfter(holder.getFrom()),
@@ -86,7 +95,7 @@ public class FileService {
                     FileSpecifications.isFavoritesMenu(holder.isFavoritesMenu()))
                     .stream().reduce(Specification::and).orElse(null);
 
-            entities = repository.findAll(specs, holder.getSort());
+            entities = fileRepository.findAll(specs, holder.getSort());
         }
 
         // 받은 검색결과를 DTO 리스트로 만들어 반환하기
@@ -108,7 +117,7 @@ public class FileService {
     // 다운로드에 필요한 정보 전달
     public FileDownloadDto getFileResource(Long id) throws IOException {
 
-        FileEntity file = repository.findById(id)
+        FileEntity file = fileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
         if (file.getDeletedAt() != null) {
@@ -134,7 +143,7 @@ public class FileService {
     // update (*파일이름(사용자에게 보이는 이름)만 수정 가능)
     public String renameFile(Long id, String newName) throws Exception {
 
-        FileEntity file = repository.findById(id)
+        FileEntity file = fileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
         // 올바른 확장자가 붙어있지 않을 경우 추가한 뒤 validate 함수로 보내기
@@ -155,7 +164,7 @@ public class FileService {
     // 즐겨찾기 여부 수정
     public boolean favoriteFile(Long id, boolean change) throws Exception {
 
-        FileEntity file = repository.findById(id)
+        FileEntity file = fileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
         if (change == true) {
@@ -180,7 +189,7 @@ public class FileService {
     // delete
     public void deleteFile(Long id) throws Exception {
 
-        FileEntity file = repository.findById(id)
+        FileEntity file = fileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
         // 이미 삭제된 파일의 경우 막아놓기
@@ -202,7 +211,7 @@ public class FileService {
     // 파일 복원
     public void restoreFile(Long id) throws Exception {
 
-        FileEntity file = repository.findById(id)
+        FileEntity file = fileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
         // 삭제되지 않았으면 복구 안되게 막아놓기
@@ -224,7 +233,7 @@ public class FileService {
     // 영구삭제
     public void shredFile(Long id) throws Exception {
 
-        FileEntity file = repository.findById(id)
+        FileEntity file = fileRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("file does not exist"));
 
         // 삭제된 파일인지 먼저 확인
@@ -239,12 +248,14 @@ public class FileService {
         }
 
         // DB에서 파일 메타데이터 삭제
-        repository.delete(file);
+        fileRepository.delete(file);
     }
 
     // 휴지통 비우기
-    public void shredAll() throws Exception {
+    public void shredAll(String userId) throws Exception {
 
-        repository.delete(FileSpecifications.isActive(false));
+        fileRepository.delete(
+                FileSpecifications.isOwnerId(userId)
+                        .and(FileSpecifications.isActive(false)));
     }
 }

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>로그인 - ZiinDrive</title>
+	</head>
+
+	<body style="margin: 0">
+		<style>
+			.loginDiv {
+				display: flex;
+				flex-direction: column;
+				width: 100vw;
+				height: 90vh;
+			}
+			.title {
+				position: fixed;
+				width: 100vw;
+				top: 7vh;
+				left: 0;
+
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				align-items: center;
+
+				cursor: default;
+			}
+			.input {
+				position: fixed;
+				left: 37vw;
+				top: 40vh;
+
+				width: 28vw;
+				font-size: 15px;
+				padding: 10px;
+				color: rgb(28, 28, 28);
+			}
+			.label {
+				position: fixed;
+				right: 64vw;
+
+				text-align: right;
+				font-size: 18px;
+				padding: 7px;
+				color: black;
+			}
+			.loginBt {
+				position: fixed;
+				top: 70vh;
+				align-self: center;
+
+				font-size: 20px;
+				padding: 10px 20px;
+				background-color: darkcyan;
+				color: white;
+				border-radius: 7px;
+				border-style: hidden;
+				cursor: pointer;
+			}
+			.loginBt:hover {
+				filter: brightness(90%);
+				transition: 0.3s;
+			}
+			.signupDiv {
+				position: fixed;
+				left: 0;
+				bottom: 0;
+
+				display: flex;
+				width: 100vw;
+				height: 30vh;
+				align-items: center;
+				justify-content: center;
+
+				cursor: default;
+			}
+		</style>
+
+		<div class="loginDiv">
+			<span class="title">
+				<p style="font-size: 25px; padding: 5px">
+					사용자 아이디로&nbsp;
+				</p>
+				<p
+					style="
+						font-size: 35px;
+						padding-bottom: 6px;
+						color: darkcyan;
+					"
+				>
+					<b>Ziin</b>Drive
+				</p>
+				<p style="font-size: 25px; padding: 5px">에 로그인하세요</p>
+			</span>
+
+			<span>
+				<label class="label" style="top: 40vh">ID</label>
+				<input id="idInput" class="input" type="text" />
+			</span>
+
+			<span>
+				<label class="label" style="top: 50vh">비밀번호</label>
+				<input
+					id="pwInput"
+					class="input"
+					style="top: 50vh"
+					type="text"
+				/>
+			</span>
+
+			<button class="loginBt" onclick="login()">로그인</button>
+		</div>
+
+		<div class="signupDiv">
+			<h5 style="color: gray">
+				아직 계정이 없으신가요? <a href="/signup">회원가입</a>
+			</h5>
+		</div>
+	</body>
+
+	<script src="/js/login.js"></script>
+</html>

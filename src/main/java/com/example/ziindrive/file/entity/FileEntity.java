@@ -33,8 +33,11 @@ public class FileEntity {
     private boolean favorited = false;
 
     @Builder
-    public FileEntity(String originalName, String storedName, String path, String extension, String size) {
+    public FileEntity(
+            UserEntity owner, String originalName, String storedName,
+            String path, String extension, String size) {
 
+        this.owner = owner;
         this.originalName = originalName;
         this.storedName = storedName;
         this.path = path;

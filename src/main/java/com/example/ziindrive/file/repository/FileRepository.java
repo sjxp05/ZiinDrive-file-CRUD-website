@@ -17,6 +17,13 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
     // specification 만들기
     public class FileSpecifications {
 
+        public static Specification<FileEntity> isOwnerId(String userId) {
+
+            return (root, query, cb) -> {
+                return cb.equal(root.get("ownerId"), userId);
+            };
+        }
+
         public static Specification<FileEntity> hasKeyword(String keyword) {
 
             return (root, query, cb) -> {
