@@ -1,4 +1,4 @@
-package com.example.ziindrive.util;
+package com.example.ziindrive.common.util;
 
 import java.util.Set;
 

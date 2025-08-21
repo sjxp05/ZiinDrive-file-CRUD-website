@@ -1,9 +1,9 @@
-package com.example.ziindrive.dto;
+package com.example.ziindrive.file.dto;
 
 import java.time.format.DateTimeFormatter;
 
-import com.example.ziindrive.domain.FileEntity;
-import com.example.ziindrive.util.FileUtils;
+import com.example.ziindrive.common.util.FileUtils;
+import com.example.ziindrive.file.entity.FileEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

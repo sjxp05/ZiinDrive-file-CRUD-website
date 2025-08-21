@@ -1,6 +1,8 @@
-package com.example.ziindrive.domain;
+package com.example.ziindrive.file.entity;
 
 import java.time.LocalDateTime;
+
+import com.example.ziindrive.user.entity.UserEntity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

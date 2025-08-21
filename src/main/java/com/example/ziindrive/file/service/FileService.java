@@ -1,4 +1,4 @@
-package com.example.ziindrive.service;
+package com.example.ziindrive.file.service;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -10,12 +10,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.ziindrive.common.util.FileUtils;
 import com.example.ziindrive.config.*;
-import com.example.ziindrive.dto.*;
-import com.example.ziindrive.domain.FileEntity;
-import com.example.ziindrive.repository.FileRepository;
-import com.example.ziindrive.repository.FileRepository.FileSpecifications;
-import com.example.ziindrive.util.FileUtils;
+import com.example.ziindrive.file.dto.*;
+import com.example.ziindrive.file.entity.FileEntity;
+import com.example.ziindrive.file.repository.FileRepository;
+import com.example.ziindrive.file.repository.FileRepository.FileSpecifications;
 
 import jakarta.transaction.Transactional;
 

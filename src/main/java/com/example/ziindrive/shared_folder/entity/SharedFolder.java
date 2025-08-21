@@ -1,4 +1,4 @@
-package com.example.ziindrive.domain;
+package com.example.ziindrive.shared_folder.entity;
 
 import java.time.LocalDateTime;
 

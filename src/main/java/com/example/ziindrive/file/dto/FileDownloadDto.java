@@ -1,4 +1,4 @@
-package com.example.ziindrive.dto;
+package com.example.ziindrive.file.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

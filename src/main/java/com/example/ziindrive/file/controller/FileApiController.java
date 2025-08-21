@@ -1,4 +1,4 @@
-package com.example.ziindrive.controller.api;
+package com.example.ziindrive.file.controller;
 
 import java.nio.file.Paths;
 import java.util.*;
@@ -8,10 +8,10 @@ import org.springframework.http.*;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.ziindrive.common.util.FileUtils;
 import com.example.ziindrive.config.SearchOptionHolder;
-import com.example.ziindrive.dto.*;
-import com.example.ziindrive.service.FileService;
-import com.example.ziindrive.util.FileUtils;
+import com.example.ziindrive.file.dto.*;
+import com.example.ziindrive.file.service.FileService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
