@@ -6,22 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Getter
 @NoArgsConstructor
-@Table(name = "users")
-public class User {
+@Getter
+@Table(name = "user")
+public class UserEntity {
 
     @Id
     private String userId;
 
     private String password;
     private String nickname;
+    private String email;
 
     @Builder
-    public User(String userId, String password, String nickname) {
+    public UserEntity(String userId, String password, String nickname, String email) {
 
         this.userId = userId;
         this.password = password;
         this.nickname = nickname;
+        this.email = email;
     }
 }

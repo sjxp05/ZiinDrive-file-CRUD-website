@@ -10,15 +10,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
-@Table(name = "metadata_files")
+@Table(name = "file")
 public class FileEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @ForeignKey
-    // private String userId;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private UserEntity owner;
 
     private String originalName;
     private String storedName;
