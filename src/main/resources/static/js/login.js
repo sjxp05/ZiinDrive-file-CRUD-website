@@ -2,8 +2,17 @@ function login() {
 	const idInput = document.getElementById("idInput");
 	const pwInput = document.getElementById("pwInput");
 
-	const id = idInput.textContent;
-	const pw = pwInput.textContent;
+	const id = idInput.value.trim();
+	const pw = pwInput.value.trim();
 
-	location.href = "/" + id + "/files";
+	console.log(id + " / " + pw);
+
+	if (id === null || id.length === 0) {
+		idInput.value = "";
+		pwInput.value = "";
+		return;
+	}
+
+	localStorage.setItem("user.id", id);
+	location.href = "/files";
 }

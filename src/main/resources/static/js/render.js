@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 	// 파일 불러오기
-	fetch("/api/files")
+	fetch("/api/files/" + localStorage.getItem("user.id"))
 		.then((res) => {
 			if (!res.ok) {
 				throw new Error(res.status);

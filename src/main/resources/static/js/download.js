@@ -1,7 +1,7 @@
 function downloadFile(btn) {
 	const id = btn.closest("tr").dataset.id;
 
-	fetch("/api/files/" + id)
+	fetch("/api/files/download/" + id)
 		.then((res) => {
 			if (!res.ok) {
 				throw new Error(res.status);

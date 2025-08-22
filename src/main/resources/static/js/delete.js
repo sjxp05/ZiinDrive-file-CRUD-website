@@ -3,7 +3,7 @@ import { renderData } from "./render.js";
 function deleteFile(btn) {
 	const id = btn.closest("tr").dataset.id;
 
-	fetch("/api/files/" + id, {
+	fetch("/api/files/" + localStorage.getItem("user.id") + "/" + id, {
 		method: "DELETE",
 	})
 		.then((res) => {

@@ -10,7 +10,7 @@ function shredFile(btn) {
 		return;
 	}
 
-	fetch("/api/bin/" + id, {
+	fetch("/api/bin/" + localStorage.getItem("user.id") + "/" + id, {
 		method: "DELETE",
 	})
 		.then((res) => {
@@ -43,7 +43,7 @@ function shredAll() {
 		return;
 	}
 
-	fetch("/api/bin", {
+	fetch("/api/bin/" + localStorage.getItem("user.id"), {
 		method: "DELETE",
 	})
 		.then((res) => {

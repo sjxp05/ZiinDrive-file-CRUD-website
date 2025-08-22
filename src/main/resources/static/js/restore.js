@@ -5,6 +5,12 @@ function restoreFile(btn) {
 
 	fetch("/api/bin/" + id, {
 		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			userId: localStorage.getItem("user.id"),
+		}),
 	})
 		.then((res) => {
 			if (!res.ok) {

@@ -4,12 +4,9 @@ import { renderData } from "./render.js";
 function favoriteFile(btn) {
 	const id = btn.closest("tr").dataset.id;
 
-	if (
-		location.href.endsWith("/favorites") ||
-		location.href.endsWith("/favorites/search")
-	) {
+	if (location.href.startsWith("http://localhost:8080/favorites")) {
 		//즐겨찾기 모음이면 즉시 반영될 수 있도록 다음 함수로 이동
-		reloadFavoriteList(id, false);
+		reloadFavoriteList(id);
 	} else {
 		// 바뀌었다는 정보 전달 + 해당 파일의 표시만 바꿔 반영해주기
 		const change = btn.innerText === "\u00A0♡\u00A0" ? true : false;
@@ -20,6 +17,7 @@ function favoriteFile(btn) {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
+				userId: localStorage.getItem("user.id"),
 				change: change,
 			}),
 		})
@@ -49,6 +47,12 @@ function favoriteFile(btn) {
 function reloadFavoriteList(id) {
 	fetch("/api/favorites/" + id, {
 		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			userId: localStorage.getItem("user.id"),
+		}),
 	})
 		.then((res) => {
 			if (!res.ok) {

@@ -50,6 +50,7 @@ function finalizeRename(id, td, newName, currentName) {
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify({
+			userId: localStorage.getItem("user.id"),
 			newName: newName,
 		}),
 	})

@@ -10,6 +10,7 @@ function uploadFile() {
 	// 폼 만들기
 	const formData = new FormData();
 	formData.append("fileInput", fileInput);
+	formData.append("userId", localStorage.getItem("user.id"));
 
 	fetch("/api/files", {
 		method: "POST",
