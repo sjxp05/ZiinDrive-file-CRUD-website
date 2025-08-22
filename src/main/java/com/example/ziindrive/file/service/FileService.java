@@ -48,7 +48,7 @@ public class FileService {
             return null;
         }
 
-        UserEntity owner = userRepository.findById(userId)
+        UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("user does not exist"));
 
         String originalName = FileUtils.validateOriginalName(fileInput.getOriginalFilename());
@@ -60,7 +60,7 @@ public class FileService {
         fileInput.transferTo(savedFile);
 
         FileEntity entity = FileEntity.builder()
-                .owner(owner)
+                .user(user)
                 .originalName(originalName)
                 .storedName(storedName)
                 .extension(extension)
@@ -78,7 +78,7 @@ public class FileService {
 
         if (holder.isFindAll()) {
             entities = fileRepository.findAll(
-                    FileSpecifications.isOwnerId(userId)
+                    FileSpecifications.isUserId(userId)
                             .and(FileSpecifications.isActive(holder.isActive()))
                             .and(FileSpecifications.isFavoritesMenu(holder.isFavoritesMenu())),
                     holder.getSort());
@@ -86,7 +86,7 @@ public class FileService {
         } else {
             // Specification으로 null이 아닌 모든 검색조건 추가
             Specification<FileEntity> specs = List.of(
-                    FileSpecifications.isOwnerId(userId),
+                    FileSpecifications.isUserId(userId),
                     FileSpecifications.hasKeyword(holder.getKeyword()),
                     FileSpecifications.hasExtension(holder.getExtension()),
                     FileSpecifications.uploadedAfter(holder.getFrom()),
@@ -255,7 +255,7 @@ public class FileService {
     public void shredAll(String userId) throws Exception {
 
         fileRepository.delete(
-                FileSpecifications.isOwnerId(userId)
+                FileSpecifications.isUserId(userId)
                         .and(FileSpecifications.isActive(false)));
     }
 }

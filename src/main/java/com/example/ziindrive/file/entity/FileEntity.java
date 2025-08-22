@@ -19,9 +19,14 @@ public class FileEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private UserEntity owner;
+    // 외래키 매핑
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
+    // 읽기 전용 FK
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private String userId;
 
     private String originalName;
     private String storedName;
@@ -34,17 +39,16 @@ public class FileEntity {
 
     @Builder
     public FileEntity(
-            UserEntity owner, String originalName, String storedName,
+            UserEntity user, String originalName, String storedName,
             String path, String extension, String size) {
 
-        this.owner = owner;
+        this.user = user;
         this.originalName = originalName;
         this.storedName = storedName;
         this.path = path;
         this.extension = extension;
         this.size = size;
         this.uploadedAt = LocalDateTime.now();
-
     }
 
     /*

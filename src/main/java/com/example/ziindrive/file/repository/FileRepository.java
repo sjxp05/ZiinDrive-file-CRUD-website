@@ -17,10 +17,10 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
     // specification 만들기
     public class FileSpecifications {
 
-        public static Specification<FileEntity> isOwnerId(String userId) {
+        public static Specification<FileEntity> isUserId(String userId) {
 
             return (root, query, cb) -> {
-                return cb.equal(root.get("ownerId"), userId);
+                return cb.equal(root.get("userId"), userId);
             };
         }
 
