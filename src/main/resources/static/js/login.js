@@ -1,12 +1,16 @@
+document.addEventListener("DOMContentLoaded", () => {
+	sessionStorage.setItem("idValidated", false);
+});
+
 function login() {
 	const idInput = document.getElementById("idInput");
 	const pwInput = document.getElementById("pwInput");
 
 	const id = idInput.value.trim();
-	const pw = pwInput.value.trim();
+	const pw = pwInput.value;
 
 	if (id === null || id.length === 0 || pw === null || pw.length === 0) {
-		alert("ID와 비밀번호를 올바르게 입력해 주세요!");
+		alert("ID 또는 비밀번호가 잘못되었습니다.");
 		return;
 	}
 
@@ -33,6 +37,10 @@ function login() {
 		.catch(async (err) => {
 			msg = await err.text();
 			console.error("로그인 중 오류:", msg);
-			alert(msg);
+			alert("ID 또는 비밀번호가 잘못되었습니다.");
+
+			if (msg === "uncorrect password") {
+				document.getElementById("resetPw").style.visibility = "visible";
+			}
 		});
 }

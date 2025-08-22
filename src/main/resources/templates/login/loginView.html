@@ -64,6 +64,14 @@
 				filter: brightness(90%);
 				transition: 0.3s;
 			}
+			#resetPw {
+				position: fixed;
+				top: 58vh;
+				align-self: center;
+
+				visibility: hidden;
+				font-size: 12px;
+			}
 			.signupDiv {
 				position: fixed;
 				left: 0;
@@ -96,20 +104,15 @@
 				<p style="font-size: 25px; padding: 5px">에 로그인하세요</p>
 			</span>
 
-			<span>
-				<label class="label" style="top: 40vh">ID</label>
-				<input id="idInput" class="input" type="text" />
-			</span>
+			<label class="label" style="top: 40vh">ID</label>
+			<input id="idInput" class="input" type="text" />
 
-			<span>
-				<label class="label" style="top: 50vh">비밀번호</label>
-				<input
-					id="pwInput"
-					class="input"
-					style="top: 50vh"
-					type="text"
-				/>
-			</span>
+			<label class="label" style="top: 50vh">비밀번호</label>
+			<input id="pwInput" class="input" style="top: 50vh" type="text" />
+
+			<label id="resetPw">
+				<a href="/users/password">비밀번호를 잊어버렸어요</a>
+			</label>
 
 			<button class="loginBt" onclick="login()">로그인</button>
 		</div>
