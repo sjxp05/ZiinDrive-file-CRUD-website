@@ -7,9 +7,6 @@ function login() {
 
 	if (id === null || id.length === 0 || pw === null || pw.length === 0) {
 		alert("ID와 비밀번호를 올바르게 입력해 주세요!");
-
-		idInput.value = "";
-		pwInput.value = "";
 		return;
 	}
 
