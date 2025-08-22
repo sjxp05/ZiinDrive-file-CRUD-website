@@ -4,6 +4,7 @@
 .uploadBt {
 	font-size: 35px;
 	padding: 2px 15px;
+	margin-right: 20px;
 	text-align: center;
 	background-color: darkcyan;
 	border: none;
@@ -23,6 +24,7 @@
 .sortButtonsDiv {
 	display: flex;
 	height: 30px;
+	margin-left: 25px;
 	align-items: center;
 }
 .sortBt {

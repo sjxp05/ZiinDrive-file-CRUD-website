@@ -13,7 +13,6 @@ import com.example.ziindrive.config.SearchOptionHolder;
 import com.example.ziindrive.file.dto.*;
 import com.example.ziindrive.file.service.FileService;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +24,10 @@ public class FileApiController {
     private final SearchOptionHolder holder;
 
     // 파일 불러오기 get
-    @GetMapping("/api/files")
+    @GetMapping("/api/files/{userId}")
     public ResponseEntity<List<FileResponseDto>> getFileData(
-            @RequestParam(name = "sort", required = false) String sort,
-            HttpSession session) {
+            @PathVariable(name = "userId") String userId,
+            @RequestParam(name = "sort", required = false) String sort) {
 
         if (sort != null) { // 정렬 버튼을 눌렀을 때
             if (sort.equals(holder.getSortToString())) { // 이전 정렬 상태와 같음: 204 No Content
@@ -38,7 +37,9 @@ public class FileApiController {
             holder.setStringToSort(sort); // 정렬 상태 바꿔주기
         }
 
-        return ResponseEntity.ok().body(service.findWithOptions((String) session.getAttribute("userId")));
+        // test
+        System.out.println("* 아이디: " + userId);
+        return ResponseEntity.ok().body(service.findWithOptions(userId));
     }
 
     // 현재 정렬 상태 get
@@ -52,10 +53,10 @@ public class FileApiController {
     @PostMapping("/api/files")
     public ResponseEntity<String> uploadFile(
             @RequestParam("fileInput") MultipartFile fileInput,
-            HttpSession session) {
+            @RequestParam("userId") String userId) {
 
         try {
-            if (service.uploadFile(fileInput, (String) session.getAttribute("userId")) == null) {
+            if (service.uploadFile(fileInput, userId) == null) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
         } catch (Exception e) {
@@ -67,10 +68,9 @@ public class FileApiController {
     }
 
     // 다운로드 get
-    @GetMapping("/api/files/{id}")
+    @GetMapping("/api/files/download/{id}")
     public ResponseEntity<Resource> downloadFile(
-            @PathVariable("id") Long id,
-            HttpSession session) {
+            @PathVariable("id") Long id) {
 
         try {
             FileDownloadDto dto = service.getFileResource(id);
@@ -91,10 +91,10 @@ public class FileApiController {
     @PatchMapping("/api/files/{id}")
     public ResponseEntity<?> renameFile(
             @PathVariable("id") Long id,
-            @RequestBody Map<String, String> renameInfo,
-            HttpSession session) {
+            @RequestBody Map<String, String> info) {
+
         try {
-            String validatedName = service.renameFile(id, renameInfo.get("newName"));
+            String validatedName = service.renameFile(id, info.get("newName"));
             /*
              * 이름이 달라졌을때: 바뀐 이름 반환
              * 이름이 기존과 같을때: null 반환
@@ -122,14 +122,12 @@ public class FileApiController {
     @PatchMapping("/api/files/favorite/{id}")
     public ResponseEntity<String> favoriteFile(
             @PathVariable("id") Long id,
-            @RequestBody Map<String, String> favoriteInfo,
-            HttpSession session) {
+            @RequestBody Map<String, String> info) {
 
-        boolean change = Boolean.parseBoolean(favoriteInfo.get("change"));
+        boolean change = Boolean.parseBoolean(info.get("change"));
 
         try {
             if (service.favoriteFile(id, change)) {
-                // service.findWithOptions(); // 캐시 새로고침
                 return ResponseEntity.ok().body("즐겨찾기 반영 성공");
 
             } else {
@@ -142,14 +140,14 @@ public class FileApiController {
     }
 
     // 삭제 delete
-    @DeleteMapping("/api/files/{id}")
+    @DeleteMapping("/api/files/{userId}/{id}")
     public ResponseEntity<List<FileResponseDto>> deleteFile(
-            @PathVariable("id") Long id,
-            HttpSession session) {
+            @PathVariable("userId") String userId,
+            @PathVariable("id") Long id) {
         try {
             service.deleteFile(id);
             // 삭제한거 빼고 다시 검색한 결과 보내기
-            return ResponseEntity.ok().body(service.findWithOptions((String) session.getAttribute("userId")));
+            return ResponseEntity.ok().body(service.findWithOptions(userId));
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -160,10 +158,10 @@ public class FileApiController {
     @PatchMapping("/api/favorites/{id}")
     public ResponseEntity<List<FileResponseDto>> reloadFavorites(
             @PathVariable("id") Long id,
-            HttpSession session) {
+            @RequestBody Map<String, String> info) {
         try {
             if (service.favoriteFile(id, false)) {
-                return ResponseEntity.ok().body(service.findWithOptions((String) session.getAttribute("userId")));
+                return ResponseEntity.ok().body(service.findWithOptions(info.get("userId")));
 
             } else {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -178,10 +176,11 @@ public class FileApiController {
     @PatchMapping("/api/bin/{id}")
     public ResponseEntity<List<FileResponseDto>> restoreFile(
             @PathVariable("id") Long id,
-            HttpSession session) {
+            @RequestBody Map<String, String> info) {
+
         try {
             service.restoreFile(id);
-            return ResponseEntity.ok().body(service.findWithOptions((String) session.getAttribute("userId")));
+            return ResponseEntity.ok().body(service.findWithOptions(info.get("userId")));
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -189,13 +188,13 @@ public class FileApiController {
     }
 
     // 휴지통 영구삭제 delete
-    @DeleteMapping("/api/bin/{id}")
+    @DeleteMapping("/api/bin/{userId}/{id}")
     public ResponseEntity<List<FileResponseDto>> shredFile(
-            @PathVariable("id") Long id,
-            HttpSession session) {
+            @PathVariable("userId") String userId,
+            @PathVariable("id") Long id) {
         try {
             service.shredFile(id);
-            return ResponseEntity.ok().body(service.findWithOptions((String) session.getAttribute("userId")));
+            return ResponseEntity.ok().body(service.findWithOptions(userId));
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -203,10 +202,10 @@ public class FileApiController {
     }
 
     // 휴지통 비우기 delete
-    @DeleteMapping("/api/bin")
-    public ResponseEntity<?> shredAll(HttpSession session) {
+    @DeleteMapping("/api/bin/{userId}")
+    public ResponseEntity<?> shredAll(@PathVariable("userId") String userId) {
         try {
-            service.shredAll((String) session.getAttribute("userId"));
+            service.shredAll(userId);
             return ResponseEntity.ok().body(Collections.emptyList());
 
         } catch (Exception e) {

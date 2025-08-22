@@ -21,9 +21,10 @@
 				</label>
 			</span>
 
-			<div>
-				<button class="menuBt" onclick="showMenu()"><b>≡</b></button>
-				<label style="font-size: 15px">&nbsp;&nbsp;&nbsp;</label>
+			<div style="margin-right: 18px">
+				<button class="menuBt" onclick="showMenu()">
+					<b>≡</b>
+				</button>
 			</div>
 		</span>
 
@@ -31,7 +32,7 @@
 
 		<div class="sidemenu">
 			<button class="menuBt" onclick="closeMenu()"><b>×</b></button>
-			<h3 style="cursor: default">&nbsp;&nbsp;&nbsp;MENU</h3>
+			<h3 style="cursor: default; padding-left: 15px">MENU</h3>
 
 			<ul class="menuList">
 				<li id="allFilesMenu" onclick="location.href='/files'">
@@ -53,14 +54,26 @@
 		<span class="spanCustom">
 			<!-- 이름, 날짜별 검색 등 버튼 -->
 			<span>
-				<label style="font-size: 15px"
-					>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;제목&nbsp;&nbsp;</label
+				<label
+					style="
+						font-size: 15px;
+						margin-left: 25px;
+						margin-right: 5px;
+					"
 				>
-				<input id="keyword" type="text" style="font-size: 15px" />
+					제목
+				</label>
+				<input
+					id="keyword"
+					type="text"
+					style="font-size: 15px; width: 10vw"
+				/>
 
-				<label style="font-size: 15px"
-					>&nbsp;&nbsp;형식&nbsp;&nbsp;</label
+				<label
+					style="font-size: 15px; margin-left: 5px; margin-right: 5px"
 				>
+					형식
+				</label>
 				<!--콤보박스-->
 				<!-- 옵션은 자바파일 따로 만들어서 돌림 개꿀ㅋㅋㅋㅋ -->
 				<select id="extension" class="select">
@@ -115,24 +128,24 @@
 					</optgroup>
 				</select>
 
-				<label style="font-size: 15px"
-					>&nbsp;&nbsp;날짜&nbsp;&nbsp;</label
+				<label
+					style="font-size: 15px; margin-left: 5px; margin-right: 5px"
 				>
-				<input id="from" type="date" />
+					날짜
+				</label>
+				<input id="from" type="date" style="width: 10vw" />
 				<label style="font-size: 15px">&nbsp;~&nbsp;</label>
-				<input id="to" type="date" />
+				<input id="to" type="date" style="width: 10vw" />
 
-				<label style="font-size: 15px">&nbsp;&nbsp;</label>
 				<button
-					style="font-size: 16px; cursor: pointer"
+					style="font-size: 16px; margin-left: 5px; cursor: pointer"
 					onclick="searchFiles()"
 				>
 					검색
 				</button>
 
-				<label style="font-size: 15px">&nbsp;&nbsp;</label>
 				<button
-					style="font-size: 16px; cursor: pointer"
+					style="font-size: 16px; margin-left: 5px; cursor: pointer"
 					onclick="initialize()"
 				>
 					초기화
@@ -155,17 +168,11 @@
 				>
 					<b>+</b>
 				</button>
-				<label style="font-size: 15px">
-					&nbsp;&nbsp;&nbsp;&nbsp;
-				</label>
 			</span>
 		</span>
 
 		<!--정렬 선택 버튼-->
 		<div class="sortButtonsDiv">
-			<label style="font-size: 15px">
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			</label>
 			<button id="latest" class="sortBt" data-sort="latest">
 				최신순
 			</button>
