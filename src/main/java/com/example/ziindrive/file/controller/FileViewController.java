@@ -113,4 +113,10 @@ public class FileViewController {
 
         return "files/trashBin";
     }
+
+    // 로그인문제 오류
+    @GetMapping("/login/error")
+    public String loginError() {
+        return "login/error";
+    }
 }

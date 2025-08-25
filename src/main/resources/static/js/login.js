@@ -22,7 +22,7 @@ function login() {
 		return;
 	}
 
-	fetch("/api/login", {
+	fetch("/api/users/login", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -34,6 +34,10 @@ function login() {
 	})
 		.then((res) => {
 			if (!res.ok) {
+				if (res.status === 401) {
+					document.getElementById("resetPw").style.visibility =
+						"visible";
+				}
 				throw res;
 			}
 		})
@@ -47,9 +51,5 @@ function login() {
 			msg = await err.text();
 			console.error("로그인 중 오류:", msg);
 			alert("ID 또는 비밀번호가 잘못되었습니다.");
-
-			if (msg === "uncorrect password") {
-				document.getElementById("resetPw").style.visibility = "visible";
-			}
 		});
 }

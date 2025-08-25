@@ -1,10 +1,12 @@
 package com.example.ziindrive.user.service;
 
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.ziindrive.user.dto.UserFullDto;
+import com.example.ziindrive.user.dto.UserProfileDto;
 import com.example.ziindrive.user.entity.UserEntity;
 import com.example.ziindrive.user.repository.UserRepository;
 
@@ -18,20 +20,20 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 로그인 아이디 및 비번 인증 절차
-    public String validateLogin(String id, String rawPassword) throws Exception {
+    public boolean validateLogin(String id, String rawPassword) throws Exception {
 
         UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("account does not exist"));
+                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
 
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new Exception("uncorrect password");
+            return false;
         }
 
-        return "OK";
+        return true;
     }
 
     // 회원가입을 위한 정보 검사 및 등록 절차
-    public void createAccount(String newId, String rawPassword, String nickname, String email) throws Exception {
+    public void createAccount(Map<String, String> signupInfo) throws Exception {
 
         /*
          * id 조건
@@ -45,9 +47,15 @@ public class UserService {
          * - 실제 사용할수있는 도메인 주소 사용 (몇개만 따로 select option 만들고 직접쓰기도 가능하게)
          */
 
+        String newId = signupInfo.get("id");
+        String rawPassword = signupInfo.get("password");
+        String nickname = signupInfo.get("nickname");
+        String email = signupInfo.get("email");
+
         // String checkIdWarning = "ID 중복확인을 먼저 진행해 주세요!";
         String pwRuleWarning = "비밀번호는 8~20자로 영문, 숫자, 특수기호 등을 혼합하여 만들어 주세요.";
         String nicknameLengthWarning = "닉네임은 20자 이내로 만들어 주세요. (선택)";
+        String emailRuleWarning = "실제로 사용하는 이메일을 입력해 주세요.";
 
         // 아이디 중복검사가 되었는지 확인 (얘는 아마 js에서 세션으로 처리해야할듯)
 
@@ -71,7 +79,7 @@ public class UserService {
         }
 
         // 닉네임 안정했을때 랜덤 생성
-        if (nickname.length() == 0) {
+        if (nickname.length() == 0 || nickname.isBlank() || nickname == null) {
             nickname = "User"
                     + UUID.randomUUID()
                             .toString()
@@ -80,6 +88,9 @@ public class UserService {
         }
 
         // 이메일 검사
+        if (email.length() == 0 || !email.contains("@")) {
+            throw new Exception(emailRuleWarning);
+        }
 
         UserEntity user = UserEntity.builder()
                 .userId(newId)
@@ -114,5 +125,59 @@ public class UserService {
         if (userRepository.existsById(newId)) {
             throw new Exception(existingIdWarning);
         }
+    }
+
+    // 회원정보 불러오기 (id, 닉네임 등 프로필 표시에 필요한 것만)
+    public UserProfileDto getUserProfile(String userId) throws Exception {
+
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+
+        return UserProfileDto.fromEntity(user);
+    }
+
+    // 회원정보 전체 불러오기
+    public UserFullDto getUserInfo(String userId) throws Exception {
+
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+
+        return UserFullDto.fromEntity(user);
+    }
+
+    // 회원정보 수정
+    public boolean modifyUserInfo(Map<String, String> userInfo) throws Exception {
+
+        UserEntity user = userRepository.findById(userInfo.get("id"))
+                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+
+        int hasKeys = 0;
+
+        if (userInfo.containsKey("password")) {
+            user.setPassword(userInfo.get("password"));
+            hasKeys++;
+        }
+
+        if (userInfo.containsKey("nickname")) {
+            user.setNickname(userInfo.get("nickname"));
+            hasKeys++;
+        }
+
+        if (userInfo.containsKey("email")) {
+            user.setEmail(userInfo.get("email"));
+            hasKeys++;
+        }
+
+        return hasKeys > 0;
+    }
+
+    // 회원 계정 삭제
+    public void deleteAccount(String userId) throws Exception {
+
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+
+        userRepository.delete(user);
+
     }
 }

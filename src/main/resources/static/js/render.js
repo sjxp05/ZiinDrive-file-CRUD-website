@@ -8,7 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		lastLogin === null ||
 		lastLogin < threeMonthsAgo
 	) {
-		location.href = "/error";
+		location.href = "/login/error";
+	} else {
+		localStorage.setItem("user.lastLogin", now);
 	}
 
 	// 파일 불러오기
