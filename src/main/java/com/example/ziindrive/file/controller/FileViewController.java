@@ -113,11 +113,4 @@ public class FileViewController {
 
         return "files/trashBin";
     }
-
-    // 에러 화면 뷰
-    @GetMapping("/error")
-    public String whenError() {
-        return "error";
-    }
-
 }

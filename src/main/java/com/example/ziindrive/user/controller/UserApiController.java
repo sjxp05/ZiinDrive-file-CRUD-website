@@ -46,4 +46,11 @@ public class UserApiController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // 로그아웃 구현필요
+    @PostMapping("/api/logout")
+    public ResponseEntity<?> logout(@RequestBody Map<String, String> payload) {
+
+        return ResponseEntity.ok().build();
+    }
 }

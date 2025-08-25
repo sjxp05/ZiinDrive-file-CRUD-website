@@ -1,5 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
-	sessionStorage.setItem("idValidated", false);
+	// sessionStorage.setItem("idValidated", false); 엥 이건 회원가입에 넣어야 되는뎅
+
+	const lastLogin = localStorage.getItem("user.lastLogin");
+	const now = new Date();
+	const threeMonthsAgo = now.setMonth(now.getMonth() - 3);
+
+	if (lastLogin === null || lastLogin < threeMonthsAgo) {
+		localStorage.removeItem("user.id");
+	}
 });
 
 function login() {
@@ -32,6 +40,7 @@ function login() {
 		.then(() => {
 			console.log("로그인 성공");
 			localStorage.setItem("user.id", id);
+			localStorage.setItem("user.lastLogin", new Date());
 			location.href = "/files";
 		})
 		.catch(async (err) => {

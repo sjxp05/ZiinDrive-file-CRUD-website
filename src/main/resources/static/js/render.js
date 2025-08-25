@@ -1,4 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
+	const lastLogin = localStorage.getItem("user.lastLogin");
+	const now = new Date();
+	const threeMonthsAgo = now.setMonth(now.getMonth() - 3);
+
+	if (
+		localStorage.getItem("user.id") === null ||
+		lastLogin === null ||
+		lastLogin < threeMonthsAgo
+	) {
+		location.href = "/error";
+	}
+
 	// 파일 불러오기
 	fetch("/api/files/" + localStorage.getItem("user.id"))
 		.then((res) => {
@@ -17,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		})
 		.catch((err) => {
 			console.error("fetch 실패:", err);
+			location.href = "/error";
 		});
 });
 

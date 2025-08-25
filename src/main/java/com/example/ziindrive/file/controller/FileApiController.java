@@ -39,6 +39,10 @@ public class FileApiController {
 
         // test
         System.out.println("* 아이디: " + userId);
+
+        if (userId == null) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok().body(service.findWithOptions(userId));
     }
 
@@ -144,6 +148,11 @@ public class FileApiController {
     public ResponseEntity<List<FileResponseDto>> deleteFile(
             @PathVariable("userId") String userId,
             @PathVariable("id") Long id) {
+
+        if (userId == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
         try {
             service.deleteFile(id);
             // 삭제한거 빼고 다시 검색한 결과 보내기
