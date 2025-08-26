@@ -2,11 +2,12 @@ package com.example.ziindrive.user.service;
 
 import java.util.*;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.ziindrive.user.dto.UserFullDto;
-import com.example.ziindrive.user.dto.UserProfileDto;
+import com.example.ziindrive.common.util.UserInfoUtils;
+import com.example.ziindrive.user.dto.*;
 import com.example.ziindrive.user.entity.UserEntity;
 import com.example.ziindrive.user.repository.UserRepository;
 
@@ -20,21 +21,20 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 로그인 아이디 및 비번 인증 절차
-    public boolean validateLogin(String id, String rawPassword) throws Exception {
+    public Long validateLogin(String loginId, String rawPassword) throws Exception {
 
-        UserEntity user = userRepository.findById(id)
+        UserEntity user = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
 
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            return false;
+            return null;
         }
 
-        return true;
+        return user.getId();
     }
 
     // 회원가입을 위한 정보 검사 및 등록 절차
     public void createAccount(Map<String, String> signupInfo) throws Exception {
-
         /*
          * id 조건
          * - 영문 대소문자 또는 숫자 혼합해서 4자 이상~20자 이하
@@ -47,99 +47,80 @@ public class UserService {
          * - 실제 사용할수있는 도메인 주소 사용 (몇개만 따로 select option 만들고 직접쓰기도 가능하게)
          */
 
-        String newId = signupInfo.get("id");
+        String loginId = signupInfo.get("loginId");
         String rawPassword = signupInfo.get("password");
         String nickname = signupInfo.get("nickname");
         String email = signupInfo.get("email");
 
-        // String checkIdWarning = "ID 중복확인을 먼저 진행해 주세요!";
-        String pwRuleWarning = "비밀번호는 8~20자로 영문, 숫자, 특수기호 등을 혼합하여 만들어 주세요.";
-        String nicknameLengthWarning = "닉네임은 20자 이내로 만들어 주세요. (선택)";
-        String emailRuleWarning = "실제로 사용하는 이메일을 입력해 주세요.";
+        // 아이디 중복검사가 되었는지 확인 (얘는 아마 js에서 세션으로 처리하거나 미리 api를 호출하거나 해야할듯)
 
-        // 아이디 중복검사가 되었는지 확인 (얘는 아마 js에서 세션으로 처리해야할듯)
+        // 아이디 검사
+        if (!UserInfoUtils.checkIdRule(loginId)) {
+            throw new Exception(UserInfoUtils.ID_RULE_WARNING);
+        }
 
         // 비밀번호 검사
-        if (rawPassword.length() < 8 || rawPassword.length() > 20) {
-            throw new Exception(pwRuleWarning);
+        if (!UserInfoUtils.checkPasswordRule(rawPassword)) {
+            throw new Exception(UserInfoUtils.PW_RULE_WARNING);
         }
-
-        for (char i : rawPassword.toCharArray()) {
-            if (i < 32 || i > 126) {
-                throw new Exception(pwRuleWarning);
-            }
-        }
-
         // 비밀번호 해싱
         String encodedPw = passwordEncoder.encode(rawPassword);
 
-        // 닉네임 글자수 등 검사
-        if (nickname.length() > 20) {
-            throw new Exception(nicknameLengthWarning);
-        }
-
-        // 닉네임 안정했을때 랜덤 생성
-        if (nickname.length() == 0 || nickname.isBlank() || nickname == null) {
-            nickname = "User"
-                    + UUID.randomUUID()
-                            .toString()
-                            .toUpperCase()
-                            .substring(0, 6);
+        // 닉네임 글자수 검사 또는 랜덤 생성
+        if ((nickname = UserInfoUtils.validateOrGenerateNickname(nickname)) == null) {
+            throw new Exception(UserInfoUtils.NICKNAME_LENGTH_WARNING);
         }
 
         // 이메일 검사
-        if (email.length() == 0 || !email.contains("@")) {
-            throw new Exception(emailRuleWarning);
+        if (!UserInfoUtils.checkEmailRule(email)) {
+            throw new Exception(UserInfoUtils.EMAIL_RULE_WARNING);
         }
 
         UserEntity user = UserEntity.builder()
-                .userId(newId)
+                .loginId(loginId)
                 .password(encodedPw)
                 .nickname(nickname)
                 .email(email)
                 .build();
 
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+
+        } catch (DataIntegrityViolationException e) {
+            // loginId(UNIQUE) 가 중복될 경우
+            throw e;
+        }
     }
 
     /*
      * id 조건 및 중복 확인
      * id 중복확인 버튼을 눌렀을 때 작동
      */
-    public void checkDuplicateId(String newId) throws Exception {
+    public boolean checkDuplicateId(String loginId) throws Exception {
 
-        String idRuleWarning = "ID는 4~20자로 영문 대소문자와 숫자를 혼합하여 만들어 주세요.";
-        String existingIdWarning = "이미 사용 중인 ID입니다.";
-
-        if (newId.length() < 4 || newId.length() > 20) {
-            throw new Exception(idRuleWarning);
+        if (!UserInfoUtils.checkIdRule(loginId)) {
+            throw new Exception(UserInfoUtils.ID_RULE_WARNING);
         }
 
-        for (char i : newId.toCharArray()) {
-
-            if ((i < 'A' || i > 'Z') && (i < 'a' || i > 'z') && (i < '0' || i > '9')) {
-                throw new Exception(idRuleWarning);
-            }
+        if (userRepository.existsByLoginId(loginId)) {
+            return false;
         }
-
-        if (userRepository.existsById(newId)) {
-            throw new Exception(existingIdWarning);
-        }
+        return true;
     }
 
     // 회원정보 불러오기 (id, 닉네임 등 프로필 표시에 필요한 것만)
-    public UserProfileDto getUserProfile(String userId) throws Exception {
+    public UserProfileDto getUserProfile(Long id) throws Exception {
 
-        UserEntity user = userRepository.findById(userId)
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
 
         return UserProfileDto.fromEntity(user);
     }
 
     // 회원정보 전체 불러오기
-    public UserFullDto getUserInfo(String userId) throws Exception {
+    public UserFullDto getUserInfo(Long id) throws Exception {
 
-        UserEntity user = userRepository.findById(userId)
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
 
         return UserFullDto.fromEntity(user);
@@ -148,36 +129,65 @@ public class UserService {
     // 회원정보 수정
     public boolean modifyUserInfo(Map<String, String> userInfo) throws Exception {
 
-        UserEntity user = userRepository.findById(userInfo.get("id"))
+        UserEntity user = userRepository.findById(Long.parseLong(userInfo.get("id")))
                 .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
 
-        int hasKeys = 0;
+        boolean hasKeys = false;
 
         if (userInfo.containsKey("password")) {
-            user.setPassword(userInfo.get("password"));
-            hasKeys++;
+
+            if (!hasKeys) {
+                hasKeys = true;
+            }
+
+            String password = userInfo.get("password");
+
+            if (UserInfoUtils.checkPasswordRule(password)) {
+                user.setPassword(password);
+            } else {
+                throw new Exception(UserInfoUtils.PW_RULE_WARNING);
+            }
         }
 
         if (userInfo.containsKey("nickname")) {
-            user.setNickname(userInfo.get("nickname"));
-            hasKeys++;
+
+            if (!hasKeys) {
+                hasKeys = true;
+            }
+
+            String nickname = UserInfoUtils.validateOrGenerateNickname(userInfo.get("nickname"));
+
+            if (nickname == null) {
+                user.setNickname(nickname);
+            } else {
+                throw new Exception(UserInfoUtils.NICKNAME_LENGTH_WARNING);
+            }
         }
 
         if (userInfo.containsKey("email")) {
-            user.setEmail(userInfo.get("email"));
-            hasKeys++;
+
+            if (!hasKeys) {
+                hasKeys = true;
+            }
+
+            String email = userInfo.get("email");
+
+            if (UserInfoUtils.checkEmailRule(email)) {
+                user.setEmail(email);
+            } else {
+                throw new Exception(UserInfoUtils.EMAIL_RULE_WARNING);
+            }
         }
 
-        return hasKeys > 0;
+        return hasKeys;
     }
 
     // 회원 계정 삭제
-    public void deleteAccount(String userId) throws Exception {
+    public void deleteAccount(Long id) throws Exception {
 
-        UserEntity user = userRepository.findById(userId)
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
 
         userRepository.delete(user);
-
     }
 }

@@ -26,7 +26,7 @@ public class FileApiController {
     // 파일 불러오기 get
     @GetMapping("/api/files/{userId}")
     public ResponseEntity<List<FileResponseDto>> getFileData(
-            @PathVariable(name = "userId") String userId,
+            @PathVariable(name = "userId") Long userId,
             @RequestParam(name = "sort", required = false) String sort) {
 
         if (sort != null) { // 정렬 버튼을 눌렀을 때
@@ -57,7 +57,7 @@ public class FileApiController {
     @PostMapping("/api/files")
     public ResponseEntity<String> uploadFile(
             @RequestParam("fileInput") MultipartFile fileInput,
-            @RequestParam("userId") String userId) {
+            @RequestParam("userId") Long userId) {
 
         try {
             if (service.uploadFile(fileInput, userId) == null) {
@@ -146,7 +146,7 @@ public class FileApiController {
     // 삭제 delete
     @DeleteMapping("/api/files/{userId}/{id}")
     public ResponseEntity<List<FileResponseDto>> deleteFile(
-            @PathVariable("userId") String userId,
+            @PathVariable("userId") Long userId,
             @PathVariable("id") Long id) {
 
         if (userId == null) {
@@ -170,7 +170,8 @@ public class FileApiController {
             @RequestBody Map<String, String> info) {
         try {
             if (service.favoriteFile(id, false)) {
-                return ResponseEntity.ok().body(service.findWithOptions(info.get("userId")));
+                return ResponseEntity.ok().body(
+                        service.findWithOptions(Long.parseLong(info.get("userId"))));
 
             } else {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -189,7 +190,8 @@ public class FileApiController {
 
         try {
             service.restoreFile(id);
-            return ResponseEntity.ok().body(service.findWithOptions(info.get("userId")));
+            return ResponseEntity.ok().body(
+                    service.findWithOptions(Long.parseLong(info.get("userId"))));
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -199,7 +201,7 @@ public class FileApiController {
     // 휴지통 영구삭제 delete
     @DeleteMapping("/api/bin/{userId}/{id}")
     public ResponseEntity<List<FileResponseDto>> shredFile(
-            @PathVariable("userId") String userId,
+            @PathVariable("userId") Long userId,
             @PathVariable("id") Long id) {
         try {
             service.shredFile(id);
@@ -212,7 +214,7 @@ public class FileApiController {
 
     // 휴지통 비우기 delete
     @DeleteMapping("/api/bin/{userId}")
-    public ResponseEntity<?> shredAll(@PathVariable("userId") String userId) {
+    public ResponseEntity<?> shredAll(@PathVariable("userId") Long userId) {
         try {
             service.shredAll(userId);
             return ResponseEntity.ok().body(Collections.emptyList());

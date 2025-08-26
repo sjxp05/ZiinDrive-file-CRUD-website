@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserFullDto {
 
-    private String userId;
+    private Long id;
+    private String loginId;
     private int pwLength;
     private String nickname;
     private String email;
@@ -22,7 +23,8 @@ public class UserFullDto {
     public static UserFullDto fromEntity(UserEntity entity) {
 
         return builder()
-                .userId(entity.getUserId())
+                .id(entity.getId())
+                .loginId(entity.getLoginId())
                 .pwLength(entity.getPasswordLength())
                 .nickname(entity.getNickname())
                 .roleToString(entity.getRole().name())

@@ -14,7 +14,11 @@ import lombok.NoArgsConstructor;
 public class UserEntity {
 
     @Id
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String loginId;
 
     private String password;
     private String nickname;
@@ -24,9 +28,9 @@ public class UserEntity {
     private Role role;
 
     @Builder
-    public UserEntity(String userId, String password, String nickname, String email) {
+    public UserEntity(String loginId, String password, String nickname, String email) {
 
-        this.userId = userId;
+        this.loginId = loginId;
         this.password = password;
         this.nickname = nickname;
         this.email = email;

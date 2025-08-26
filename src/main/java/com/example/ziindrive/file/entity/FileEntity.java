@@ -21,12 +21,12 @@ public class FileEntity {
 
     // 외래키 매핑
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserEntity user;
 
     // 읽기 전용 FK
     @Column(name = "user_id", insertable = false, updatable = false)
-    private String userId;
+    private Long userId;
 
     private String originalName;
     private String storedName;

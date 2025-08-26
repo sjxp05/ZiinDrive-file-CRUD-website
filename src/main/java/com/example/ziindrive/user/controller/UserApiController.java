@@ -2,6 +2,7 @@ package com.example.ziindrive.user.controller;
 
 import java.util.*;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,9 +30,12 @@ public class UserApiController {
     public ResponseEntity<String> validateLogin(@RequestBody Map<String, String> loginInfo) {
 
         try {
-            if (userService.validateLogin(loginInfo.get("id"), loginInfo.get("password"))) {
-                return ResponseEntity.ok().body(null);
+            Long id = userService.validateLogin(loginInfo.get("loginId"), loginInfo.get("password"));
+            if (id != null) {
+                // 비밀번호 맞음: 200 OK
+                return ResponseEntity.ok().body(Long.toString(id));
             } else {
+                // 비밀번호 틀림: 401 UNAUTHORIZED
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("incorrect password");
             }
 
@@ -42,13 +46,18 @@ public class UserApiController {
 
     // 회원가입
     @PostMapping("/api/users/signup")
-    public ResponseEntity<String> createAccount(@RequestBody Map<String, String> signupInfo) {
+    public ResponseEntity<?> createAccount(@RequestBody Map<String, String> signupInfo) {
 
         try {
             userService.createAccount(signupInfo);
             return ResponseEntity.ok().body(null);
 
+        } catch (DataIntegrityViolationException e) {
+            // 중복 id의 경우: 409 CONFLICT
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 ID입니다.");
+
         } catch (Exception e) {
+            // 형식에 맞지 않을때
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -58,8 +67,13 @@ public class UserApiController {
     public ResponseEntity<String> checkDuplicateId(@RequestBody Map<String, String> idCheckInfo) {
 
         try {
-            userService.checkDuplicateId(idCheckInfo.get("id"));
-            return ResponseEntity.ok().body(null);
+            if (userService.checkDuplicateId(idCheckInfo.get("loginId"))) {
+                // 중복 없을 경우: 200 OK
+                return ResponseEntity.ok().body(null);
+            } else {
+                // 중복 id의 경우: 409 CONFLICT
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 ID입니다.");
+            }
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -67,11 +81,11 @@ public class UserApiController {
     }
 
     // 회원정보 일부 조회 (id, 닉네임만 띄워주는 프로필 정보)
-    @GetMapping("/api/users/profile/{userId}")
-    public ResponseEntity<?> getUserProfile(@PathVariable(name = "userId") String userId) {
+    @GetMapping("/api/users/profile/{id}")
+    public ResponseEntity<?> getUserProfile(@PathVariable(name = "id") Long id) {
 
         try {
-            UserProfileDto dto = userService.getUserProfile(userId);
+            UserProfileDto dto = userService.getUserProfile(id);
             return ResponseEntity.ok().body(dto);
 
         } catch (Exception e) {
@@ -80,11 +94,11 @@ public class UserApiController {
     }
 
     // 회원정보 전체 조회
-    @GetMapping("/api/users/{userId}")
-    public ResponseEntity<?> getUserInfo(@PathVariable(name = "userId") String userId) {
+    @GetMapping("/api/users/{id}")
+    public ResponseEntity<?> getUserInfo(@PathVariable(name = "id") Long id) {
 
         try {
-            UserFullDto dto = userService.getUserInfo(userId);
+            UserFullDto dto = userService.getUserInfo(id);
             return ResponseEntity.ok().body(dto);
 
         } catch (Exception e) {
@@ -117,11 +131,11 @@ public class UserApiController {
     }
 
     // 회원탈퇴
-    @DeleteMapping("/api/users/account/{userId}")
-    public ResponseEntity<?> deleteAccount(@PathVariable(name = "userId") String userId) {
+    @DeleteMapping("/api/users/account/{id}")
+    public ResponseEntity<?> deleteAccount(@PathVariable(name = "id") Long id) {
 
         try {
-            userService.deleteAccount(userId);
+            userService.deleteAccount(id);
             return ResponseEntity.ok().body(null);
 
         } catch (Exception e) {

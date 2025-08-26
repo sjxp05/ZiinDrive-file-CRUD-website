@@ -42,7 +42,7 @@ public class FileService {
      */
 
     // create
-    public FileEntity uploadFile(MultipartFile fileInput, String userId) throws Exception {
+    public FileEntity uploadFile(MultipartFile fileInput, Long userId) throws Exception {
 
         if (fileInput == null || userId == null) {
             return null;
@@ -72,7 +72,7 @@ public class FileService {
     }
 
     // read, search
-    public List<FileResponseDto> findWithOptions(String userId) {
+    public List<FileResponseDto> findWithOptions(Long userId) {
 
         List<FileEntity> entities = null;
 
@@ -252,7 +252,7 @@ public class FileService {
     }
 
     // 휴지통 비우기
-    public void shredAll(String userId) throws Exception {
+    public void shredAll(Long userId) throws Exception {
 
         fileRepository.delete(
                 FileSpecifications.isUserId(userId)
