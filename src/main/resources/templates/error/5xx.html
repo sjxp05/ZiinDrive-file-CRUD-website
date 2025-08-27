@@ -3,28 +3,54 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
+		<title>Failed to log in - ZiinDrive</title>
 	</head>
-	<body>
-		<div
-			style="
-				position: fixed;
-				top: 0;
-				left: 0;
+
+	<body style="margin: 0">
+		<style>
+			.container {
 				display: flex;
 				flex-direction: column;
-				width: 100%;
+				width: 100vw;
 				height: 100vh;
-				justify-content: center;
 				align-items: center;
-				background-color: bisque;
-			"
-		>
-			<h1 style="text-align: center">YOU JUST ACTIVATED MY TRAP CARD</h1>
-			<img
-				src="/images/trap_card.png"
-				alt="YOU JUST ACTIVATED MY TRAP CARD"
-			/>
+				justify-content: center;
+			}
+			.button {
+				font-size: 20px;
+				padding: 10px 20px;
+				background-color: darkcyan;
+				color: white;
+				border-radius: 7px;
+				border-style: hidden;
+				cursor: pointer;
+			}
+			.button:hover {
+				filter: brightness(90%);
+				transition: 0.3s;
+			}
+		</style>
+
+		<div class="container">
+			<h2 style="margin-bottom: 140px; flex-direction: row">
+				서버에 문제가 발생하였습니다.
+			</h2>
+			<button class="button" onclick="location.href='/'">
+				다시 시도하기
+			</button>
 		</div>
+
+		<!--bfcache 처리-->
+		<script>
+			window.addEventListener("pageshow", function (event) {
+				if (
+					event.persisted ||
+					window.performance?.navigation?.type === 2
+				) {
+					// 뒤로가기로 복원됐거나, bfcache로 들어옴
+					location.reload(); // 강제로 새로고침
+				}
+			});
+		</script>
 	</body>
 </html>

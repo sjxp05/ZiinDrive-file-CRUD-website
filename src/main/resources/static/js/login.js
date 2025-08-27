@@ -61,3 +61,16 @@ function login() {
 			alert("ID 또는 비밀번호가 잘못되었습니다.");
 		});
 }
+
+function showPassword() {
+	const pwInput = document.getElementById("pwInput");
+	const showPassword = document.querySelector(".showPassword");
+
+	if (showPassword.classList.contains("active")) {
+		pwInput.setAttribute("type", "password");
+	} else {
+		pwInput.setAttribute("type", "text");
+	}
+
+	showPassword.classList.toggle("active");
+}

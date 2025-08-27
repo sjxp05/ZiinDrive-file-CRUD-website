@@ -30,9 +30,9 @@
 			.input {
 				position: fixed;
 				left: 37vw;
+				right: 33vw;
 				top: 40vh;
 
-				width: 28vw;
 				font-size: 15px;
 				padding: 10px;
 				color: rgb(28, 28, 28);
@@ -45,6 +45,25 @@
 				font-size: 18px;
 				padding: 7px;
 				color: black;
+			}
+			.showPassword {
+				position: fixed;
+				top: 50vh;
+				right: 33vw;
+				width: 5.5vw;
+				height: 40px;
+
+				text-align: center;
+				border-radius: 5px;
+				border-width: 2px;
+				border-style: solid;
+				border-color: gray;
+				background-color: lightgray;
+				cursor: pointer;
+			}
+			.showPassword.active {
+				border-color: darkblue;
+				background-color: cornflowerblue;
 			}
 			.loginBt {
 				position: fixed;
@@ -107,13 +126,16 @@
 			<label class="label" style="top: 40vh">ID</label>
 			<input id="idInput" class="input" type="text" />
 
-			<label class="label" style="top: 50vh">비밀번호</label>
-			<input
-				id="pwInput"
-				class="input"
-				style="top: 50vh"
-				type="password"
-			/>
+			<span>
+				<label class="label" style="top: 50vh">비밀번호</label>
+				<input
+					id="pwInput"
+					class="input"
+					style="top: 50vh; right: 39vw"
+					type="password"
+				/>
+				<button class="showPassword" onclick="showPassword()"></button>
+			</span>
 
 			<label id="resetPw">
 				<a href="/users/password">비밀번호를 잊어버렸어요</a>

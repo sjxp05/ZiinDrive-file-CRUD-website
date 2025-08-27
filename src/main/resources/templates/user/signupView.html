@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>회원가입 - ZiinDrive</title>
+	</head>
+	<body style="margin: 0">
+		<style>
+			.signupDiv {
+				display: flex;
+				flex-direction: column;
+				width: 100vw;
+				height: 100vh;
+			}
+			.title {
+				margin-top: 50px;
+				margin-bottom: 100px;
+				text-align: center;
+			}
+			.label {
+				position: fixed;
+				right: 64vw;
+				padding: 7px;
+				text-align: right;
+				font-size: 15px;
+			}
+			.input {
+				position: fixed;
+				left: 37vw;
+				right: 33vw;
+				font-size: 15px;
+				padding: 10px;
+			}
+			.wordsCount {
+				position: fixed;
+				left: 37vw;
+				right: 33vw;
+
+				font-size: 10px;
+				text-align: right;
+				color: gray;
+			}
+			#idDupCheck {
+				position: fixed;
+				top: 200px;
+				right: 33vw;
+				width: 6.5vw;
+				height: 40px;
+
+				text-align: center;
+				border-radius: 5px;
+				border-width: 2px;
+				border-style: solid;
+				border-color: darkblue;
+				background-color: cornflowerblue;
+				cursor: pointer;
+			}
+			#idDupCheck:hover {
+				filter: brightness(90%);
+				transition: 0.3s;
+			}
+			.showPassword {
+				position: fixed;
+				top: 280px;
+				right: 33vw;
+				width: 5.5vw;
+				height: 40px;
+
+				text-align: center;
+				border-radius: 5px;
+				border-width: 2px;
+				border-style: solid;
+				border-color: gray;
+				background-color: lightgray;
+				cursor: pointer;
+			}
+			.showPassword.active {
+				border-color: darkblue;
+				background-color: cornflowerblue;
+			}
+			.signupBt {
+				position: fixed;
+				top: 550px;
+				align-self: center;
+				z-index: 100;
+
+				font-size: 20px;
+				padding: 10px 20px;
+				background-color: darkcyan;
+				color: white;
+				border-radius: 7px;
+				border-style: hidden;
+				cursor: pointer;
+			}
+			.signupBt:hover {
+				filter: brightness(90%);
+				transition: 0.3s;
+			}
+		</style>
+
+		<div class="signupDiv">
+			<h2 class="title">회원가입</h2>
+
+			<label class="label" style="top: 200px">ID</label>
+			<input
+				id="idInput"
+				class="input"
+				style="top: 200px; right: 40vw"
+				onchange="checkWordsCount(this)"
+			/>
+			<button id="idDupCheck" onclick="checkDuplicateId()">
+				중복확인
+			</button>
+			<label
+				id="idLength"
+				class="wordsCount"
+				style="top: 243px; right: 40vw"
+				>0 / 20</label
+			>
+
+			<label class="label" style="top: 280px">비밀번호</label>
+			<input
+				id="pwInput"
+				class="input"
+				type="password"
+				style="top: 280px; right: 39vw"
+				onchange="checkWordsCount(this)"
+			/>
+			<button class="showPassword" onclick="showPassword()"></button>
+			<label
+				id="pwLength"
+				class="wordsCount"
+				style="top: 323px; right: 39vw"
+				>0 / 20</label
+			>
+
+			<label class="label" style="top: 360px">닉네임</label>
+			<input
+				id="nickInput"
+				class="input"
+				style="top: 360px"
+				onchange="checkWordsCount(this)"
+			/>
+			<label id="nickLength" class="wordsCount" style="top: 403px"
+				>0 / 30</label
+			>
+
+			<label class="label" style="top: 440px">이메일 주소</label>
+			<input id="emailInput" class="input" style="top: 440px" />
+
+			<button class="signupBt" onclick="signup()">가입하기</button>
+		</div>
+
+		<script src="/js/signup.js"></script>
+
+		<!--bfcache 처리-->
+		<script>
+			window.addEventListener("pageshow", function (event) {
+				if (
+					event.persisted ||
+					window.performance?.navigation?.type === 2
+				) {
+					// 뒤로가기로 복원됐거나, bfcache로 들어옴
+					location.reload(); // 강제로 새로고침
+				}
+			});
+		</script>
+	</body>
+</html>

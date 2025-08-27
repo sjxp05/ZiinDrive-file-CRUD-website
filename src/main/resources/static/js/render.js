@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		lastLogin === null ||
 		lastLogin < threeMonthsAgo
 	) {
-		location.href = "/login/error";
+		location.href = "/login/failed";
 	} else {
 		localStorage.setItem("user.lastLogin", now);
 	}
@@ -54,7 +54,7 @@ function createRow(file) {
 	return `<tr
 				data-id=${file.id}
 				data-fullname="${file.originalName}"
-				style="height: 40px; align-items: center"
+				style="height: 40px; align-items: center; border-bottom: 1px solid #ccc"
 			>
 				<td>${file.truncatedName}</td>
 				<td>${file.formattedDate}</td>

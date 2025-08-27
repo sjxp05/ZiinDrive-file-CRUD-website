@@ -51,7 +51,7 @@ export function renderData(fileList) {
 function createRow(file) {
 	return `<tr
 				data-id=${file.id}
-				style="height: 40px; align-items: center"
+				style="height: 40px; align-items: center; border-bottom: 1px solid #ccc"
 			>
 				<td>${file.truncatedName}</td>
 				<td>${file.formattedDate}</td>
