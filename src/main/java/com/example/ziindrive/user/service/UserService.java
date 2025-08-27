@@ -52,8 +52,6 @@ public class UserService {
         String nickname = signupInfo.get("nickname");
         String email = signupInfo.get("email");
 
-        // 아이디 중복검사가 되었는지 확인 (얘는 아마 js에서 세션으로 처리하거나 미리 api를 호출하거나 해야할듯)
-
         // 아이디 검사
         if (!UserInfoUtils.checkIdRule(loginId)) {
             throw new Exception(UserInfoUtils.ID_RULE_WARNING);
@@ -76,6 +74,11 @@ public class UserService {
             throw new Exception(UserInfoUtils.EMAIL_RULE_WARNING);
         }
 
+        // 이메일 중복체크
+        if (userRepository.existsByEmail(email)) {
+            throw new DataIntegrityViolationException("해당 이메일로 이미 가입된 계정이 있습니다.");
+        }
+
         UserEntity user = UserEntity.builder()
                 .loginId(loginId)
                 .password(encodedPw)
@@ -88,7 +91,7 @@ public class UserService {
 
         } catch (DataIntegrityViolationException e) {
             // loginId(UNIQUE) 가 중복될 경우
-            throw e;
+            throw new DataIntegrityViolationException("이미 사용 중인 ID입니다.");
         }
     }
 

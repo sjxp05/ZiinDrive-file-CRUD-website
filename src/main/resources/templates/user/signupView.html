@@ -45,7 +45,7 @@
 				position: fixed;
 				top: 200px;
 				right: 33vw;
-				width: 6.5vw;
+				width: 7.5vw;
 				height: 40px;
 
 				text-align: center;
@@ -68,16 +68,20 @@
 				height: 40px;
 
 				text-align: center;
+				padding-bottom: 3px;
+				font-size: 24px;
 				border-radius: 5px;
 				border-width: 2px;
 				border-style: solid;
 				border-color: gray;
 				background-color: lightgray;
+				color: black;
 				cursor: pointer;
 			}
 			.showPassword.active {
 				border-color: darkblue;
 				background-color: cornflowerblue;
+				color: white;
 			}
 			.signupBt {
 				position: fixed;
@@ -102,11 +106,11 @@
 		<div class="signupDiv">
 			<h2 class="title">회원가입</h2>
 
-			<label class="label" style="top: 200px">ID</label>
+			<label class="label" style="top: 200px">* ID</label>
 			<input
 				id="idInput"
 				class="input"
-				style="top: 200px; right: 40vw"
+				style="top: 200px; right: 41vw"
 				onchange="checkWordsCount(this)"
 			/>
 			<button id="idDupCheck" onclick="checkDuplicateId()">
@@ -115,11 +119,11 @@
 			<label
 				id="idLength"
 				class="wordsCount"
-				style="top: 243px; right: 40vw"
+				style="top: 243px; right: 41vw"
 				>0 / 20</label
 			>
 
-			<label class="label" style="top: 280px">비밀번호</label>
+			<label class="label" style="top: 280px">* 비밀번호</label>
 			<input
 				id="pwInput"
 				class="input"
@@ -127,7 +131,7 @@
 				style="top: 280px; right: 39vw"
 				onchange="checkWordsCount(this)"
 			/>
-			<button class="showPassword" onclick="showPassword()"></button>
+			<button class="showPassword" onclick="showPassword()">👁</button>
 			<label
 				id="pwLength"
 				class="wordsCount"
@@ -146,13 +150,13 @@
 				>0 / 30</label
 			>
 
-			<label class="label" style="top: 440px">이메일 주소</label>
+			<label class="label" style="top: 440px">* 이메일 주소</label>
 			<input id="emailInput" class="input" style="top: 440px" />
 
 			<button class="signupBt" onclick="signup()">가입하기</button>
 		</div>
 
-		<script src="/js/signup.js"></script>
+		<script src="/js/user/signup.js"></script>
 
 		<!--bfcache 처리-->
 		<script>

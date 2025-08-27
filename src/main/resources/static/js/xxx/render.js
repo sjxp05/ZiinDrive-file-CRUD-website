@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		lastLogin === null ||
 		lastLogin < threeMonthsAgo
 	) {
-		location.href = "/login/failed";
+		location.href = "/error";
 	} else {
 		localStorage.setItem("user.lastLogin", now);
 	}

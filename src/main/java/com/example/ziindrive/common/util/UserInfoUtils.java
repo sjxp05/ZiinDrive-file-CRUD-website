@@ -63,9 +63,20 @@ public class UserInfoUtils {
 
     public static boolean checkEmailRule(String email) {
 
-        if (email.length() == 0 || !email.contains("@")) {
+        if (email.length() == 0) {
             return false;
         }
+
+        if (!email.contains("@") || email.indexOf("@") != email.lastIndexOf("@")
+                || email.startsWith("@") || email.endsWith("@")) {
+            /*
+             * 1. @ 기호가 없는경우
+             * 2. @ 기호가 2개 이상인 경우
+             * 3. @ 기호의 앞뒤에 다른 문자가 없는 경우
+             */
+            return false;
+        }
+
         return true;
     }
 }

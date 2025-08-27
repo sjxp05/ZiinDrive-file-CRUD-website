@@ -53,11 +53,11 @@ public class UserApiController {
             return ResponseEntity.ok().body(null);
 
         } catch (DataIntegrityViolationException e) {
-            // 중복 id의 경우: 409 CONFLICT
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 ID입니다.");
+            // 중복 id 또는 email의 경우: 409 CONFLICT
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 
         } catch (Exception e) {
-            // 형식에 맞지 않을때
+            // 형식에 맞지 않을때: 404 BAD REQUEST
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

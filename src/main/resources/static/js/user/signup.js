@@ -24,6 +24,7 @@ function signup() {
 		.then(() => {
 			console.log("회원가입 성공");
 			alert("회원가입에 성공하였습니다.");
+			location.href = "/";
 		})
 		.catch(async (err) => {
 			const msg = await err.text();
@@ -85,17 +86,19 @@ function checkWordsCount(input) {
 
 	if (currentCount > limit) {
 		lb.style.color = "red";
+	} else {
+		lb.style.color = "gray";
+
+		if (labelName === "idLength") {
+			if (currentCount < 4) {
+				lb.style.color = "red";
+			}
+		} else if (labelName === "pwLength") {
+			if (currentCount < 8 || currentCount > limit) {
+				lb.style.color = "red";
+			}
+		}
 	}
 
-	if (labelName === "idLength") {
-		if (currentCount < 4) {
-			lb.style.color = "red";
-		}
-	} else if (labelName === "pwLength") {
-		if (currentCount < 8) {
-			lb.style.color = "red";
-		}
-	}
-
-	lb.textContent = toString(currentCount) + " / " + toString(limit);
+	lb.textContent = String(currentCount) + " / " + String(limit);
 }

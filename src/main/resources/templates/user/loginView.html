@@ -54,16 +54,20 @@
 				height: 40px;
 
 				text-align: center;
+				padding-bottom: 3px;
+				font-size: 24px;
 				border-radius: 5px;
 				border-width: 2px;
 				border-style: solid;
 				border-color: gray;
 				background-color: lightgray;
+				color: black;
 				cursor: pointer;
 			}
 			.showPassword.active {
 				border-color: darkblue;
 				background-color: cornflowerblue;
+				color: white;
 			}
 			.loginBt {
 				position: fixed;
@@ -134,7 +138,7 @@
 					style="top: 50vh; right: 39vw"
 					type="password"
 				/>
-				<button class="showPassword" onclick="showPassword()"></button>
+				<button class="showPassword" onclick="showPassword()">👁</button>
 			</span>
 
 			<label id="resetPw">
@@ -151,7 +155,7 @@
 		</div>
 	</body>
 
-	<script src="/js/login.js"></script>
+	<script src="/js/user/login.js"></script>
 
 	<!--bfcache 처리-->
 	<script>
