@@ -1,0 +1,94 @@
+.signupDiv {
+	display: flex;
+	flex-direction: column;
+	width: 100vw;
+	height: 100vh;
+}
+.title {
+	margin-top: 50px;
+	margin-bottom: 100px;
+	text-align: center;
+}
+.label {
+	position: fixed;
+	right: 64vw;
+	padding: 7px;
+	text-align: right;
+	font-size: 15px;
+}
+.input {
+	position: fixed;
+	left: 37vw;
+	right: 33vw;
+	font-size: 15px;
+	padding: 10px;
+}
+.wordsCount {
+	position: fixed;
+	left: 37vw;
+	right: 33vw;
+
+	font-size: 10px;
+	text-align: right;
+	color: gray;
+}
+#idDupCheck {
+	position: fixed;
+	top: 200px;
+	right: 33vw;
+	width: 7.5vw;
+	height: 40px;
+
+	text-align: center;
+	border-radius: 5px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: darkblue;
+	background-color: cornflowerblue;
+	cursor: pointer;
+}
+#idDupCheck:hover {
+	filter: brightness(90%);
+	transition: 0.3s;
+}
+.showPassword {
+	position: fixed;
+	top: 280px;
+	right: 33vw;
+	width: 5.5vw;
+	height: 40px;
+
+	text-align: center;
+	padding-bottom: 3px;
+	font-size: 24px;
+	border-radius: 5px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: gray;
+	background-color: lightgray;
+	color: black;
+	cursor: pointer;
+}
+.showPassword.active {
+	border-color: darkblue;
+	background-color: cornflowerblue;
+	color: white;
+}
+.signupBt {
+	position: fixed;
+	top: 550px;
+	align-self: center;
+	z-index: 100;
+
+	font-size: 20px;
+	padding: 10px 20px;
+	background-color: darkcyan;
+	color: white;
+	border-radius: 7px;
+	border-style: hidden;
+	cursor: pointer;
+}
+.signupBt:hover {
+	filter: brightness(90%);
+	transition: 0.3s;
+}

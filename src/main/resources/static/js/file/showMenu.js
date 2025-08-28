@@ -11,7 +11,13 @@ function showMenu() {
 	}
 }
 
+function showUserPage() {
+	document.querySelector(".overlay").classList.toggle("active");
+	document.querySelector(".userPage").classList.toggle("active");
+}
+
 function closeMenu() {
 	document.querySelector(".overlay").classList.remove("active");
 	document.querySelector(".sidemenu").classList.remove("active");
+	document.querySelector(".userPage").classList.remove("active");
 }

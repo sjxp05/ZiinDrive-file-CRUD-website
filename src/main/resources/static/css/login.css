@@ -1,0 +1,109 @@
+.backDiv {
+	/* 뒤로가기 메뉴 */
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: flex;
+	width: 100vw;
+	height: 70px;
+	background-color: white;
+}
+.loginDiv {
+	display: flex;
+	flex-direction: column;
+	width: 100vw;
+	height: 90vh;
+}
+.title {
+	width: 100vw;
+	top: 70px;
+	left: 0;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	cursor: default;
+}
+.input {
+	position: fixed;
+	left: 37vw;
+	right: 33vw;
+	top: 40vh;
+
+	font-size: 15px;
+	padding: 10px;
+	color: rgb(28, 28, 28);
+}
+.label {
+	position: fixed;
+	right: 64vw;
+
+	text-align: right;
+	font-size: 18px;
+	padding: 7px;
+	color: black;
+}
+.showPassword {
+	position: fixed;
+	top: 50vh;
+	right: 33vw;
+	width: 5.5vw;
+	height: 40px;
+
+	text-align: center;
+	padding-bottom: 3px;
+	font-size: 24px;
+	border-radius: 5px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: gray;
+	background-color: lightgray;
+	color: black;
+	cursor: pointer;
+}
+.showPassword.active {
+	border-color: darkblue;
+	background-color: cornflowerblue;
+	color: white;
+}
+.loginBt {
+	position: fixed;
+	top: 70vh;
+	align-self: center;
+	z-index: 100;
+
+	font-size: 20px;
+	padding: 10px 20px;
+	background-color: darkcyan;
+	color: white;
+	border-radius: 7px;
+	border-style: hidden;
+	cursor: pointer;
+}
+.loginBt:hover {
+	filter: brightness(90%);
+	transition: 0.3s;
+}
+#resetPw {
+	position: fixed;
+	top: 58vh;
+	align-self: center;
+
+	visibility: hidden;
+	font-size: 12px;
+}
+.signupDiv {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+
+	display: flex;
+	width: 100vw;
+	height: 30vh;
+	align-items: center;
+	justify-content: center;
+
+	cursor: default;
+}

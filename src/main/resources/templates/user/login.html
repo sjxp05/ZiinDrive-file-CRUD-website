@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>로그인 - ZiinDrive</title>
+	</head>
+
+	<body style="margin: 0">
+		<link rel="stylesheet" href="/css/user/login.css" />
+
+		<div class="topDiv">
+			<button class="backBt" onclick="location.href='/'">뒤로가기</button>
+			<h3 style="text-align: center; cursor: default">로그인</h3>
+		</div>
+
+		<div class="mainDiv">
+			<span class="titleSpan">
+				<h3 class="title">사용자 아이디로&nbsp;&nbsp;</h3>
+				<h2 class="title" style="margin-bottom: 3px; color: darkcyan">
+					<b>Ziin</b>Drive
+				</h2>
+				<h3 class="title">&nbsp;에 로그인하세요</h3>
+			</span>
+
+			<span>
+				<label>ID</label>
+				<input type="text" />
+			</span>
+
+			<span>
+				<label>비밀번호</label>
+				<input style="right: 42.5vw" type="password" />
+				<button class="showPasswordBt" onclick="showPassword()">
+					👁
+				</button>
+			</span>
+
+			<div class="bottomDiv">
+				<button class="loginBt" onclick="login()">로그인</button>
+			</div>
+
+			<div class="bottomDiv">
+				<h5 style="color: gray; cursor: default">
+					아직 계정이 없으신가요? <a href="/signup">회원가입</a>
+				</h5>
+			</div>
+		</div>
+
+		<script src="/js/user/login.js"></script>
+
+		<!--bfcache 처리-->
+		<script>
+			window.addEventListener("pageshow", function (event) {
+				if (
+					event.persisted ||
+					window.performance?.navigation?.type === 2
+				) {
+					// 뒤로가기로 복원됐거나, bfcache로 들어옴
+					location.reload(); // 강제로 새로고침
+				}
+			});
+		</script>
+	</body>
+</html>

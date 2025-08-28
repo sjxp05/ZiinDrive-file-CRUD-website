@@ -2,9 +2,9 @@
 
 /* 검색창 및 업로드 버튼 */
 .uploadBt {
+	margin-right: 20px;
 	font-size: 35px;
 	padding: 2px 15px;
-	margin-right: 20px;
 	text-align: center;
 	background-color: darkcyan;
 	border: none;

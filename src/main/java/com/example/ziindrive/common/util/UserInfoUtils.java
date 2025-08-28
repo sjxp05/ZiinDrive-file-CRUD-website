@@ -77,6 +77,12 @@ public class UserInfoUtils {
             return false;
         }
 
+        for (char i : email.toCharArray()) {
+            if (i <= 32 || i > 126) {
+                return false;
+            }
+        }
+
         return true;
     }
 }

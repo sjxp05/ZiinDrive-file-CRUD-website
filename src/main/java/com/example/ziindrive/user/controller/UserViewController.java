@@ -8,7 +8,7 @@ public class UserViewController {
 
     @GetMapping("/login")
     public String getLoginView() {
-        return "user/loginView";
+        return "user/login";
     }
 
     @GetMapping("/signup")
