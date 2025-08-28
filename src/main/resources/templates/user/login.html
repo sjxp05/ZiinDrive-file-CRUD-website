@@ -25,22 +25,28 @@
 
 			<span>
 				<label>ID</label>
-				<input type="text" />
+				<input id="idInput" type="text" />
 			</span>
 
 			<span>
 				<label>비밀번호</label>
-				<input style="right: 42.5vw" type="password" />
+				<input id="pwInput" style="right: 42.5vw" type="password" />
 				<button class="showPasswordBt" onclick="showPassword()">
 					👁
 				</button>
 			</span>
 
-			<div class="bottomDiv">
+			<div class="bottomDiv" style="height: 10px">
+				<p id="resetPw">
+					<a href="/users/password">비밀번호를 잊어버렸어요</a>
+				</p>
+			</div>
+
+			<div class="bottomDiv" style="height: 120px">
 				<button class="loginBt" onclick="login()">로그인</button>
 			</div>
 
-			<div class="bottomDiv">
+			<div class="bottomDiv" style="height: 80px">
 				<h5 style="color: gray; cursor: default">
 					아직 계정이 없으신가요? <a href="/signup">회원가입</a>
 				</h5>

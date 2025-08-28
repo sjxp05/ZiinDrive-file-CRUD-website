@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>회원가입 - ZiinDrive</title>
+	</head>
+
+	<body style="margin: 0">
+		<link rel="stylesheet" href="/css/user/signup.css" />
+
+		<div class="topDiv">
+			<button class="backBt" onclick="location.href='/'">뒤로가기</button>
+			<h3 style="text-align: center; cursor: default">회원가입</h3>
+		</div>
+
+		<div style="height: 600px">
+			<div class="mainDiv">
+				<span>
+					<label>* ID</label>
+					<input
+						id="idInput"
+						style="right: 13.5vw"
+						oninput="checkWordsCount(this)"
+					/>
+					<button id="idDupCheck" onclick="checkDuplicateId()">
+						중복체크
+					</button>
+				</span>
+				<div>
+					<label
+						id="idLength"
+						class="wordsCount"
+						style="right: 13.5vw"
+						>0 / 20</label
+					>
+				</div>
+
+				<span>
+					<label>* 비밀번호</label>
+					<input
+						id="pwInput"
+						style="right: 11.5vw"
+						type="password"
+						oninput="checkWordsCount(this)"
+					/>
+					<button class="showPasswordBt" onclick="showPassword()">
+						👁
+					</button>
+				</span>
+				<div>
+					<label
+						id="pwLength"
+						class="wordsCount"
+						style="right: 11.5vw"
+						>0 / 20</label
+					>
+				</div>
+
+				<span>
+					<label>닉네임</label>
+					<input id="nickInput" oninput="checkWordsCount(this)" />
+				</span>
+				<div>
+					<label id="nickLength" class="wordsCount">0 / 30</label>
+				</div>
+
+				<span>
+					<label>* 이메일</label>
+					<input id="emailInput" />
+				</span>
+
+				<div style="justify-content: center; height: 150px">
+					<button class="signupBt" onclick="signup()">
+						가입하기
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<script src="/js/user/signup.js"></script>
+
+		<!--bfcache 처리-->
+		<script>
+			window.addEventListener("pageshow", function (event) {
+				if (
+					event.persisted ||
+					window.performance?.navigation?.type === 2
+				) {
+					// 뒤로가기로 복원됐거나, bfcache로 들어옴
+					location.reload(); // 강제로 새로고침
+				}
+			});
+		</script>
+	</body>
+</html>

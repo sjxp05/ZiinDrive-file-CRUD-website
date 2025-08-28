@@ -29,7 +29,7 @@ public class FileViewController {
             holder.setStringToSort("latest");
         }
 
-        return "files/filesView";
+        return "files/main";
     }
 
     // 검색 get (파라미터 주소창에 띄움!)
@@ -55,7 +55,7 @@ public class FileViewController {
             holder.setStringToSort("latest");
         }
 
-        return "files/filesView";
+        return "files/main";
     }
 
     // 즐겨찾기 뷰 보기
@@ -111,7 +111,7 @@ public class FileViewController {
         // 삭제된 순서대로 보기
         holder.setStringToSort("deleted");
 
-        return "files/trashBin";
+        return "files/bin";
     }
 
 }

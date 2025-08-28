@@ -21,7 +21,6 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100px;
 }
 
 span {
@@ -49,7 +48,7 @@ input {
 	align-items: end;
 	position: relative;
 	top: 0;
-	height: 270px;
+	height: 260px;
 }
 .title {
 	margin-bottom: 5px;
@@ -102,4 +101,11 @@ input {
 .loginBt:hover {
 	filter: brightness(90%);
 	transition: 0.3s;
+}
+
+#resetPw {
+	visibility: hidden;
+	text-align: center;
+	font-size: 11px;
+	margin: 0;
 }

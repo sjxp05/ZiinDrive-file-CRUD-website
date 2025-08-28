@@ -1,8 +1,30 @@
 /* favorite, filesView only */
 
 /* 검색창 및 업로드 버튼 */
+.searchLb {
+	font-size: 15px;
+	margin-left: 6px;
+	margin-right: 2px;
+}
+.select {
+	font-size: 15px;
+	padding: 3px;
+	width: 100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.searchBt {
+	margin: 5px;
+	font-size: 15px;
+	padding: 1px 6px;
+	cursor: pointer;
+}
+
 .uploadBt {
-	margin-right: 20px;
+	position: absolute;
+	right: 20px;
 	font-size: 35px;
 	padding: 2px 15px;
 	text-align: center;
@@ -11,20 +33,12 @@
 	color: white;
 	cursor: pointer;
 }
-.select {
-	font-size: 15px;
-	width: 100px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	cursor: pointer;
-}
 
 /* 정렬버튼 */
 .sortButtonsDiv {
 	display: flex;
+	padding-left: 25px;
 	height: 30px;
-	margin-left: 25px;
 	align-items: center;
 }
 .sortBt {
@@ -34,6 +48,7 @@
 	cursor: pointer;
 	transition: all 0.2s ease;
 	border-width: 1px;
+	border-collapse: collapse;
 }
 .sortBt.active {
 	background-color: black;

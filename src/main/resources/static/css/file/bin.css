@@ -1,13 +1,15 @@
 /* trashBin only */
 
-/* 휴지통 비우기 기능 들어갈 곳 */
-.shredAllBtDiv {
+/* 휴지통 비우기 버튼 */
+.shredAllDiv {
 	display: flex;
-	width: 100%;
-	height: 35px;
 	justify-content: right;
+	align-items: end;
+	height: 50px;
 }
 .shredAllBt {
+	position: relative;
+	right: 20px;
 	font-size: 18px;
 	background-color: lightgray;
 	border-color: darkgray;

@@ -1,42 +1,98 @@
-.signupDiv {
+.topDiv {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	box-shadow: 0 2px 6px #ccc;
+	z-index: 100;
+}
+.mainDiv {
 	display: flex;
 	flex-direction: column;
-	width: 100vw;
-	height: 100vh;
+	position: absolute;
+	top: 80px;
+	left: 30vw;
+	right: 30vw;
+	height: 460px;
+	padding-top: 40px;
+
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	box-shadow: 0px 0px 6px #ccc;
 }
-.title {
-	margin-top: 50px;
-	margin-bottom: 100px;
-	text-align: center;
+
+div {
+	display: flex;
+	align-items: center;
+	height: 10px;
 }
-.label {
-	position: fixed;
-	right: 64vw;
-	padding: 7px;
-	text-align: right;
+span {
+	display: flex;
+	height: 50px;
+	margin-top: 20px;
+	align-items: center;
+}
+label {
+	position: absolute;
+	right: 32vw;
 	font-size: 15px;
+	text-align: right;
 }
-.input {
-	position: fixed;
-	left: 37vw;
-	right: 33vw;
+input {
+	position: absolute;
+	left: 9vw;
+	right: 7vw;
 	font-size: 15px;
 	padding: 10px;
 }
-.wordsCount {
-	position: fixed;
-	left: 37vw;
-	right: 33vw;
 
-	font-size: 10px;
+.wordsCount {
+	position: absolute;
+	left: 9vw;
+	right: 7vw;
 	text-align: right;
+	font-size: 10px;
 	color: gray;
 }
+
+.backBt {
+	position: absolute;
+	top: 13px;
+	left: 20px;
+	cursor: pointer;
+}
+
+.showPasswordBt {
+	position: absolute;
+	right: 7vw;
+	width: 4vw;
+	height: 40px;
+	padding: 0 0 3px 0;
+	text-align: center;
+	font-size: 24px;
+	border-radius: 5px;
+	border-width: 2px;
+	border-style: solid;
+	border-color: gray;
+	background-color: lightgray;
+	color: black;
+	cursor: pointer;
+}
+.showPasswordBt.active {
+	border-color: darkblue;
+	background-color: cornflowerblue;
+	color: white;
+}
+
 #idDupCheck {
-	position: fixed;
-	top: 200px;
-	right: 33vw;
-	width: 7.5vw;
+	position: absolute;
+	right: 7vw;
+	width: 6vw;
 	height: 40px;
 
 	text-align: center;
@@ -51,37 +107,12 @@
 	filter: brightness(90%);
 	transition: 0.3s;
 }
-.showPassword {
-	position: fixed;
-	top: 280px;
-	right: 33vw;
-	width: 5.5vw;
-	height: 40px;
 
-	text-align: center;
-	padding-bottom: 3px;
-	font-size: 24px;
-	border-radius: 5px;
-	border-width: 2px;
-	border-style: solid;
-	border-color: gray;
-	background-color: lightgray;
-	color: black;
-	cursor: pointer;
-}
-.showPassword.active {
-	border-color: darkblue;
-	background-color: cornflowerblue;
-	color: white;
-}
 .signupBt {
-	position: fixed;
-	top: 550px;
-	align-self: center;
-	z-index: 100;
-
 	font-size: 20px;
-	padding: 10px 20px;
+	text-align: center;
+	width: 110px;
+	height: 40px;
 	background-color: darkcyan;
 	color: white;
 	border-radius: 7px;

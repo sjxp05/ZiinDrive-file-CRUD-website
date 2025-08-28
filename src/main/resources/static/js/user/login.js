@@ -64,13 +64,13 @@ function login() {
 
 function showPassword() {
 	const pwInput = document.getElementById("pwInput");
-	const showPassword = document.querySelector(".showPassword");
+	const showPasswordBt = document.querySelector(".showPasswordBt");
 
-	if (showPassword.classList.contains("active")) {
+	if (showPasswordBt.classList.contains("active")) {
 		pwInput.setAttribute("type", "password");
 	} else {
 		pwInput.setAttribute("type", "text");
 	}
 
-	showPassword.classList.toggle("active");
+	showPasswordBt.classList.toggle("active");
 }

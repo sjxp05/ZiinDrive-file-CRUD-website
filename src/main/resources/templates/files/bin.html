@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ZiinDrive</title>
+	</head>
+
+	<body style="margin: 0">
+		<link rel="stylesheet" href="/css/file/style.css" />
+		<link rel="stylesheet" href="/css/file/bin.css" />
+
+		<!-- 첫줄 고정 메뉴 -->
+		<div class="topDiv">
+			<span style="display: flex; align-items: center">
+				<label class="logo" onclick="toMainView()"
+					><b>Ziin</b>Drive</label
+				>
+				<label style="position: relative; left: 25px; font-size: 20px"
+					>&nbsp;&nbsp;|&nbsp;&nbsp;휴지통</label
+				>
+			</span>
+
+			<span
+				style="
+					display: flex;
+					align-items: center;
+					position: relative;
+					right: 15px;
+				"
+			>
+				<img
+					src="/images/default_profile.png"
+					class="profile"
+					onclick="showUserPage()"
+				/>
+				<button class="menuBt" onclick="showMenu()"><b>≡</b></button>
+			</span>
+		</div>
+
+		<!-- 유저 페이지 -->
+		<ul class="userPage">
+			<p
+				style="
+					margin-bottom: 0;
+					padding-left: 16px;
+					font-size: 20px;
+					cursor: default;
+				"
+			>
+				<b>닉네임</b>
+			</p>
+			<p
+				style="
+					margin-top: 5px;
+					margin-bottom: 20px;
+					padding-left: 18px;
+					font-size: 13px;
+					color: gray;
+					cursor: default;
+				"
+			>
+				아이디
+			</p>
+			<li>사용자 정보</li>
+			<li onclick="logout()">로그아웃</li>
+		</ul>
+
+		<!-- 사이드 메뉴 -->
+		<ul class="sidemenu">
+			<span
+				style="
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					height: 70px;
+					border-bottom: 2px solid #ccc;
+				"
+			>
+				<h3
+					style="
+						cursor: default;
+						position: absolute;
+						width: 150px;
+						left: 20px;
+					"
+				>
+					MENU
+				</h3>
+				<button
+					class="menuBt"
+					style="position: absolute; right: 15px"
+					onclick="closeMenu()"
+				>
+					<b>×</b>
+				</button>
+			</span>
+
+			<li id="allFilesMenu" onclick="location.href='/files'">
+				모든 파일
+			</li>
+			<li id="favoritesMenu" onclick="location.href='/favorites'">
+				즐겨찾기
+			</li>
+			<li id="trashbinMenu" onclick="location.href='/bin'">휴지통</li>
+		</ul>
+
+		<div class="overlay" onclick="closeMenu()"></div>
+
+		<!-- 고정x 전체 화면 -->
+		<div style="display: flex; flex-direction: column; margin-top: 70px">
+			<div class="shredAllDiv">
+				<button class="shredAllBt">휴지통 비우기</button>
+			</div>
+
+			<table>
+				<thead>
+					<tr class="firstTr">
+						<th style="width: 400px; color: rgb(134, 133, 133)">
+							파일명
+						</th>
+						<th style="width: 200px; color: rgb(134, 133, 133)">
+							업로드 날짜
+						</th>
+						<th style="width: 200px; color: rgb(134, 133, 133)">
+							크기
+						</th>
+						<th>&nbsp;&nbsp;</th>
+						<th>&nbsp;&nbsp;</th>
+						<th>&nbsp;&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="tBody">
+					<!--js에서 구현-->
+				</tbody>
+			</table>
+
+			<div id="isEmpty" class="isEmpty">
+				<h3>휴지통이 비어 있습니다.</h3>
+			</div>
+		</div>
+
+		<!-- script -->
+		<script src="/js/file/showMenu.js"></script>
+		<script src="/js/file/bin.js"></script>
+
+		<script src="/js/user/logout.js"></script>
+
+		<!--bfcache 처리-->
+		<script>
+			window.addEventListener("pageshow", function (event) {
+				if (
+					event.persisted ||
+					window.performance?.navigation?.type === 2
+				) {
+					// 뒤로가기로 복원됐거나, bfcache로 들어옴
+					location.reload(); // 강제로 새로고침
+				}
+			});
+		</script>
+	</body>
+</html>
