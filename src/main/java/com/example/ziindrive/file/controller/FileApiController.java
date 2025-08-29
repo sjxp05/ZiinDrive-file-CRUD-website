@@ -25,7 +25,7 @@ public class FileApiController {
 
     // 파일 불러오기 get
     @GetMapping("/api/files/{userId}")
-    public ResponseEntity<List<FileResponseDto>> getFileData(
+    public ResponseEntity<?> getFileData(
             @PathVariable(name = "userId") Long userId,
             @RequestParam(name = "sort", required = false) String sort) {
 
@@ -37,11 +37,8 @@ public class FileApiController {
             holder.setStringToSort(sort); // 정렬 상태 바꿔주기
         }
 
-        // test
-        System.out.println("* 아이디: " + userId);
-
         if (userId == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("사용자 정보를 찾을 수 없습니다.");
         }
         return ResponseEntity.ok().body(service.findWithOptions(userId));
     }
@@ -64,7 +61,6 @@ public class FileApiController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }
         } catch (Exception e) {
-            System.out.println("업로드 오류 발생: " + e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
@@ -73,7 +69,7 @@ public class FileApiController {
 
     // 다운로드 get
     @GetMapping("/api/files/download/{id}")
-    public ResponseEntity<Resource> downloadFile(
+    public ResponseEntity<?> downloadFile(
             @PathVariable("id") Long id) {
 
         try {
@@ -85,8 +81,7 @@ public class FileApiController {
                     .body(resource);
 
         } catch (Exception e) {
-            System.out.println("다운로드 오류 발생: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
     }
@@ -139,18 +134,18 @@ public class FileApiController {
             }
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("존재하지 않는 파일");
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     // 삭제 delete
     @DeleteMapping("/api/files/{userId}/{id}")
-    public ResponseEntity<List<FileResponseDto>> deleteFile(
+    public ResponseEntity<?> deleteFile(
             @PathVariable("userId") Long userId,
             @PathVariable("id") Long id) {
 
         if (userId == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("사용자 정보를 찾을 수 없습니다.");
         }
 
         try {
@@ -159,13 +154,13 @@ public class FileApiController {
             return ResponseEntity.ok().body(service.findWithOptions(userId));
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     // 즐겨찾기 목록 업데이트 patch
     @PatchMapping("/api/favorites/{id}")
-    public ResponseEntity<List<FileResponseDto>> reloadFavorites(
+    public ResponseEntity<?> reloadFavorites(
             @PathVariable("id") Long id,
             @RequestBody Map<String, String> info) {
         try {
@@ -178,13 +173,13 @@ public class FileApiController {
             }
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     // 휴지통 복원 patch
     @PatchMapping("/api/bin/{id}")
-    public ResponseEntity<List<FileResponseDto>> restoreFile(
+    public ResponseEntity<?> restoreFile(
             @PathVariable("id") Long id,
             @RequestBody Map<String, String> info) {
 
@@ -194,13 +189,13 @@ public class FileApiController {
                     service.findWithOptions(Long.parseLong(info.get("userId"))));
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     // 휴지통 영구삭제 delete
     @DeleteMapping("/api/bin/{userId}/{id}")
-    public ResponseEntity<List<FileResponseDto>> shredFile(
+    public ResponseEntity<?> shredFile(
             @PathVariable("userId") Long userId,
             @PathVariable("id") Long id) {
         try {
@@ -208,7 +203,7 @@ public class FileApiController {
             return ResponseEntity.ok().body(service.findWithOptions(userId));
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -220,7 +215,7 @@ public class FileApiController {
             return ResponseEntity.ok().body(Collections.emptyList());
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

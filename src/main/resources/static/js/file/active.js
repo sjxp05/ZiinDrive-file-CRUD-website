@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	fetch("/api/files/sort")
 		.then((res) => {
 			if (!res.ok) {
-				throw new Error(res.status);
+				location.href = "/error";
 			}
 			return res;
 		})
@@ -54,16 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			const currentSort = await res.text();
 			console.log("정렬조건 받기 완료:", currentSort);
 			document.getElementById(currentSort).classList.add("active");
-		})
-		.catch((err) => {
-			console.error("정렬조건 받기 실패:", err);
 		});
 
 	// 파일 불러오기
 	fetch("/api/files/" + localStorage.getItem("user.id"))
 		.then((res) => {
 			if (!res.ok) {
-				throw new Error(res.status);
+				location.href = "/error";
 			}
 			return res;
 		})
@@ -74,10 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				console.log("all files fetch 성공");
 				renderData(fileList);
 			}
-		})
-		.catch((err) => {
-			console.error("fetch 실패:", err);
-			location.href = "/error";
 		});
 });
 
@@ -183,9 +176,8 @@ function uploadFile() {
 			}
 		})
 		.catch(async (err) => {
-			const msg = await err.text();
-			alert(msg);
-			console.error("업로드 실패:", msg);
+			console.error("업로드 실패:", err.status);
+			alert(await err.text());
 		});
 }
 
@@ -196,7 +188,7 @@ function downloadFile(btn) {
 	fetch("/api/files/download/" + id)
 		.then((res) => {
 			if (!res.ok) {
-				throw new Error(res.status);
+				throw res;
 			}
 
 			const disposition = res.headers.get("Content-Disposition");
@@ -225,8 +217,9 @@ function downloadFile(btn) {
 
 			console.log("다운로드 성공");
 		})
-		.catch((err) => {
-			console.error("다운로드 실패:", err);
+		.catch(async (err) => {
+			console.error("다운로드 실패:", err.status);
+			alert(await err.text());
 		});
 }
 
@@ -312,10 +305,9 @@ function finalizeRename(id, td, newName, currentName) {
 		})
 		.catch(async (err) => {
 			// 길이 제한 or 특수문자 제한 등 경고 메시지
-			const msg = await err.text();
-			alert(msg);
+			console.error("이름 변경 실패:", err.status);
+			alert(await err.text());
 
-			console.error("이름 변경 실패:", msg);
 			td.textContent = currentName;
 		});
 }
@@ -343,7 +335,7 @@ function favoriteFile(btn) {
 		})
 			.then((res) => {
 				if (!res.ok) {
-					throw new Error(res.status);
+					throw res;
 				}
 			})
 			.then(() => {
@@ -357,8 +349,8 @@ function favoriteFile(btn) {
 					console.log("즐겨찾기 해제");
 				}
 			})
-			.catch((err) => {
-				console.error("반영 실패:", err);
+			.catch(async (err) => {
+				console.error("반영 실패:", err.status, "/", await err.text());
 			});
 	}
 }
@@ -376,7 +368,7 @@ function reloadFavoriteList(id) {
 	})
 		.then((res) => {
 			if (!res.ok) {
-				throw new Error(res.status);
+				throw res;
 			}
 			return res;
 		})
@@ -385,8 +377,8 @@ function reloadFavoriteList(id) {
 			renderData(fileList);
 			console.log("즐겨찾기 목록 다시 불러오기 성공");
 		})
-		.catch((err) => {
-			console.error("불러오기 실패:", err);
+		.catch(async (err) => {
+			console.error("불러오기 실패:", err.status, "/", await err.text());
 		});
 }
 
@@ -399,7 +391,7 @@ function deleteFile(btn) {
 	})
 		.then((res) => {
 			if (!res.ok) {
-				throw new Error(res.status);
+				throw res;
 			}
 
 			return res;
@@ -411,8 +403,9 @@ function deleteFile(btn) {
 			alert("휴지통으로 이동하였습니다.");
 			renderData(fileList);
 		})
-		.catch((err) => {
-			console.error("파일 삭제 실패:", err);
+		.catch(async (err) => {
+			console.error("파일 삭제 실패:", err.status);
+			alert(await err.text());
 		});
 }
 

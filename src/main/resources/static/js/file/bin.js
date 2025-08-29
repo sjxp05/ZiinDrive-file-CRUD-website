@@ -51,7 +51,7 @@ function restoreFile(btn) {
 	})
 		.then((res) => {
 			if (!res.ok) {
-				throw new Error(res.status);
+				throw res;
 			}
 			return res;
 		})
@@ -62,8 +62,9 @@ function restoreFile(btn) {
 			alert("파일을 복원하였습니다.");
 			renderData(fileList);
 		})
-		.catch((err) => {
-			console.error("파일 복원 실패:", err);
+		.catch(async (err) => {
+			console.error("파일 복원 실패:", err.status);
+			alert(await err.text());
 		});
 }
 
@@ -83,7 +84,7 @@ function shredFile(btn) {
 	})
 		.then((res) => {
 			if (!res.ok) {
-				throw new Error(res.status);
+				throw res;
 			}
 			return res;
 		})
@@ -94,8 +95,9 @@ function shredFile(btn) {
 			alert("파일이 영구 삭제되었습니다.");
 			renderData(fileList);
 		})
-		.catch((err) => {
-			console.error("파일 영구삭제 실패:", err);
+		.catch(async (err) => {
+			console.error("파일 영구삭제 실패:", err.status);
+			alert(await err.text());
 		});
 }
 
@@ -122,7 +124,7 @@ function shredAll() {
 	})
 		.then((res) => {
 			if (!res.ok) {
-				throw new Error(res.status);
+				throw res;
 			}
 			return res;
 		})
@@ -131,8 +133,9 @@ function shredAll() {
 			renderData(emptyList);
 			console.log("휴지통 비우기 성공");
 		})
-		.catch((err) => {
-			console.error("휴지통 비우기 실패:", err);
+		.catch(async (err) => {
+			console.error("휴지통 비우기 실패:", err.status);
+			alert(await err.text());
 		});
 }
 

@@ -49,7 +49,7 @@ public class FileService {
         }
 
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("user does not exist"));
+                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
         String originalName = FileUtils.validateOriginalName(fileInput.getOriginalFilename());
         String size = FileUtils.formatSize(fileInput.getSize());
@@ -118,15 +118,15 @@ public class FileService {
     public FileDownloadDto getFileResource(Long id) throws IOException {
 
         FileEntity file = fileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("file does not exist"));
+                .orElseThrow(() -> new RuntimeException("파일을 찾을 수 없습니다."));
 
         if (file.getDeletedAt() != null) {
-            throw new RuntimeException("file is not active");
+            throw new RuntimeException("파일을 다운로드할 수 없습니다.");
         }
 
         Path storedPath = Paths.get(file.getPath(), file.getStoredName());
         if (!Files.exists(storedPath)) {
-            throw new FileNotFoundException("file does not exist");
+            throw new FileNotFoundException("파일을 다운로드할 수 없습니다.");
         }
 
         // 한글 이름 및 특수문자 등의 경우 인코딩 필요
@@ -144,7 +144,7 @@ public class FileService {
     public String renameFile(Long id, String newName) throws Exception {
 
         FileEntity file = fileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("file does not exist"));
+                .orElseThrow(() -> new RuntimeException("파일을 찾을 수 없습니다."));
 
         // 올바른 확장자가 붙어있지 않을 경우 추가한 뒤 validate 함수로 보내기
         if (!newName.endsWith(file.getExtension())) {
@@ -165,7 +165,7 @@ public class FileService {
     public boolean favoriteFile(Long id, boolean change) throws Exception {
 
         FileEntity file = fileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("file does not exist"));
+                .orElseThrow(() -> new RuntimeException("파일을 찾을 수 없습니다."));
 
         if (change == true) {
             if (file.isFavorited() == false) {
@@ -190,7 +190,7 @@ public class FileService {
     public void deleteFile(Long id) throws Exception {
 
         FileEntity file = fileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("file does not exist"));
+                .orElseThrow(() -> new RuntimeException("파일을 찾을 수 없습니다."));
 
         // 이미 삭제된 파일의 경우 막아놓기
         if (file.getDeletedAt() != null) {
@@ -212,16 +212,21 @@ public class FileService {
     public void restoreFile(Long id) throws Exception {
 
         FileEntity file = fileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("file does not exist"));
+                .orElseThrow(() -> new RuntimeException("파일을 찾을 수 없습니다."));
 
         // 삭제되지 않았으면 복구 안되게 막아놓기
         if (file.getDeletedAt() == null) {
-            throw new Exception();
+            throw new Exception("이미 복원된 파일입니다.");
         }
 
         // 디스크 위치 이동
         Path source = Paths.get(file.getPath(), file.getStoredName());
         Path target = Paths.get(properties.getUploadPath(), file.getStoredName());
+
+        // 파일이 실제 위치에 존재하지 않을 경우 오류 발생
+        if (!Files.exists(source)) {
+            throw new FileNotFoundException(" 파일을 복원할 수 없습니다.");
+        }
 
         Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
 
@@ -234,11 +239,11 @@ public class FileService {
     public void shredFile(Long id) throws Exception {
 
         FileEntity file = fileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("file does not exist"));
+                .orElseThrow(() -> new RuntimeException("파일을 찾을 수 없습니다."));
 
         // 삭제된 파일인지 먼저 확인
         if (file.getDeletedAt() == null) {
-            throw new Exception("file cannot be shredded");
+            throw new Exception("파일이 휴지통에 존재하지 않습니다.");
         }
 
         // 디스크에서 먼저 삭제
@@ -254,8 +259,25 @@ public class FileService {
     // 휴지통 비우기
     public void shredAll(Long userId) throws Exception {
 
-        fileRepository.delete(
-                FileSpecifications.isUserId(userId)
-                        .and(FileSpecifications.isActive(false)));
+        List<FileEntity> filesToShred = fileRepository.findAll(FileSpecifications.isUserId(userId)
+                .and(FileSpecifications.isActive(false)));
+
+        for (FileEntity file : filesToShred) {
+
+            // 삭제된 파일인지 먼저 확인
+            if (file.getDeletedAt() == null) {
+                throw new Exception("작업 중 문제가 발생하였습니다.");
+            }
+
+            // 디스크에서 먼저 삭제
+            File storedPath = new File(file.getPath(), file.getStoredName());
+            if (storedPath.exists()) {
+                storedPath.delete();
+            }
+
+            // DB에서 파일 메타데이터 삭제
+            fileRepository.delete(file);
+        }
+
     }
 }
