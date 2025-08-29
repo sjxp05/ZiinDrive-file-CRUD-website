@@ -22,18 +22,22 @@
 				z-index: 100;
 			}
 			.mainDiv {
+				list-style: none;
 				display: flex;
 				flex-direction: column;
 				position: absolute;
 				top: 80px;
 				left: 30vw;
 				right: 30vw;
-				height: 460px;
-				padding-top: 40px;
-
+				padding: 40px 20px;
 				border: 1px solid #ccc;
 				border-radius: 10px;
 				box-shadow: 0px 0px 6px #ccc;
+			}
+			.mainDiv li {
+				padding: 20px 20px;
+				border-bottom: 1px solid #ccc;
+				cursor: pointer;
 			}
 
 			.backBt {
@@ -45,12 +49,20 @@
 		</style>
 
 		<div class="topDiv">
-			<button class="backBt" onclick="location.href='/'">뒤로가기</button>
-			<h3 style="text-align: center; cursor: default">회원가입</h3>
+			<button class="backBt" onclick="location.href='/files'">
+				뒤로가기
+			</button>
+			<h3 style="text-align: center; cursor: default">
+				사용자 정보 조회/수정
+			</h3>
 		</div>
 
 		<div style="height: 600px">
-			<div class="mainDiv"></div>
+			<ul class="mainDiv">
+				<li>닉네임</li>
+				<li>비밀번호</li>
+				<li style="border-bottom: none">이메일</li>
+			</ul>
 		</div>
 
 		<!--bfcache 처리-->

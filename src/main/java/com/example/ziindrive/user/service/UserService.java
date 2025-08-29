@@ -129,6 +129,27 @@ public class UserService {
         return UserFullDto.fromEntity(user);
     }
 
+    // 선택한 항목 불러오기
+    public String getSelectedInfo(Long id, String key) throws Exception {
+
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+
+        switch (key) {
+            case "password":
+                return Integer.toString(user.getPasswordLength());
+
+            case "nickname":
+                return user.getNickname();
+
+            case "email":
+                return user.getEmail();
+
+            default:
+                throw new Exception("요청받은 키가 존재하지 않음");
+        }
+    }
+
     // 회원정보 수정
     public boolean modifyUserInfo(Map<String, String> userInfo) throws Exception {
 

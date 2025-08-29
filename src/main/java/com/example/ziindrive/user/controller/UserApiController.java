@@ -3,18 +3,10 @@ package com.example.ziindrive.user.controller;
 import java.util.*;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.ziindrive.user.dto.UserFullDto;
-import com.example.ziindrive.user.dto.UserProfileDto;
+import com.example.ziindrive.user.dto.*;
 import com.example.ziindrive.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -93,13 +85,15 @@ public class UserApiController {
         }
     }
 
-    // 회원정보 전체 조회
-    @GetMapping("/api/users/{id}")
-    public ResponseEntity<?> getUserInfo(@PathVariable(name = "id") Long id) {
+    // 회원정보 중 선택한 항목만 조회
+    @PostMapping("/api/users/info/{id}")
+    public ResponseEntity<?> getUserInfo(
+            @PathVariable(name = "id") Long id,
+            @RequestBody Map<String, String> info) {
 
         try {
-            UserFullDto dto = userService.getUserInfo(id);
-            return ResponseEntity.ok().body(dto);
+            // UserFullDto dto = userService.getUserInfo(id);
+            return ResponseEntity.ok().body(userService.getSelectedInfo(id, info.get("key")));
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -142,11 +136,4 @@ public class UserApiController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    // // 로그아웃 구현 (필요시)
-    // @PostMapping("/api/users/logout")
-    // public ResponseEntity<?> logout(@RequestBody Map<String, String> payload) {
-
-    // return ResponseEntity.ok().build();
-    // }
 }
