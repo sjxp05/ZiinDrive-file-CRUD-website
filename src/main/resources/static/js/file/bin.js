@@ -104,6 +104,11 @@ function shredAll() {
 	const trs = document.getElementById("tBody").querySelectorAll("tr");
 	const trCount = trs.length;
 
+	if (trCount === 0) {
+		alert("휴지통이 비어 있습니다.");
+		return;
+	}
+
 	const really = confirm(
 		"휴지통에 있는 " + trCount + " 개의 파일을 모두 삭제하시겠습니까?"
 	);

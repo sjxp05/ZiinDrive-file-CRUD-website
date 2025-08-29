@@ -6,87 +6,39 @@
 		<title>ZiinDrive</title>
 	</head>
 
-	<body style="margin: 0">
+	<body style="margin: 5px">
 		<link rel="stylesheet" href="/css/file/style.css" />
 		<link rel="stylesheet" href="/css/file/bin.css" />
 
 		<!-- 첫줄 고정 메뉴 -->
 		<div class="topDiv">
 			<span style="display: flex; align-items: center">
-				<label class="logo" onclick="toMainView()"
+				<label class="logo" onclick="location.href='/files'"
 					><b>Ziin</b>Drive</label
 				>
-				<label style="position: relative; left: 25px; font-size: 20px"
-					>&nbsp;&nbsp;|&nbsp;&nbsp;휴지통</label
-				>
+				<label class="logo side">
+					&nbsp;&nbsp;|&nbsp;&nbsp;휴지통
+				</label>
 			</span>
 
-			<span
-				style="
-					display: flex;
-					align-items: center;
-					position: relative;
-					right: 15px;
-				"
-			>
-				<img
-					src="/images/default_profile.png"
-					class="profile"
-					onclick="showUserPage()"
-				/>
+			<span class="topSpan">
+				<img src="/images/default_profile.png" id="profile" />
 				<button class="menuBt" onclick="showMenu()"><b>≡</b></button>
 			</span>
 		</div>
 
 		<!-- 유저 페이지 -->
-		<ul class="userPage">
-			<p
-				style="
-					margin-bottom: 0;
-					padding-left: 16px;
-					font-size: 20px;
-					cursor: default;
-				"
-			>
-				<b>닉네임</b>
-			</p>
-			<p
-				style="
-					margin-top: 5px;
-					margin-bottom: 20px;
-					padding-left: 18px;
-					font-size: 13px;
-					color: gray;
-					cursor: default;
-				"
-			>
-				아이디
-			</p>
+		<ul id="userPage">
+			<p id="pfNickname"><b>-</b></p>
+			<p id="pfId">-</p>
 			<li>사용자 정보</li>
 			<li onclick="logout()">로그아웃</li>
 		</ul>
 
 		<!-- 사이드 메뉴 -->
-		<ul class="sidemenu">
-			<span
-				style="
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					height: 70px;
-					border-bottom: 2px solid #ccc;
-				"
-			>
-				<h3
-					style="
-						cursor: default;
-						position: absolute;
-						width: 150px;
-						left: 20px;
-					"
-				>
-					MENU
-				</h3>
+		<ul id="sidemenu">
+			<span class="menuSpan">
+				<h3 class="menuTitle">MENU</h3>
 				<button
 					class="menuBt"
 					style="position: absolute; right: 15px"
@@ -105,12 +57,14 @@
 			<li id="trashbinMenu" onclick="location.href='/bin'">휴지통</li>
 		</ul>
 
-		<div class="overlay" onclick="closeMenu()"></div>
+		<div id="overlay" onclick="closeMenu()"></div>
 
 		<!-- 고정x 전체 화면 -->
-		<div style="display: flex; flex-direction: column; margin-top: 70px">
+		<div class="mainDiv">
 			<div class="shredAllDiv">
-				<button class="shredAllBt">휴지통 비우기</button>
+				<button class="shredAllBt" onclick="shredAll()">
+					휴지통 비우기
+				</button>
 			</div>
 
 			<table>
@@ -135,7 +89,7 @@
 				</tbody>
 			</table>
 
-			<div id="isEmpty" class="isEmpty">
+			<div id="isEmpty">
 				<h3>휴지통이 비어 있습니다.</h3>
 			</div>
 		</div>

@@ -6,80 +6,34 @@
 		<title>ZiinDrive</title>
 	</head>
 
-	<body style="margin: 0">
+	<body style="margin: 5px">
 		<link rel="stylesheet" href="/css/file/style.css" />
 		<link rel="stylesheet" href="/css/file/active.css" />
 
 		<!-- 첫줄 고정 메뉴 -->
 		<div class="topDiv">
-			<label class="logo" onclick="toMainView()"><b>Ziin</b>Drive</label>
-
-			<span
-				style="
-					display: flex;
-					align-items: center;
-					position: relative;
-					right: 15px;
-				"
+			<label class="logo" onclick="location.href='/files'"
+				><b>Ziin</b>Drive</label
 			>
-				<img
-					src="/images/default_profile.png"
-					class="profile"
-					onclick="showUserPage()"
-				/>
+
+			<span class="topSpan">
+				<img src="/images/default_profile.png" id="profile" />
 				<button class="menuBt" onclick="showMenu()"><b>≡</b></button>
 			</span>
 		</div>
 
 		<!-- 유저 페이지 -->
-		<ul class="userPage">
-			<p
-				style="
-					margin-bottom: 0;
-					padding-left: 16px;
-					font-size: 20px;
-					cursor: default;
-				"
-			>
-				<b>닉네임</b>
-			</p>
-			<p
-				style="
-					margin-top: 5px;
-					margin-bottom: 20px;
-					padding-left: 18px;
-					font-size: 13px;
-					color: gray;
-					cursor: default;
-				"
-			>
-				아이디
-			</p>
+		<ul id="userPage">
+			<p id="pfNickname"><b>-</b></p>
+			<p id="pfId">-</p>
 			<li>사용자 정보</li>
 			<li onclick="logout()">로그아웃</li>
 		</ul>
 
 		<!-- 사이드 메뉴 -->
-		<ul class="sidemenu">
-			<span
-				style="
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					height: 70px;
-					border-bottom: 2px solid #ccc;
-				"
-			>
-				<h3
-					style="
-						cursor: default;
-						position: absolute;
-						width: 150px;
-						left: 20px;
-					"
-				>
-					MENU
-				</h3>
+		<ul id="sidemenu">
+			<span class="menuSpan">
+				<h3 class="menuTitle">MENU</h3>
 				<button
 					class="menuBt"
 					style="position: absolute; right: 15px"
@@ -98,19 +52,12 @@
 			<li id="trashbinMenu" onclick="location.href='/bin'">휴지통</li>
 		</ul>
 
-		<div class="overlay" onclick="closeMenu()"></div>
+		<div id="overlay" onclick="closeMenu()"></div>
 
 		<!-- 고정x 전체 화면 -->
-		<div style="display: flex; flex-direction: column; margin-top: 70px">
+		<div class="mainDiv">
 			<!-- 검색 및 업로드 버튼 -->
-			<div
-				style="
-					display: flex;
-					justify-content: space-between;
-					align-items: center;
-					height: 70px;
-				"
-			>
+			<div class="searchDiv">
 				<span style="position: relative; left: 19px">
 					<label class="searchLb">제목</label>
 					<input
@@ -240,7 +187,7 @@
 				</tbody>
 			</table>
 
-			<div id="isEmpty" class="isEmpty">
+			<div id="isEmpty">
 				<h3>파일이 없습니다.</h3>
 			</div>
 		</div>

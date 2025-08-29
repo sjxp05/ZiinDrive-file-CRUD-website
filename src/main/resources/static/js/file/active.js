@@ -81,24 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 });
 
-// 메인화면으로 돌아가기
-function toMainView() {
-	if (
-		location.href === "http://localhost:8080/files" ||
-		location.href === "http://localhost:8080/favorites"
-	) {
-		// 이미 메인화면일 경우 추가 동작 하지 않음
-		console.log("메인 화면 유지");
-		return;
-	} else {
-		if (location.href.startsWith("http://localhost:8080/favorites")) {
-			location.href = "/favorites";
-		} else {
-			location.href = "/files";
-		}
-	}
-}
-
 // 검색 조건만 초기화
 function initialize() {
 	keyword.value = "";
