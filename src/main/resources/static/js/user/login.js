@@ -62,15 +62,8 @@ function login() {
 		});
 }
 
-function showPassword() {
-	const pwInput = document.getElementById("pwInput");
-	const showPasswordBt = document.querySelector(".showPasswordBt");
-
-	if (showPasswordBt.classList.contains("active")) {
-		pwInput.setAttribute("type", "password");
-	} else {
-		pwInput.setAttribute("type", "text");
-	}
-
-	showPasswordBt.classList.toggle("active");
+function logout() {
+	localStorage.removeItem("user.id");
+	localStorage.removeItem("user.lastLogin"); // 넣을? 말?
+	location.href = "/";
 }

@@ -86,7 +86,7 @@ public class UserApiController {
     }
 
     // 회원정보 중 선택한 항목만 조회
-    @PostMapping("/api/users/info/{id}")
+    @PostMapping("/api/users/info")
     public ResponseEntity<?> getUserInfo(
             @PathVariable(name = "id") Long id,
             @RequestBody Map<String, String> info) {
@@ -117,16 +117,25 @@ public class UserApiController {
         }
     }
 
-    // 회원탈퇴 전 비밀번호 확인
+    // 비밀번호변경, 회원탈퇴 전 비밀번호 확인
     @PostMapping("/api/users/account")
-    public ResponseEntity<?> checkPwBeforeDelete(@RequestBody Map<String, String> userInfo) {
+    public ResponseEntity<String> checkPwBeforeDelete(@RequestBody Map<String, String> userInfo) {
 
-        return validateLogin(userInfo);
+        try {
+            if (userService.validatePassword(Long.parseLong(userInfo.get("id")), userInfo.get("password"))) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다. 다시 시도해 주세요.");
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // 회원탈퇴
     @DeleteMapping("/api/users/account/{id}")
-    public ResponseEntity<?> deleteAccount(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<String> deleteAccount(@PathVariable(name = "id") Long id) {
 
         try {
             userService.deleteAccount(id);

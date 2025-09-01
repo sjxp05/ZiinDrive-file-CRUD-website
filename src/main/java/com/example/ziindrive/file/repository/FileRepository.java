@@ -14,6 +14,8 @@ public interface FileRepository extends JpaRepository<FileEntity, Long>, JpaSpec
 
     // 기본 CRUD 제공.
 
+    public void deleteAllByUserId(long userId);
+
     // specification 만들기
     public class FileSpecifications {
 

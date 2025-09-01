@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.ziindrive.common.util.UserInfoUtils;
+import com.example.ziindrive.file.repository.FileRepository;
 import com.example.ziindrive.user.dto.*;
 import com.example.ziindrive.user.entity.UserEntity;
 import com.example.ziindrive.user.repository.UserRepository;
@@ -18,19 +19,31 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FileRepository fileRepository;
     private final PasswordEncoder passwordEncoder;
 
     // 로그인 아이디 및 비번 인증 절차
     public Long validateLogin(String loginId, String rawPassword) throws Exception {
 
         UserEntity user = userRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
             return null;
         }
-
         return user.getId();
+    }
+
+    // 비밀번호 확인절차
+    public boolean validatePassword(long id, String rawPassword) throws Exception {
+
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            return false;
+        }
+        return true;
     }
 
     // 회원가입을 위한 정보 검사 및 등록 절차
@@ -115,29 +128,27 @@ public class UserService {
     public UserProfileDto getUserProfile(Long id) throws Exception {
 
         UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         return UserProfileDto.fromEntity(user);
     }
 
     // 회원정보 전체 불러오기
-    public UserFullDto getUserInfo(Long id) throws Exception {
+    // public UserFullDto getUserInfo(Long id) throws Exception {
 
-        UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+    // UserEntity user = userRepository.findById(id)
+    // .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        return UserFullDto.fromEntity(user);
-    }
+    // return UserFullDto.fromEntity(user);
+    // }
 
     // 선택한 항목 불러오기
     public String getSelectedInfo(Long id, String key) throws Exception {
 
         UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         switch (key) {
-            case "password":
-                return Integer.toString(user.getPasswordLength());
 
             case "nickname":
                 return user.getNickname();
@@ -154,7 +165,7 @@ public class UserService {
     public boolean modifyUserInfo(Map<String, String> userInfo) throws Exception {
 
         UserEntity user = userRepository.findById(Long.parseLong(userInfo.get("id")))
-                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         boolean hasKeys = false;
 
@@ -167,7 +178,7 @@ public class UserService {
             String password = userInfo.get("password");
 
             if (UserInfoUtils.checkPasswordRule(password)) {
-                user.setPassword(password);
+                user.setPassword(passwordEncoder.encode(password));
             } else {
                 throw new Exception(UserInfoUtils.PW_RULE_WARNING);
             }
@@ -206,12 +217,13 @@ public class UserService {
         return hasKeys;
     }
 
-    // 회원 계정 삭제
+    // 회원 계정 삭제 + 게시한 모든 파일 삭제
     public void deleteAccount(Long id) throws Exception {
 
         UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("account with this id does not exist"));
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
+        fileRepository.deleteAllByUserId(id); // 해당 사용자가 게시한 모든 파일 삭제
         userRepository.delete(user);
     }
 }

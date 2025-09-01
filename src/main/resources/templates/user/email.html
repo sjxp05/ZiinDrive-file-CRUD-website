@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>비밀번호 재설정 - ZiinDrive</title>
+		<title>사용자 정보 - ZiinDrive</title>
 	</head>
 
 	<body style="margin: 0">
@@ -45,36 +45,16 @@
 			.mainDiv h4 {
 				width: 100%;
 				margin-left: 10px;
-				margin-top: 10px;
-				margin-bottom: 10px;
+				margin-top: 0;
+				margin-bottom: 30px;
 				text-align: left;
 				cursor: default;
 			}
-			.mainDiv span {
-				width: 90%;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-			}
 
-			.pwInput {
-				width: 80%;
+			#emailInput {
+				width: 90%;
 				font-size: 15px;
 				padding: 10px;
-			}
-			.showPasswordBt {
-				width: 4vw;
-				height: 40px;
-				padding: 0 0 3px 0;
-				text-align: center;
-				font-size: 24px;
-				border-radius: 5px;
-				border-width: 2px;
-				border-style: solid;
-				border-color: gray;
-				background-color: lightgray;
-				color: black;
-				cursor: pointer;
 			}
 
 			.confirmBt {
@@ -96,36 +76,16 @@
 			}
 		</style>
 
-		<div class="topDiv">
+		<div id="email" class="topDiv">
 			<button class="backBt" onclick="history.back()">뒤로가기</button>
-			<h3 style="text-align: center; cursor: default">비밀번호 재설정</h3>
+			<h3 style="text-align: center; cursor: default">사용자 정보</h3>
 		</div>
 
 		<div style="height: 100vh">
 			<div class="mainDiv">
-				<h4>새로운 비밀번호를 입력해 주십시오.</h4>
-				<span>
-					<input id="pwInput" class="pwInput" type="password" />
-					<button
-						id="showPasswordBt"
-						class="showPasswordBt"
-						onclick="showPassword()"
-					>
-						👁
-					</button>
-				</span>
-				<h4>비밀번호 확인</h4>
-				<span>
-					<input id="pwInput2" class="pwInput" type="password" />
-					<button
-						id="showPasswordBt2"
-						class="showPasswordBt"
-						onclick="showPassword2()"
-					>
-						👁
-					</button>
-				</span>
-				<button class="confirmBt">확인</button>
+				<h4>변경할 이메일 주소를 입력해 주십시오.</h4>
+				<input id="emailInput" />
+				<button class="confirmBt" onclick="changeEmail()">확인</button>
 			</div>
 		</div>
 

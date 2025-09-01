@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>사용자 정보 - ZiinDrive</title>
+		<title>사용자 설정 - ZiinDrive</title>
 	</head>
 
 	<body style="margin: 0">
@@ -21,6 +21,13 @@
 				box-shadow: 0 2px 6px #ccc;
 				z-index: 100;
 			}
+			.backBt {
+				position: absolute;
+				top: 13px;
+				left: 20px;
+				cursor: pointer;
+			}
+
 			.mainDiv {
 				list-style: none;
 				display: flex;
@@ -29,22 +36,38 @@
 				top: 80px;
 				left: 30vw;
 				right: 30vw;
-				padding: 40px 20px;
+				padding: 20px 20px;
 				border: 1px solid #ccc;
 				border-radius: 10px;
 				box-shadow: 0px 0px 6px #ccc;
 			}
+			.mainDiv h3 {
+				margin-top: 0;
+				margin-bottom: 10px;
+				margin-left: 5px;
+				cursor: default;
+			}
 			.mainDiv li {
-				padding: 20px 20px;
+				padding: 15px 20px;
+				background-color: white;
 				border-bottom: 1px solid #ccc;
 				cursor: pointer;
 			}
+			.mainDiv li:hover {
+				filter: brightness(90%);
+			}
 
-			.backBt {
-				position: absolute;
-				top: 13px;
-				left: 20px;
+			.mainDiv.singleMenu {
+				padding: 10px 20px;
+			}
+			.mainDiv.singleMenu li {
+				border-bottom: none;
+				padding: 5px 10px;
+				background-color: white;
 				cursor: pointer;
+			}
+			.mainDiv.singleMenu li:hover {
+				filter: brightness(90%);
 			}
 		</style>
 
@@ -52,18 +75,35 @@
 			<button class="backBt" onclick="location.href='/files'">
 				뒤로가기
 			</button>
-			<h3 style="text-align: center; cursor: default">
-				사용자 정보 조회/수정
-			</h3>
+			<h3 style="text-align: center; cursor: default">사용자 설정</h3>
 		</div>
 
 		<div style="height: 600px">
 			<ul class="mainDiv">
-				<li>닉네임</li>
-				<li>비밀번호</li>
-				<li style="border-bottom: none">이메일</li>
+				<h3>정보 조회 및 수정</h3>
+				<li onclick="location.href='/user/nickname'">닉네임</li>
+				<li onclick="location.href='/user/confirm'">비밀번호</li>
+				<li
+					style="border-bottom: none"
+					onclick="location.href='/user/email'"
+				>
+					이메일
+				</li>
+			</ul>
+
+			<ul class="mainDiv singleMenu" style="top: 335px">
+				<li onclick="logout()">로그아웃</li>
+			</ul>
+
+			<ul class="mainDiv singleMenu" style="top: 400px">
+				<li style="color: red" onclick="location.href='/user/account'">
+					계정 삭제
+				</li>
 			</ul>
 		</div>
+
+		<!-- script -->
+		<script src="/js/user/login.js"></script>
 
 		<!--bfcache 처리-->
 		<script>

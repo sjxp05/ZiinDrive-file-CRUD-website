@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>비밀번호 재설정 - ZiinDrive</title>
+		<title>계정 삭제 - ZiinDrive</title>
 	</head>
 
 	<body style="margin: 0">
@@ -45,8 +45,8 @@
 			.mainDiv h4 {
 				width: 100%;
 				margin-left: 10px;
-				margin-top: 10px;
-				margin-bottom: 10px;
+				margin-top: 0;
+				margin-bottom: 30px;
 				text-align: left;
 				cursor: default;
 			}
@@ -57,12 +57,12 @@
 				justify-content: space-between;
 			}
 
-			.pwInput {
+			#pwInput {
 				width: 80%;
 				font-size: 15px;
 				padding: 10px;
 			}
-			.showPasswordBt {
+			#showPasswordBt {
 				width: 4vw;
 				height: 40px;
 				padding: 0 0 3px 0;
@@ -98,34 +98,21 @@
 
 		<div class="topDiv">
 			<button class="backBt" onclick="history.back()">뒤로가기</button>
-			<h3 style="text-align: center; cursor: default">비밀번호 재설정</h3>
+			<h3 style="text-align: center; cursor: default">계정 삭제</h3>
 		</div>
 
 		<div style="height: 100vh">
 			<div class="mainDiv">
-				<h4>새로운 비밀번호를 입력해 주십시오.</h4>
+				<h4>사용자 확인을 위해 비밀번호를 입력해 주십시오.</h4>
 				<span>
-					<input id="pwInput" class="pwInput" type="password" />
-					<button
-						id="showPasswordBt"
-						class="showPasswordBt"
-						onclick="showPassword()"
-					>
+					<input id="pwInput" type="password" />
+					<button id="showPasswordBt" onclick="showPassword()">
 						👁
 					</button>
 				</span>
-				<h4>비밀번호 확인</h4>
-				<span>
-					<input id="pwInput2" class="pwInput" type="password" />
-					<button
-						id="showPasswordBt2"
-						class="showPasswordBt"
-						onclick="showPassword2()"
-					>
-						👁
-					</button>
-				</span>
-				<button class="confirmBt">확인</button>
+				<button class="confirmBt" onclick="deleteAccount()">
+					확인
+				</button>
 			</div>
 		</div>
 

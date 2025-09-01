@@ -21,8 +21,28 @@ public class UserViewController {
         return "user/info";
     }
 
+    @GetMapping("/user/confirm")
+    public String confirmPasswordView() {
+        return "user/confirm";
+    }
+
+    @GetMapping("/user/nickname")
+    public String changeNicknameView() {
+        return "user/nickname";
+    }
+
+    @GetMapping("/user/email")
+    public String changeEmailView() {
+        return "user/email";
+    }
+
     @GetMapping("/user/password")
     public String resetPasswordView() {
         return "user/password";
+    }
+
+    @GetMapping("/user/account")
+    public String getAccountDeleteView() {
+        return "user/delete";
     }
 }

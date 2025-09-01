@@ -39,10 +39,10 @@ public class UserEntity {
         this.role = Role.MANAGER;
     }
 
-    // 비밀번호 글자 수만 전달 (보안 목적)
-    public int getPasswordLength() {
-        return this.password.length();
-    }
+    // // 비밀번호 글자 수만 전달 (보안 목적)
+    // public int getPasswordLength() {
+    // return this.password.length();
+    // }
 
     // setter (필요한 것만)
 
