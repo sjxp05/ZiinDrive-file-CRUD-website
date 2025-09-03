@@ -64,7 +64,7 @@ input {
 	cursor: pointer;
 }
 
-#showPasswordBt {
+.showPasswordBt {
 	position: absolute;
 	right: 38vw;
 	width: 4vw;
@@ -80,7 +80,7 @@ input {
 	color: black;
 	cursor: pointer;
 }
-#showPasswordBt.active {
+.showPasswordBt.active {
 	border-color: darkblue;
 	background-color: cornflowerblue;
 	color: white;

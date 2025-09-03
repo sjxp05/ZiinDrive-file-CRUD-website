@@ -88,15 +88,30 @@ public class UserApiController {
     // 회원정보 중 선택한 항목만 조회
     @PostMapping("/api/users/info")
     public ResponseEntity<?> getUserInfo(
-            @PathVariable(name = "id") Long id,
             @RequestBody Map<String, String> info) {
 
         try {
             // UserFullDto dto = userService.getUserInfo(id);
+            long id = Long.parseLong(info.get("id"));
             return ResponseEntity.ok().body(userService.getSelectedInfo(id, info.get("key")));
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // 비번 찾기 시 사용자 인증
+    @PostMapping("/api/users/auth")
+    public ResponseEntity<?> authorizeUser(@RequestBody Map<String, String> authInfo) {
+
+        try {
+            Long id = userService.authorizeUser(authInfo.get("loginId"), authInfo.get("email"));
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, "application/json")
+                    .body(Map.of("id", id));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 

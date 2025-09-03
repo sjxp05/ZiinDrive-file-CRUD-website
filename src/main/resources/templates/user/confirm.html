@@ -57,13 +57,18 @@
 				justify-content: space-between;
 			}
 
-			#pwInput {
-				width: 80%;
+			input {
+				position: relative;
+				left: 0;
+				width: 25vw;
 				font-size: 15px;
 				padding: 10px;
 			}
-			#showPasswordBt {
-				width: 4vw;
+
+			.showPasswordBt {
+				position: relative;
+				right: 0;
+				width: 4.5vw;
 				height: 40px;
 				padding: 0 0 3px 0;
 				text-align: center;
@@ -75,6 +80,11 @@
 				background-color: lightgray;
 				color: black;
 				cursor: pointer;
+			}
+			.showPasswordBt.active {
+				border-color: darkblue;
+				background-color: cornflowerblue;
+				color: white;
 			}
 
 			.confirmBt {
@@ -106,16 +116,29 @@
 				<h4>사용자 확인을 위해 비밀번호를 입력해 주십시오.</h4>
 				<span>
 					<input id="pwInput" type="password" />
-					<button id="showPasswordBt" onclick="showPassword()">
+					<button class="showPasswordBt" onclick="showPassword(this)">
 						👁
 					</button>
 				</span>
-				<button class="confirmBt">확인</button>
+				<button class="confirmBt" onclick="nextPage()">확인</button>
 			</div>
 		</div>
 
 		<!-- script -->
 		<script src="/js/user/manageAccount.js"></script>
+		<script src="/js/user/input.js"></script>
+
+		<script>
+			async function nextPage() {
+				const msg = await confirmPassword();
+
+				if (msg === null) {
+					location.href = "/user/password";
+				} else {
+					alert(msg);
+				}
+			}
+		</script>
 
 		<!--bfcache 처리-->
 		<script>

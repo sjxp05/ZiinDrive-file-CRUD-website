@@ -42,9 +42,9 @@
 						id="pwInput"
 						style="right: 11.5vw"
 						type="password"
-						oninput="checkWordsCount(this)"
+						oninput="checkWordsCount(this); checkIfSamePw()"
 					/>
-					<button class="showPasswordBt" onclick="showPassword()">
+					<button class="showPasswordBt" onclick="showPassword(this)">
 						👁
 					</button>
 				</span>
@@ -56,6 +56,19 @@
 						>0 / 20</label
 					>
 				</div>
+
+				<span>
+					<label>* 비밀번호 확인</label>
+					<input
+						id="pwConfirm"
+						style="right: 11.5vw"
+						type="password"
+						oninput="checkIfSamePw()"
+					/>
+					<button class="showPasswordBt" onclick="showPassword(this)">
+						👁
+					</button>
+				</span>
 
 				<span>
 					<label>닉네임</label>
@@ -79,6 +92,7 @@
 		</div>
 
 		<script src="/js/user/signup.js"></script>
+		<script src="/js/user/input.js"></script>
 
 		<!--bfcache 처리-->
 		<script>

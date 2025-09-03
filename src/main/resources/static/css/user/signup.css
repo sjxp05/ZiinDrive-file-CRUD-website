@@ -49,6 +49,7 @@ input {
 	right: 7vw;
 	font-size: 15px;
 	padding: 10px;
+	border: 0.5px solid darkgray;
 }
 
 .wordsCount {

@@ -26,6 +26,16 @@ public class UserViewController {
         return "user/confirm";
     }
 
+    @GetMapping("/user/auth")
+    public String userAuthorizeView() {
+        return "user/forgot_password";
+    }
+
+    @GetMapping("/user/password")
+    public String resetPasswordView() {
+        return "user/password";
+    }
+
     @GetMapping("/user/nickname")
     public String changeNicknameView() {
         return "user/nickname";
@@ -34,11 +44,6 @@ public class UserViewController {
     @GetMapping("/user/email")
     public String changeEmailView() {
         return "user/email";
-    }
-
-    @GetMapping("/user/password")
-    public String resetPasswordView() {
-        return "user/password";
     }
 
     @GetMapping("/user/account")

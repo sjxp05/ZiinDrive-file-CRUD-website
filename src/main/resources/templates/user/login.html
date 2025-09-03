@@ -31,12 +31,14 @@
 			<span>
 				<label>비밀번호</label>
 				<input id="pwInput" style="right: 42.5vw" type="password" />
-				<button id="showPasswordBt" onclick="showPassword()">👁</button>
+				<button class="showPasswordBt" onclick="showPassword(this)">
+					👁
+				</button>
 			</span>
 
 			<div class="bottomDiv" style="height: 10px">
 				<p id="resetPw">
-					<a href="/users/password">비밀번호를 잊어버렸어요</a>
+					<a href="/user/auth">비밀번호를 잊어버렸어요</a>
 				</p>
 			</div>
 
@@ -52,7 +54,7 @@
 		</div>
 
 		<script src="/js/user/login.js"></script>
-		<script src="/js/user/manageAccount.js"></script>
+		<script src="/js/user/input.js"></script>
 
 		<!--bfcache 처리-->
 		<script>

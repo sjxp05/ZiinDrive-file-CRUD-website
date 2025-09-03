@@ -1,8 +1,13 @@
 function signup() {
 	const loginId = document.getElementById("idInput").value.trim() || "";
-	const password = document.getElementById("pwInput").value.trim() || "";
+	const password = document.getElementById("pwInput").value;
 	const nickname = document.getElementById("nickInput").value.trim() || "";
 	const email = document.getElementById("emailInput").value.trim() || "";
+
+	if (password !== document.getElementById("pwConfirm").value) {
+		alert("비밀번호를 다시 확인해 주세요.");
+		return;
+	}
 
 	fetch("/api/users/signup", {
 		method: "POST",
@@ -60,45 +65,4 @@ function checkDuplicateId() {
 			console.error("ID 중복 체크 결과:", err.status);
 			alert(msg);
 		});
-}
-
-function showPassword() {
-	const pwInput = document.getElementById("pwInput");
-	const showPassword = document.querySelector(".showPassword");
-
-	if (showPassword.classList.contains("active")) {
-		pwInput.setAttribute("type", "password");
-	} else {
-		pwInput.setAttribute("type", "text");
-	}
-
-	showPassword.classList.toggle("active");
-}
-
-function checkWordsCount(input) {
-	const inputName = input.getAttribute("id");
-	const labelName = inputName.replace("Input", "Length");
-	const lb = document.getElementById(labelName);
-
-	const content = lb.textContent.split(" / ");
-	const limit = parseInt(content[1]);
-	const currentCount = input.value.length;
-
-	if (currentCount > limit) {
-		lb.style.color = "red";
-	} else {
-		lb.style.color = "gray";
-
-		if (labelName === "idLength") {
-			if (currentCount < 4) {
-				lb.style.color = "red";
-			}
-		} else if (labelName === "pwLength") {
-			if (currentCount < 8 || currentCount > limit) {
-				lb.style.color = "red";
-			}
-		}
-	}
-
-	lb.textContent = String(currentCount) + " / " + String(limit);
 }

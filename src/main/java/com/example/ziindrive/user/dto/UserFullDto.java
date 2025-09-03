@@ -15,7 +15,7 @@ public class UserFullDto {
 
     private Long id;
     private String loginId;
-    private int pwLength;
+    // private int pwLength;
     private String nickname;
     private String email;
     private String roleToString;
@@ -25,7 +25,7 @@ public class UserFullDto {
         return builder()
                 .id(entity.getId())
                 .loginId(entity.getLoginId())
-                .pwLength(entity.getPasswordLength())
+                // .pwLength(entity.getPasswordLength())
                 .nickname(entity.getNickname())
                 .roleToString(entity.getRole().name())
                 .build();

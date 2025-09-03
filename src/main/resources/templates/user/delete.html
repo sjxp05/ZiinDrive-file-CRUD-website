@@ -58,12 +58,12 @@
 			}
 
 			#pwInput {
-				width: 80%;
+				width: 25vw;
 				font-size: 15px;
 				padding: 10px;
 			}
-			#showPasswordBt {
-				width: 4vw;
+			.showPasswordBt {
+				width: 4.5vw;
 				height: 40px;
 				padding: 0 0 3px 0;
 				text-align: center;
@@ -106,7 +106,7 @@
 				<h4>사용자 확인을 위해 비밀번호를 입력해 주십시오.</h4>
 				<span>
 					<input id="pwInput" type="password" />
-					<button id="showPasswordBt" onclick="showPassword()">
+					<button class="showPasswordBt" onclick="showPassword(this)">
 						👁
 					</button>
 				</span>
@@ -118,6 +118,7 @@
 
 		<!-- script -->
 		<script src="/js/user/manageAccount.js"></script>
+		<script src="/js/user/input.js"></script>
 
 		<!--bfcache 처리-->
 		<script>
