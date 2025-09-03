@@ -42,7 +42,7 @@ function signup() {
 function checkDuplicateId() {
 	const loginId = document.getElementById("idInput").value.trim() || "";
 
-	fetch("/api/users/id", {
+	fetch("/api/users/signup/id", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

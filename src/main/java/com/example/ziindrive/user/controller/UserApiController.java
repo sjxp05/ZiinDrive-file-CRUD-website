@@ -55,7 +55,7 @@ public class UserApiController {
     }
 
     // id 중복체크
-    @PostMapping("/api/users/id")
+    @PostMapping("/api/users/signup/id")
     public ResponseEntity<String> checkDuplicateId(@RequestBody Map<String, String> idCheckInfo) {
 
         try {
@@ -101,11 +101,11 @@ public class UserApiController {
     }
 
     // 비번 찾기 시 사용자 인증
-    @PostMapping("/api/users/auth")
-    public ResponseEntity<?> authorizeUser(@RequestBody Map<String, String> authInfo) {
+    @PostMapping("/api/users/verify/id")
+    public ResponseEntity<?> verifyUserById(@RequestBody Map<String, String> authInfo) {
 
         try {
-            Long id = userService.authorizeUser(authInfo.get("loginId"), authInfo.get("email"));
+            Long id = userService.verifyUserById(authInfo.get("loginId"), authInfo.get("email"));
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
                     .body(Map.of("id", id));
@@ -115,8 +115,24 @@ public class UserApiController {
         }
     }
 
+    // 비밀번호변경, 회원탈퇴 전 비밀번호 확인
+    @PostMapping("/api/users/verify/password")
+    public ResponseEntity<String> checkPwBeforeDelete(@RequestBody Map<String, String> userInfo) {
+
+        try {
+            if (userService.verifyUserByPassword(Long.parseLong(userInfo.get("id")), userInfo.get("password"))) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다. 다시 시도해 주세요.");
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     // 회원정보수정
-    @PatchMapping("/api/users")
+    @PatchMapping("/api/users/info")
     public ResponseEntity<?> modifyUserInfo(@RequestBody Map<String, String> userInfo) {
 
         try {
@@ -125,22 +141,6 @@ public class UserApiController {
 
             } else { // 변경 사항이 없을 때
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    // 비밀번호변경, 회원탈퇴 전 비밀번호 확인
-    @PostMapping("/api/users/account")
-    public ResponseEntity<String> checkPwBeforeDelete(@RequestBody Map<String, String> userInfo) {
-
-        try {
-            if (userService.validatePassword(Long.parseLong(userInfo.get("id")), userInfo.get("password"))) {
-                return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다. 다시 시도해 주세요.");
             }
 
         } catch (Exception e) {

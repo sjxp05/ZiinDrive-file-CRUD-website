@@ -2,6 +2,7 @@ package com.example.ziindrive.user.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserViewController {
@@ -16,34 +17,33 @@ public class UserViewController {
         return "user/signup";
     }
 
-    @GetMapping("/user/info")
-    public String getUserInfoMainView() {
-        return "user/info";
+    @GetMapping("/user/settings")
+    public String getUserSettingsView() {
+        return "user/settings";
     }
 
-    @GetMapping("/user/confirm")
-    public String confirmPasswordView() {
-        return "user/confirm";
+    @GetMapping("/user/verify/id")
+    public String verifyByIdView() {
+        return "user/verifyId";
     }
 
-    @GetMapping("/user/auth")
-    public String userAuthorizeView() {
-        return "user/forgot_password";
+    @GetMapping("/user/verify/password")
+    public String verifyByPasswordView() {
+        return "user/verifyPassword";
     }
 
-    @GetMapping("/user/password")
-    public String resetPasswordView() {
-        return "user/password";
-    }
+    @GetMapping("/user/reset")
+    public String resetPasswordView(@RequestParam("key") String key) {
 
-    @GetMapping("/user/nickname")
-    public String changeNicknameView() {
-        return "user/nickname";
-    }
-
-    @GetMapping("/user/email")
-    public String changeEmailView() {
-        return "user/email";
+        if (key.equals("password")) {
+            return "user/reset/password";
+        } else if (key.equals("nickname")) {
+            return "user/reset/nickname";
+        } else if (key.equals("email")) {
+            return "user/reset/email";
+        } else {
+            return "error/4xx";
+        }
     }
 
     @GetMapping("/user/account")

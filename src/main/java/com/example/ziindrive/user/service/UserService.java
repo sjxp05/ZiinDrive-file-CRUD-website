@@ -37,7 +37,7 @@ public class UserService {
     }
 
     // 비밀번호 확인절차
-    public boolean validatePassword(long id, String rawPassword) throws Exception {
+    public boolean verifyUserByPassword(long id, String rawPassword) throws Exception {
 
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
@@ -49,7 +49,7 @@ public class UserService {
     }
 
     // 사용자 인증
-    public Long authorizeUser(String loginId, String email) throws Exception {
+    public Long verifyUserById(String loginId, String email) throws Exception {
 
         UserEntity user = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new RuntimeException());
@@ -194,45 +194,43 @@ public class UserService {
 
             if (UserInfoUtils.checkPasswordRule(password)) {
                 user.setPassword(passwordEncoder.encode(password));
-                return true;
 
             } else {
                 throw new Exception(UserInfoUtils.PW_RULE_WARNING);
             }
-        }
 
-        if (userInfo.containsKey("nickname")) {
+        } else if (userInfo.containsKey("nickname")) {
 
             String nickname = UserInfoUtils.validateOrGenerateNickname(userInfo.get("nickname"));
 
             if (nickname != null) {
+
+                if (!nickname.equals(user.getNickname())) {
+                    if (!hasKeys) {
+                        hasKeys = true;
+                    }
+                }
                 user.setNickname(nickname);
+
             } else {
                 throw new Exception(UserInfoUtils.NICKNAME_LENGTH_WARNING);
             }
 
-            if (!nickname.equals(user.getNickname())) {
-                if (!hasKeys) {
-                    hasKeys = true;
-                }
-            }
-        }
-
-        if (userInfo.containsKey("email")) {
+        } else if (userInfo.containsKey("email")) {
 
             String email = userInfo.get("email");
 
-            if (!email.equals(user.getEmail())) {
+            if (UserInfoUtils.checkEmailRule(email)) {
 
-                if (UserInfoUtils.checkEmailRule(email)) {
-                    user.setEmail(email);
-                } else {
-                    throw new Exception(UserInfoUtils.EMAIL_RULE_WARNING);
+                if (!email.equals(user.getEmail())) {
+                    if (!hasKeys) {
+                        hasKeys = true;
+                    }
                 }
+                user.setEmail(email);
 
-                if (!hasKeys) {
-                    hasKeys = true;
-                }
+            } else {
+                throw new Exception(UserInfoUtils.EMAIL_RULE_WARNING);
             }
         }
 

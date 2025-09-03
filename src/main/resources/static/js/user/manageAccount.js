@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const div = document.querySelector(".topDiv");
 	const key = div.dataset.id;
 
-	if (location.href.endsWith("/user/auth")) {
+	if (location.href.endsWith("/user/verify/id")) {
 		return;
 	}
 
@@ -48,11 +48,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 });
 
-function findExistingUser() {
+function verifyById() {
 	const loginId = document.getElementById("idInput").value.trim();
 	const email = document.getElementById("emailInput").value.trim();
 
-	fetch("/api/users/auth", {
+	fetch("/api/users/verify/id", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -72,7 +72,7 @@ function findExistingUser() {
 			const data = await res.json();
 			localStorage.setItem("user.id", data.id); // 다음 페이지에서 사용될 아이디
 
-			location.href = "/user/password";
+			location.href = "/user/reset?key=password";
 		})
 		.catch((err) => {
 			console.error("인증 실패:", err);
@@ -82,7 +82,7 @@ function findExistingUser() {
 		});
 }
 
-async function confirmPassword() {
+async function verifyByPassword() {
 	const pw = document.getElementById("pwInput").value;
 
 	if (
@@ -94,7 +94,7 @@ async function confirmPassword() {
 		location.href = "/login";
 	}
 
-	const res = await fetch("/api/users/account", {
+	const res = await fetch("/api/users/verify/password", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -129,7 +129,7 @@ function changePassword() {
 		location.href = "/login";
 	}
 
-	fetch("/api/users", {
+	fetch("/api/users/info", {
 		method: "PATCH",
 		headers: {
 			"Content-Type": "application/json",
@@ -144,10 +144,10 @@ function changePassword() {
 				throw res;
 			}
 
-			if (document.referrer.endsWith("/user/confirm")) {
+			if (document.referrer.endsWith("/user/verify/password")) {
 				// 사용자 설정
 				alert("수정 사항이 반영되었습니다.");
-				location.href = "/user/info";
+				location.href = "/user/settings";
 			} else {
 				// 로그인 화면 (비번잊음)일 경우
 				alert("새로운 비밀번호를 설정했습니다. 다시 로그인해 주세요.");
@@ -174,7 +174,7 @@ function changeNickname() {
 		location.href = "/login";
 	}
 
-	fetch("/api/users", {
+	fetch("/api/users/info", {
 		method: "PATCH",
 		headers: {
 			"Content-Type": "application/json",
@@ -194,7 +194,7 @@ function changeNickname() {
 			} else {
 				alert("변경 사항이 없습니다. 기존 페이지로 돌아갑니다.");
 			}
-			location.href = "/user/info";
+			location.href = "/user/settings";
 		})
 		.catch(async (err) => {
 			console.error("수정 실패:", err.status);
@@ -215,7 +215,7 @@ function changeEmail() {
 		location.href = "/login";
 	}
 
-	fetch("/api/users", {
+	fetch("/api/users/info", {
 		method: "PATCH",
 		headers: {
 			"Content-Type": "application/json",
@@ -235,7 +235,7 @@ function changeEmail() {
 			} else {
 				alert("변경 사항이 없습니다. 기존 페이지로 돌아갑니다.");
 			}
-			location.href = "/user/info";
+			location.href = "/user/settings";
 		})
 		.catch(async (err) => {
 			console.error("수정 실패:", err.status);
@@ -244,7 +244,16 @@ function changeEmail() {
 }
 
 async function deleteAccount() {
-	const msg = await confirmPassword();
+	if (
+		localStorage.getItem("user.id") === null ||
+		localStorage.getItem("user.lastLogin") === null
+	) {
+		console.error("there's no user id");
+		alert("사용자 정보를 찾을 수 없습니다. 다시 시도해 주세요.");
+		location.href = "/login";
+	}
+
+	const msg = await verifyByPassword();
 
 	if (msg !== null) {
 		alert(msg);
@@ -254,9 +263,8 @@ async function deleteAccount() {
 	const really = confirm(
 		"정말 삭제를 진행하시겠습니까?\n삭제된 사용자의 정보는 복구할 수 없습니다."
 	);
-
 	if (!really) {
-		location.href = "/user/info";
+		location.href = "/user/settings";
 		return;
 	}
 

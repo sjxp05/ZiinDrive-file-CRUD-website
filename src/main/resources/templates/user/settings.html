@@ -81,11 +81,15 @@
 		<div style="height: 600px">
 			<ul class="mainDiv">
 				<h3>정보 조회 및 수정</h3>
-				<li onclick="location.href='/user/nickname'">닉네임</li>
-				<li onclick="location.href='/user/confirm'">비밀번호</li>
+				<li onclick="location.href='/user/reset?key=nickname'">
+					닉네임
+				</li>
+				<li onclick="location.href='/user/verify/password'">
+					비밀번호
+				</li>
 				<li
 					style="border-bottom: none"
-					onclick="location.href='/user/email'"
+					onclick="location.href='/user/reset?key=email'"
 				>
 					이메일
 				</li>
