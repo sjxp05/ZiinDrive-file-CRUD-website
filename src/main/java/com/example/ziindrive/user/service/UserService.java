@@ -36,7 +36,7 @@ public class UserService {
         return user.getId();
     }
 
-    // 비밀번호 확인절차
+    // 비밀번호 수정 / 계정 삭제 등의 작업 전 사용자 인증
     public boolean verifyUserByPassword(long id, String rawPassword) throws Exception {
 
         UserEntity user = userRepository.findById(id)
@@ -48,7 +48,7 @@ public class UserService {
         return true;
     }
 
-    // 사용자 인증
+    // 비밀번호 찾기 시 아이디로 사용자 인증
     public Long verifyUserById(String loginId, String email) throws Exception {
 
         UserEntity user = userRepository.findByLoginId(loginId)
